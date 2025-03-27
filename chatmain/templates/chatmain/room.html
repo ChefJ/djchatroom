@@ -14,6 +14,12 @@
 
 {{ room_name|json_script:"room-name" }}
 <script>
+    function refreshImage() {
+        const img = document.getElementById("my-image");
+        const timestamp = new Date().getTime(); // Current time in ms
+        const baseSrc = "{% static 'chatmain/1.jpg' %}";
+        img.src = baseSrc + "?t=" + timestamp; // Forces browser to reload
+    }
     const roomName = JSON.parse(document.getElementById('room-name').textContent);
 
     const chatSocket = new WebSocket(
@@ -27,6 +33,7 @@
     chatSocket.onmessage = function(e) {
         const data = JSON.parse(e.data);
         document.querySelector('#chat-log').value += (data.message + '\n');
+        refreshImage();
     };
 
     chatSocket.onclose = function(e) {
