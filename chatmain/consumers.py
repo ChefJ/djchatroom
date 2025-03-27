@@ -1,7 +1,5 @@
 # chat/consumers.py
 import json
-import threading
-
 from asgiref.sync import async_to_sync
 from channels.generic.websocket import WebsocketConsumer
 
@@ -27,7 +25,6 @@ class ChatConsumer(WebsocketConsumer):
         )
 
 
-
     def receive(self, text_data):
         text_data_json = json.loads(text_data)
         message = text_data_json["message"]
@@ -40,9 +37,8 @@ class ChatConsumer(WebsocketConsumer):
         if self.room_group_name == 'gpt':
             gpt_rsp = ask_gpt(message)
             async_to_sync(self.channel_layer.group_send)(
-            self.room_group_name,
-            {"type": "chat.message", "message": "GPT:" + gpt_rsp}
-        )
+                self.room_group_name, {"type": "chat.message", "message": "GPT:"+gpt_rsp}
+            )
 
         # Receive message from room group
     def chat_message(self, event):
