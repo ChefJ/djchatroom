@@ -43,7 +43,7 @@ class ChatConsumer(WebsocketConsumer):
         )
 
         if self.room_group_name == 'gpt':
-            handle_gpt_response(message)
+            self.handle_gpt_response(message)
 
         # Receive message from room group
     def chat_message(self, event):
