@@ -29,12 +29,13 @@ class ChatConsumer(WebsocketConsumer):
 
     def handle_gpt_response(self, message):
         gpt_rsp = ask_gpt(message)
+        neg_scores, neu_scores, pos_scores, compound_scores = text_to_score(gpt_rsp)
+        generate_sentiment_graph(neg_scores, neu_scores, pos_scores, compound_scores, str(settings.BASE_DIR)+"/chatmain/static/chatmain/")
         async_to_sync(self.channel_layer.group_send)(
             self.room_group_name,
             {"type": "chat.message", "message": "GPT:" + gpt_rsp}
         )
-        neg_scores, neu_scores, pos_scores, compound_scores = text_to_score(gpt_rsp)
-        generate_sentiment_graph(neg_scores, neu_scores, pos_scores, compound_scores, str(settings.BASE_DIR)+"/chatmain/static/chatmain/")
+
 
     def receive(self, text_data):
         text_data_json = json.loads(text_data)
