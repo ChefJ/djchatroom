@@ -26,12 +26,7 @@ class ChatConsumer(WebsocketConsumer):
             self.room_group_name, self.channel_name
         )
 
-    def handle_gpt_response(self, message):
-        gpt_rsp = ask_gpt(message)
-        async_to_sync(self.channel_layer.group_send)(
-            self.room_group_name,
-            {"type": "chat.message", "message": "GPT:" + gpt_rsp}
-        )
+
 
     def receive(self, text_data):
         text_data_json = json.loads(text_data)
@@ -43,7 +38,11 @@ class ChatConsumer(WebsocketConsumer):
         )
 
         if self.room_group_name == 'gpt':
-            self.handle_gpt_response(message)
+            gpt_rsp = ask_gpt(message)
+            async_to_sync(self.channel_layer.group_send)(
+            self.room_group_name,
+            {"type": "chat.message", "message": "GPT:" + gpt_rsp}
+        )
 
         # Receive message from room group
     def chat_message(self, event):
