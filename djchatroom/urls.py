@@ -17,9 +17,17 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from django.urls import include, path
+from django.http.response import HttpResponseRedirect
+
+import chatmain
+
+
+def handler404(request, *args, **kwargs):
+    return HttpResponseRedirect('/')
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path("chat/", include("chatmain.urls")),
-    path("/", include("chatmain.urls")),
+    path("/", chatmain.views.index)
 ]
+handler404 = 'root_dir.views.handler404'
