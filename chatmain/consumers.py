@@ -4,8 +4,9 @@ import threading
 
 from asgiref.sync import async_to_sync
 from channels.generic.websocket import WebsocketConsumer
+from django.conf import settings
 
-from utils.utils_vis import ask_gpt
+from utils.utils_vis import ask_gpt, text_to_score, generate_sentiment_graph
 
 
 class ChatConsumer(WebsocketConsumer):
@@ -32,6 +33,9 @@ class ChatConsumer(WebsocketConsumer):
             self.room_group_name,
             {"type": "chat.message", "message": "GPT:" + gpt_rsp}
         )
+        neg_scores, neu_scores, pos_scores, compound_scores = text_to_score(gpt_rsp)
+        generate_sentiment_graph(neg_scores, neu_scores, pos_scores, compound_scores, settings.STATIC_URL)
+
     def receive(self, text_data):
         text_data_json = json.loads(text_data)
         message = text_data_json["message"]

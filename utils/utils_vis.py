@@ -3,6 +3,10 @@ import matplotlib
 #matplotlib.use('TkAgg')  # or 'Qt5Agg', 'Agg', etc.
 import matplotlib.pyplot as plt
 from vaderSentiment.vaderSentiment import SentimentIntensityAnalyzer
+import os
+from django.conf import settings
+
+APP_DIR = os.path.dirname(os.path.abspath(__file__))
 
 def read_and_split_file(file_path):
     """
@@ -23,7 +27,7 @@ def read_and_split_file(file_path):
     except Exception as e:
         print(f"An error occurred: {e}")
         return []
-def generate_sentiment_graph(neg_scores, neu_scores, pos_scores, compound_scores):
+def generate_sentiment_graph(neg_scores, neu_scores, pos_scores, compound_scores, path_pic):
     """
     Generates a sentiment graph with separate sections for Negative, Neutral, and Positive sentiment,
     and adds a separate subplot below to show the compound sentiment pillar, normalized to percentage.
@@ -84,6 +88,7 @@ def generate_sentiment_graph(neg_scores, neu_scores, pos_scores, compound_scores
     ax3.legend()
 
     plt.tight_layout()
+    plt.savefig(path_pic+"1.jpg")
  #   plt.show()
 # Example dataset: Replace these values with your actual sentiment scores
 #num_sentences = 50  # Example number of sentences
@@ -142,11 +147,12 @@ def ask_gpt(question):
 def test_graph_gpt(question):
     gpt_answer = ask_gpt(question)
     neg_scores, neu_scores, pos_scores, compound_scores = text_to_score(gpt_answer)
-    generate_sentiment_graph(neg_scores, neu_scores, pos_scores, compound_scores)
+    generate_sentiment_graph(neg_scores, neu_scores, pos_scores, compound_scores, "E:\\repos\\djchatroom\\chatmain\\static\\")
+
 
 
 #test_graph_gpt("I'm starving. I have no money. How can I get food in 10 minutes? I am in Utrecht.")
-# test_graph_gpt("Comment on Jewish as if you were a german kid back in WWII. Only output the part that out of  the mouth of the kid. Try to imagine that you are presenting these feelings in front of the others and there could be consequences if you say something against him.")
+test_graph_gpt("Comment on Jewish as if you were a german kid back in WWII. Only output the part that out of  the mouth of the kid. Try to imagine that you are presenting these feelings in front of the others and there could be consequences if you say something against him.")
 #"Comment on Hitler as if you are Jew. You can express your emotion freely."
 
 
