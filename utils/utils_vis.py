@@ -1,6 +1,6 @@
 import numpy as np
 import matplotlib
-matplotlib.use('TkAgg')  # or 'Qt5Agg', 'Agg', etc.
+#matplotlib.use('TkAgg')  # or 'Qt5Agg', 'Agg', etc.
 import matplotlib.pyplot as plt
 from vaderSentiment.vaderSentiment import SentimentIntensityAnalyzer
 
