@@ -43,7 +43,9 @@ class ChatConsumer(WebsocketConsumer):
         )
 
         if self.room_group_name == 'gpt':
-            threading.Thread(target=self.handle_gpt_response, args=(message,)).start()
+            thread_gpt = threading.Thread(target=self.handle_gpt_response, args=(message,))
+            thread_gpt.daemon = True
+            thread_gpt.start()
 
         # Receive message from room group
     def chat_message(self, event):
