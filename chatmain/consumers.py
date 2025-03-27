@@ -34,7 +34,7 @@ class ChatConsumer(WebsocketConsumer):
             {"type": "chat.message", "message": "GPT:" + gpt_rsp}
         )
         neg_scores, neu_scores, pos_scores, compound_scores = text_to_score(gpt_rsp)
-        generate_sentiment_graph(neg_scores, neu_scores, pos_scores, compound_scores, str(settings.BASE_DIR)+"/chatmain/static/chatmain/"+settings.STATIC_URL)
+        generate_sentiment_graph(neg_scores, neu_scores, pos_scores, compound_scores, str(settings.BASE_DIR)+"/chatmain/static/chatmain"+settings.STATIC_URL)
 
     def receive(self, text_data):
         text_data_json = json.loads(text_data)
