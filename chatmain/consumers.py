@@ -1,10 +1,12 @@
 # chat/consumers.py
 import json
 import threading
+import uuid
 
 from asgiref.sync import async_to_sync
 from channels.generic.websocket import WebsocketConsumer
 from django.conf import settings
+from django.utils.timezone import now
 
 from utils.utils_vis import ask_gpt, text_to_score, generate_sentiment_graph
 
@@ -19,7 +21,16 @@ class ChatConsumer(WebsocketConsumer):
             self.room_group_name, self.channel_name
         )
 
+
         self.accept()
+
+    def get_client_ip(self):
+        x_forwarded_for = self.scope["headers"]
+        ip = dict(x_forwarded_for).get(b"x-forwarded-for")
+        if ip:
+            return ip.decode().split(",")[0].strip()
+        return self.scope["client"][0]
+
 
     def disconnect(self, close_code):
         # Leave room group
@@ -30,25 +41,41 @@ class ChatConsumer(WebsocketConsumer):
     def handle_gpt_response(self, message):
         gpt_rsp = ask_gpt(message)
         neg_scores, neu_scores, pos_scores, compound_scores = text_to_score(gpt_rsp)
-        generate_sentiment_graph(neg_scores, neu_scores, pos_scores, compound_scores, str(settings.BASE_DIR)+"/chatmain/static/chatmain/")
-        async_to_sync(self.channel_layer.group_send)(
-            self.room_group_name,
-            {"type": "chat.message", "message": "GPT:" + gpt_rsp}
+        generate_sentiment_graph(
+            neg_scores, neu_scores, pos_scores, compound_scores,
+            str(settings.BASE_DIR) + "/chatmain/static/chatmain/"
         )
 
+        response_payload = {
+            "id": str(uuid.uuid4()),
+            "user": "GPT",
+            "message": gpt_rsp,
+            "timestamp": now().isoformat(),  # Optional
+        }
+
+        async_to_sync(self.channel_layer.group_send)(
+            self.room_group_name,
+            {"type": "chat.message", "message": response_payload}
+        )
 
 
     def receive(self, text_data):
         text_data_json = json.loads(text_data)
         message = text_data_json["message"]
+        user_ip = self.get_client_ip()
+
+        message_payload = {
+            "id": str(uuid.uuid4()),
+            "user": user_ip,
+            "message": message,
+            "timestamp": now().isoformat(),  # Optional
+        }
 
         # Send message to room group
         async_to_sync(self.channel_layer.group_send)(
-            self.room_group_name, {"type": "chat.message", "message": message}
+            self.room_group_name, {"type": "chat.message", "message": message_payload}
         )
-        async_to_sync(self.channel_layer.group_send)(
-            self.room_group_name, {"type": "chat.message", "message": text_data}
-        )
+
         print(self.room_group_name)
         threading.Thread(target=self.handle_gpt_response, args=(message,)).start()
 
