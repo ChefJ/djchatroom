@@ -117,7 +117,7 @@
     function refreshImageById(messageId) {
         const img = document.getElementById("visbias-image");
         const timestamp = new Date().getTime();
-        img.src = `/static/${messageId}.jpg?t=${timestamp}`;
+        img.src = `/static/chatmain/${messageId}.jpg?t=${timestamp}`;
     }
 
     const roomName = JSON.parse(document.getElementById('room-name').textContent);
@@ -141,7 +141,7 @@
             msgDiv.classList.add('chat-message');
             msgDiv.textContent = `[${message.user}] ${message.id}: ${message.message}`;
             msgDiv.dataset.id = message.id;
-
+            refreshImageById(message.id);
             msgDiv.ondblclick = () => {
                 const msgId = msgDiv.dataset.id;
                 if (msgId) {
