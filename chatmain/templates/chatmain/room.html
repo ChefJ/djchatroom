@@ -22,10 +22,9 @@
             flex-direction: column;
         }
 
-        #chat-log {
+        .chat-log {
             width: 100%;
             height: 400px;
-            resize: none;
             padding: 10px;
             font-size: 14px;
             line-height: 1.5;
@@ -34,6 +33,34 @@
             background-color: #fff;
             overflow-y: auto;
             margin-bottom: 10px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .chat-message {
+            max-width: 70%;
+            padding: 8px 12px;
+            border-radius: 12px;
+            word-wrap: break-word;
+            position: relative;
+            cursor: pointer;
+        }
+
+        .chat-message-left {
+            align-self: flex-start;
+            background-color: #e1e1e1;
+        }
+
+        .chat-message-right {
+            align-self: flex-end;
+            background-color: #007bff;
+            color: white;
+        }
+
+        .input-row {
+            display: flex;
+            align-items: center;
         }
 
         #chat-message-input {
@@ -59,11 +86,6 @@
             background-color: #0056b3;
         }
 
-        .input-row {
-            display: flex;
-            align-items: center;
-        }
-
         .image-box {
             flex: 1;
             display: flex;
@@ -87,7 +109,7 @@
 
 <div class="container">
     <div class="chat-box">
-        <textarea id="chat-log" disabled></textarea>
+        <div id="chat-log" class="chat-log"></div>
         <div class="input-row">
             <input id="chat-message-input" type="text" placeholder="Type your message here...">
             <input id="chat-message-submit" type="button" value="Send">
@@ -102,35 +124,47 @@
 
 {{ room_name|json_script:"room-name" }}
 <script>
-    function refreshImage() {
+    const roomName = JSON.parse(document.getElementById('room-name').textContent);
+    const sessionId = crypto.randomUUID();  // Unique per visit
+
+    function refreshImageById(messageId) {
         const img = document.getElementById("visbias-image");
         const timestamp = new Date().getTime();
-        const baseSrc = "{% static 'chatmain/1.jpg' %}";
-        img.src = baseSrc + "?t=" + timestamp;
+        img.src = `/static/${messageId}.jpg?t=${timestamp}`;
     }
 
-    const roomName = JSON.parse(document.getElementById('room-name').textContent);
-
     const chatSocket = new WebSocket(
-        'ws://'
-        + window.location.host
-        + '/ws/chat/'
-        + roomName
-        + '/'
+        'ws://' + window.location.host + '/ws/chat/' + roomName + '/'
     );
 
     chatSocket.onmessage = function(e) {
         const data = JSON.parse(e.data);
         const message = data.message;
 
-        if (typeof message === 'object' && message !== null) {
-            const formattedMessage = `[${message.user}] ${message.id}: ${message.message}`;
-            document.querySelector('#chat-log').value += formattedMessage + '\n';
+        if (!message || typeof message !== 'object') return;
+
+        const chatLog = document.getElementById('chat-log');
+        const msgDiv = document.createElement('div');
+        msgDiv.classList.add('chat-message');
+
+        if (message.sessionId === sessionId) {
+            msgDiv.classList.add('chat-message-right');
         } else {
-            document.querySelector('#chat-log').value += message + '\n';
+            msgDiv.classList.add('chat-message-left');
         }
 
-        refreshImage();
+        msgDiv.textContent = `[${message.user}] ${message.message}`;
+        msgDiv.dataset.id = message.id;
+
+        msgDiv.ondblclick = () => {
+            const msgId = msgDiv.dataset.id;
+            if (msgId) {
+                refreshImageById(msgId);
+            }
+        };
+
+        chatLog.appendChild(msgDiv);
+        chatLog.scrollTop = chatLog.scrollHeight;
     };
 
     chatSocket.onclose = function(e) {
@@ -146,11 +180,14 @@
 
     document.querySelector('#chat-message-submit').onclick = function(e) {
         const messageInputDom = document.querySelector('#chat-message-input');
-        const message = messageInputDom.value;
-        chatSocket.send(JSON.stringify({
-            'message': message
-        }));
-        messageInputDom.value = '';
+        const message = messageInputDom.value.trim();
+        if (message.length > 0) {
+            chatSocket.send(JSON.stringify({
+                'message': message,
+                'sessionId': sessionId
+            }));
+            messageInputDom.value = '';
+        }
     };
 </script>
 </body>
