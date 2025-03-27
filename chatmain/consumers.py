@@ -3,6 +3,8 @@ import json
 from asgiref.sync import async_to_sync
 from channels.generic.websocket import WebsocketConsumer
 
+from utils.utils_vis import ask_gpt
+
 
 class ChatConsumer(WebsocketConsumer):
     def connect(self):
@@ -31,8 +33,9 @@ class ChatConsumer(WebsocketConsumer):
             self.room_group_name, {"type": "chat.message", "message": message}
         )
 
+        gpt_rsp = ask_gpt(message)
         async_to_sync(self.channel_layer.group_send)(
-            self.room_group_name, {"type": "chat.message", "message": "This is what I added XD"}
+            self.room_group_name, {"type": "chat.message", "message": "GPT:"+gpt_rsp}
         )
 
         # Receive message from room group
