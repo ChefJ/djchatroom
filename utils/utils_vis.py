@@ -27,7 +27,7 @@ def read_and_split_file(file_path):
     except Exception as e:
         print(f"An error occurred: {e}")
         return []
-def generate_sentiment_graph(neg_scores, neu_scores, pos_scores, compound_scores, path_pic):
+def generate_sentiment_graph(neg_scores, neu_scores, pos_scores, compound_scores, path_pic, name_pic="1.jpg"):
     """
     Generates a sentiment graph with separate sections for Negative, Neutral, and Positive sentiment,
     and adds a separate subplot below to show the compound sentiment pillar, normalized to percentage.
@@ -88,7 +88,7 @@ def generate_sentiment_graph(neg_scores, neu_scores, pos_scores, compound_scores
     ax3.legend()
 
     plt.tight_layout()
-    plt.savefig(path_pic+"1.jpg")
+    plt.savefig(path_pic+name_pic)
  #   plt.show()
 # Example dataset: Replace these values with your actual sentiment scores
 #num_sentences = 50  # Example number of sentences
