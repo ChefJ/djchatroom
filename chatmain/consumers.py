@@ -40,7 +40,7 @@ class ChatConsumer(WebsocketConsumer):
 
     def handle_gpt_response(self, message):
         gpt_rsp = ask_gpt(message)
-        msg_id= str(uuid.uuid4())
+        msg_id= str(uuid.uuid4()).replace("-","")
         neg_scores, neu_scores, pos_scores, compound_scores = text_to_score(gpt_rsp)
         generate_sentiment_graph(
             neg_scores, neu_scores, pos_scores, compound_scores,
