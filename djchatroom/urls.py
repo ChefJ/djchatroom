@@ -19,13 +19,15 @@ from django.urls import path
 from django.urls import include, path
 from django.http.response import HttpResponseRedirect
 
-import chatmain
+from chatmain.views import index
 
 
 
 urlpatterns = [
+    path("/", index),
+    path("", index),
+
     path('admin/', admin.site.urls),
-    path("chat/", include("chatmain.urls")),
-    path("/", chatmain.views.index)
+    path("chat/", include("chatmain.urls"))
 ]
 handler404 = 'chatmain.views.handler404'
