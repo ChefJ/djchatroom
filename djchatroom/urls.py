@@ -30,4 +30,4 @@ urlpatterns = [
     path("chat/", include("chatmain.urls")),
     path("/", chatmain.views.index)
 ]
-handler404 = 'root_dir.views.handler404'
+handler404 = 'handler404'
