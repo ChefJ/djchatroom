@@ -30,4 +30,4 @@ urlpatterns = [
     path("chat/", include("chatmain.urls")),
     path("/", chatmain.views.index)
 ]
-handler404 = 'root_dir.urls.handler404'
+handler404 = 'djchatroom.urls.handler404'
