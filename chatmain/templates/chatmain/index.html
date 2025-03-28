@@ -1,29 +1,25 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
+    <meta charset="utf-8"/>
     <title>Chat Rooms</title>
+    <link href="https://fonts.googleapis.com/css2?family=Courier+Prime&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Ubuntu+Mono&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+
+
     <style>
-        <meta charset="utf-8"/>
-        <title>Chat Rooms</title>
-        <link href="https://fonts.googleapis.com/css2?family=Courier+Prime&display=swap" rel="stylesheet">
-        <link href="https://fonts.googleapis.com/css2?family=Ubuntu+Mono&display=swap" rel="stylesheet">
-        <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
-
-
-        <style>
-         html, body {
-             height: 100%;
-             margin: 0;
-             font-family: 'Courier Prime', monospace;
-             background-color: #1a1a1a;
-             color: #00ff99;
-             display: flex;
-             align-items: center;
-             justify-content: center;
-             flex-direction: column;
-         }
+        html, body {
+            height: 100%;
+            margin: 0;
+            font-family: 'Courier Prime', monospace;
+            background-color: #1a1a1a;
+            color: #00ff99;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+        }
 
         .status-bar {
             position: absolute;
@@ -48,48 +44,49 @@
             text-shadow: 0 0 6px #00ff99;
             white-space: pre;
         }
-
-
         .search-box {
             display: flex;
-            justify-content: center;
+            flex-direction: row; /* <-- side by side */
             align-items: center;
-            gap: 10px;
+            justify-content: center;
+            gap: 10px; /* space between input and button */
         }
 
-        /* Input field styling */
         .search-box input[type="text"] {
-            width: 400px;
-            padding: 10px;
-            border: 2px solid #00ff99;
-            border-radius: 5px;
+            font-size: 16px;
+            width: 100%;
+            max-width: 500px;
+            font-family: 'Press Start 2P', monospace;
+
+            border-radius: 6px;
+            border: 1px solid #00ff99;
             background-color: #000;
             color: #00ff99;
-            font-size: 14px;
         }
 
-        /* Button styling */
-        .search-box button {
+        .search-box input[type="button"] {
             padding: 10px 20px;
+            font-size: 14px;
+            font-family: 'Press Start 2P', monospace;
+
+            border-radius: 6px;
             border: none;
-            border-radius: 5px;
             background-color: #00ff99;
             color: #000;
-            font-size: 14px;
             cursor: pointer;
             text-transform: uppercase;
+            letter-spacing: 1px;
         }
 
-        .search-box button:hover {
+        .search-box input[type="button"]:hover {
             background-color: #39ff14;
-        }    </style>
+        }
     </style>
 </head>
 <body>
 <div class="status-bar">[READY] :: LIFE IS RANDOM</div>
 
-<div class="container">
-    <pre  class="ascii-banner">
+<pre  class="ascii-banner">
 ██████╗  ██████╗  ██████╗ ██████╗    ██╗ ██████╗
 ╚════██╗██╔═████╗██╔═████╗╚════██╗   ██║██╔═══██╗
  █████╔╝██║██╔██║██║██╔██║ █████╔╝   ██║██║   ██║
@@ -97,19 +94,26 @@
 ███████╗╚██████╔╝╚██████╔╝██████╔╝██╗██║╚██████╔╝
 ╚══════╝ ╚═════╝  ╚═════╝ ╚═════╝ ╚═╝╚═╝ ╚═════╝
 </pre>
-    <form class="search-box">
-        <input id="room-name-input" type="text" placeholder="Enter chat room name..." aria-label="Chat room name">
-        <button id="room-name-submit" type="submit">Enter</button>
-    </form>
+
+<div class="search-box">
+    <input id="room-name-input" type="text" placeholder="">
+    <input id="room-name-submit" type="button" value="Enter">
 </div>
+
 <script>
     document.querySelector('#room-name-input').focus();
-    document.querySelector('.search-box').onsubmit = function(e) {
-        e.preventDefault();
-        var roomName = document.querySelector('#room-name-input').value.trim();
-        if (roomName !== '') {
-            window.location.pathname = '/chat/' + encodeURIComponent(roomName) + '/';
+    document.querySelector('#room-name-input').onkeyup = function(e) {
+        if (e.key === 'Enter') {
+            document.querySelector('#room-name-submit').click();
         }
-    };</script>
+    };
+
+    document.querySelector('#room-name-submit').onclick = function(e) {
+        var roomName = document.querySelector('#room-name-input').value;
+        if (roomName.trim() !== '') {
+            window.location.pathname = '/chat/' + encodeURIComponent(roomName.trim()) + '/';
+        }
+    };
+</script>
 </body>
 </html>
