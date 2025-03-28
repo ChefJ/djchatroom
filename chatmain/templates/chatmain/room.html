@@ -114,12 +114,12 @@
 
 {{ room_name|json_script:"room-name" }}
 <script>
-    function refreshImage(messageId) {
+    function refreshImageById(messageId) {
         const img = document.getElementById("visbias-image");
         const timestamp = new Date().getTime();
         img.src = `/static/chatmain/${messageId}.jpg?t=${timestamp}`;
-        img.src = baseSrc + "?t=" + timestamp;
     }
+
 
     const roomName = JSON.parse(document.getElementById('room-name').textContent);
     const chatSocket = new WebSocket('ws://' + window.location.host + '/ws/chat/' + roomName + '/');
