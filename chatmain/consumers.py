@@ -12,7 +12,7 @@ from utils.utils_vis import ask_gpt, text_to_score, generate_sentiment_graph
 
 
 class ChatConsumer(WebsocketConsumer):
-    def connect(self):
+    async def connect(self):
         self.room_name = self.scope["url_route"]["kwargs"]["room_name"]
         self.room_group_name = f"chat_{self.room_name}"
 
@@ -31,12 +31,9 @@ class ChatConsumer(WebsocketConsumer):
             return ip.decode().split(",")[0].strip()
         return self.scope["client"][0]
 
-
-    def disconnect(self, close_code):
+    async def disconnect(self, close_code):
         # Leave room group
-        async_to_sync(self.channel_layer.group_discard)(
-            self.room_group_name, self.channel_name
-        )
+        await self.channel_layer.group_discard(self.room_group_name, self.channel_name)
 
     def handle_gpt_response(self, message):
         gpt_rsp = ask_gpt(message)
@@ -61,7 +58,7 @@ class ChatConsumer(WebsocketConsumer):
         )
 
 
-    def receive(self, text_data):
+    async def receive(self, text_data):
         text_data_json = json.loads(text_data)
         message = text_data_json["message"]
         user_ip = self.get_client_ip()
@@ -74,7 +71,7 @@ class ChatConsumer(WebsocketConsumer):
         }
 
         # Send message to room group
-        async_to_sync(self.channel_layer.group_send)(
+        await self.channel_layer.group_send(
             self.room_group_name, {"type": "chat.message", "message": message_payload}
         )
 
@@ -82,8 +79,8 @@ class ChatConsumer(WebsocketConsumer):
         threading.Thread(target=self.handle_gpt_response, args=(message,)).start()
 
         # Receive message from room group
-    def chat_message(self, event):
+    async def chat_message(self, event):
         message = event["message"]
 
         # Send message to WebSocket
-        self.send(text_data=json.dumps({"message": message}))
+        await self.send(text_data=json.dumps({"message": message}))
