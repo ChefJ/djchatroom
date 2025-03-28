@@ -25,6 +25,17 @@
             background-color: #f1f0f0;
             margin-right: auto;
         }
+        .sender-name {
+            font-weight: bold;
+            margin-bottom: 4px;
+            font-size: 13px;
+            color: #333;
+        }
+
+        .message-text {
+            font-size: 14px;
+            margin-bottom: 4px;
+        }
         body {
             font-family: sans-serif;
             margin: 20px;
@@ -179,8 +190,9 @@
             }
 
             bubble.innerHTML = `
-                <div>${message.message}</div>
-                <div class="meta">From: ${message.user} • ID: ${message.id}</div>
+                <div class="sender-name">${message.user}</div>
+                <div class="message-text">${message.message}</div>
+                <div class="meta">ID: ${message.id}</div>
             `;
 
             chatLog.appendChild(bubble);

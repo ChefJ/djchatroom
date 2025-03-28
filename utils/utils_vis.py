@@ -134,7 +134,12 @@ def ask_gpt(question):
 
     completion = client.chat.completions.create(
         model="gpt-4o",
-        messages=[{
+        messages=[
+            # {
+            #     "role": "developer",
+            #     "content": "Talk like a pirate."
+            # }, # this is going to be useful if we need a further instruction on sentiment
+            {
             "role": "user",
             "content": question
         }]
