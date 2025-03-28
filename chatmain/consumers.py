@@ -33,6 +33,8 @@ class ChatConsumer(AsyncWebsocketConsumer):
         await self.channel_layer.group_discard(self.room_group_name, self.channel_name)
 
     def handle_gpt_response(self, message):
+        if "@GPT" not in message:
+            return
         gpt_rsp = ask_gpt(message)
         msg_id= str(uuid.uuid4()).replace("-","")
         neg_scores, neu_scores, pos_scores, compound_scores = text_to_score(gpt_rsp)
