@@ -1,26 +1,114 @@
-<!-- chat/templates/chat/index.html -->
 <!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8"/>
     <title>Chat Rooms</title>
+    <link href="https://fonts.googleapis.com/css2?family=Courier+Prime&display=swap" rel="stylesheet">
+    <style>
+        html, body {
+            height: 100%;
+            margin: 0;
+            font-family: 'Courier Prime', monospace;
+            background-color: #1a1a1a;
+            color: #00ff99;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+        }
+
+        .status-bar {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            padding: 6px 12px;
+            font-size: 13px;
+            border-bottom: 1px solid #00ff99;
+            background-color: #000;
+            color: #00ff99;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            box-shadow: 0 2px 10px #00ff99;
+        }
+
+        .ascii-banner {
+            font-size: 12px;
+            color: #00ff99;
+            text-align: center;
+            white-space: pre;
+            margin-bottom: 30px;
+            text-shadow: 0 0 4px #00ff99;
+        }
+
+        .search-box {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+            max-width: 600px;
+            text-align: center;
+        }
+
+        .search-box input[type="text"] {
+            padding: 10px;
+            font-size: 16px;
+            width: 100%;
+            max-width: 500px;
+            border-radius: 6px;
+            border: 1px solid #00ff99;
+            background-color: #000;
+            color: #00ff99;
+            margin-bottom: 10px;
+        }
+
+        .search-box input[type="button"] {
+            padding: 10px 20px;
+            font-size: 14px;
+            border-radius: 6px;
+            border: none;
+            background-color: #00ff99;
+            color: #000;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .search-box input[type="button"]:hover {
+            background-color: #39ff14;
+        }
+    </style>
 </head>
 <body>
-What chat room would you like to enter?<br>
-<input id="room-name-input" type="text" size="100" disabled><br>
-<input id="room-name-submit" type="button" value="Enter">
+<div class="status-bar">[READY] :: ENTER A CHAT ROOM</div>
+
+<div class="ascii-banner">
+    ██████╗  ██████╗  ██████╗ ██████╗    ██╗ ██████╗
+    ╚════██╗██╔═████╗██╔═████╗╚════██╗   ██║██╔═══██╗
+     █████╔╝██║██╔██║██║██╔██║ █████╔╝   ██║██║   ██║
+    ██╔═══╝ ████╔╝██║████╔╝██║ ╚═══██╗   ██║██║   ██║
+    ███████╗╚██████╔╝╚██████╔╝██████╔╝██╗██║╚██████╔╝
+    ╚══════╝ ╚═════╝  ╚═════╝ ╚═════╝ ╚═╝╚═╝ ╚═════╝
+</div>
+
+<div class="search-box">
+    <input id="room-name-input" type="text" placeholder="Enter chat room name...">
+    <input id="room-name-submit" type="button" value="Enter">
+</div>
 
 <script>
     document.querySelector('#room-name-input').focus();
     document.querySelector('#room-name-input').onkeyup = function(e) {
-        if (e.key === 'Enter') {  // enter, return
+        if (e.key === 'Enter') {
             document.querySelector('#room-name-submit').click();
         }
     };
 
     document.querySelector('#room-name-submit').onclick = function(e) {
         var roomName = document.querySelector('#room-name-input').value;
-        window.location.pathname = '/chat/' + roomName + '/';
+        if (roomName.trim() !== '') {
+            window.location.pathname = '/chat/' + encodeURIComponent(roomName.trim()) + '/';
+        }
     };
 </script>
 </body>
