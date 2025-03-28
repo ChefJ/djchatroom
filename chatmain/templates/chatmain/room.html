@@ -114,44 +114,49 @@
 
 {{ room_name|json_script:"room-name" }}
 <script>
-    function refreshImageById(messageId) {
+    function refreshImage() {
         const img = document.getElementById("visbias-image");
         const timestamp = new Date().getTime();
-        img.src = `/static/chatmain/${messageId}.jpg?t=${timestamp}`;
+        const baseSrc = "{% static 'chatmain/1.jpg' %}";
+        img.src = baseSrc + "?t=" + timestamp;
     }
 
     const roomName = JSON.parse(document.getElementById('room-name').textContent);
+    const chatSocket = new WebSocket('ws://' + window.location.host + '/ws/chat/' + roomName + '/');
+    const chatLog = document.getElementById('chat-log');
 
-    const chatSocket = new WebSocket(
-        'ws://'
-        + window.location.host
-        + '/ws/chat/'
-        + roomName
-        + '/'
-    );
+    let lastSentMessageId = null;
+
+    // Helper: Generate UUID without dashes
+    function generateCleanUUID() {
+        return crypto.randomUUID().replace(/-/g, '');
+    }
 
     chatSocket.onmessage = function(e) {
         const data = JSON.parse(e.data);
         const message = data.message;
 
         if (typeof message === 'object' && message !== null) {
-            const chatLog = document.getElementById('chat-log');
+            const bubble = document.createElement('div');
+            bubble.classList.add('chat-message');
 
-            const msgDiv = document.createElement('div');
-            msgDiv.classList.add('chat-message');
-            msgDiv.textContent = `[${message.user}] ${message.id}: ${message.message}`;
-            msgDiv.dataset.id = message.id;
-            refreshImageById(message.id);
-            msgDiv.ondblclick = () => {
-                const msgId = msgDiv.dataset.id;
-                if (msgId) {
-                    refreshImageById(msgId);
-                }
-            };
+            if (message.id === lastSentMessageId) {
+                bubble.classList.add('own-message', 'my-message');
+                lastSentMessageId = null; // Clear after use
+            } else {
+                bubble.classList.add('other-message');
+            }
 
-            chatLog.appendChild(msgDiv);
+            bubble.innerHTML = `
+                <div>${message.message}</div>
+                <div class="meta">From: ${message.user} • ID: ${message.id}</div>
+            `;
+
+            chatLog.appendChild(bubble);
             chatLog.scrollTop = chatLog.scrollHeight;
         }
+
+        refreshImage();
     };
 
     chatSocket.onclose = function(e) {
@@ -166,13 +171,22 @@
     };
 
     document.querySelector('#chat-message-submit').onclick = function(e) {
-        const messageInputDom = document.querySelector('#chat-message-input');
-        const message = messageInputDom.value;
-        chatSocket.send(JSON.stringify({
-            'message': message
-        }));
-        messageInputDom.value = '';
+        const messageInput = document.querySelector('#chat-message-input');
+        const message = messageInput.value.trim();
+
+        if (message !== '') {
+            const customId = generateCleanUUID();
+            lastSentMessageId = customId;
+
+            chatSocket.send(JSON.stringify({
+                'message': message,
+                'id': customId
+            }));
+
+            messageInput.value = '';
+        }
     };
 </script>
+
 </body>
 </html>

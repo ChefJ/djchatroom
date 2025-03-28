@@ -67,7 +67,7 @@ class ChatConsumer(WebsocketConsumer):
         user_ip = self.get_client_ip()
 
         message_payload = {
-            "id": str(uuid.uuid4()),
+            "id": str(uuid.uuid4()) if "id" not in text_data_json.keys() else text_data_json["id"],
             "user": user_ip,
             "message": message,
             "timestamp": now().isoformat(),  # Optional
