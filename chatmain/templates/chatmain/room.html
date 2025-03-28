@@ -148,7 +148,7 @@
                 lastSentMessageId = null; // Clear after use
             } else {
                 bubble.classList.add('other-message');
-                img.src = `/static/chatmain/${messageId}.jpg?t=${timestamp}`;
+              //  img.src = `/static/chatmain/${messageId}.jpg?t=${timestamp}`;
                 refreshImageById(message.id);
                 bubble.ondblclick = () => {
                     const msgId = bubble.dataset.id;
