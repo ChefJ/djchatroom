@@ -5,34 +5,51 @@
     <title>Chat Rooms</title>
     <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
     <style>
-        /* General reset and body styling */
-        body, html {
-            margin: 0;
-            padding: 0;
-            height: 100%;
-            font-family: 'Press Start 2P', monospace;
-            background-color: #1a1a1a;
+        <meta charset="utf-8"/>
+        <title>Chat Rooms</title>
+        <link href="https://fonts.googleapis.com/css2?family=Courier+Prime&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Ubuntu+Mono&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+
+
+        <style>
+         html, body {
+             height: 100%;
+             margin: 0;
+             font-family: 'Courier Prime', monospace;
+             background-color: #1a1a1a;
+             color: #00ff99;
+             display: flex;
+             align-items: center;
+             justify-content: center;
+             flex-direction: column;
+         }
+
+        .status-bar {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            padding: 6px 12px;
+            font-size: 13px;
+            border-bottom: 1px solid #00ff99;
+            background-color: #000;
             color: #00ff99;
-            display: flex;
-            justify-content: center;
-            align-items: center;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            box-shadow: 0 2px 10px #00ff99;
         }
 
-        /* Container for centering content */
-        .container {
-            text-align: center;
-        }
-
-        /* Styling for the ASCII art banner */
         .ascii-banner {
-            margin-bottom: 20px;
-            white-space: pre;
-            font-size: 12px;
             color: #00ff99;
-            text-shadow: 0 0 5px #00ff99;
+            font-size: 35px;
+            line-height: 1.2;
+            margin: 160px 0;
+            text-shadow: 0 0 6px #00ff99;
+            white-space: pre;
         }
 
-        /* Search box styling */
+
         .search-box {
             display: flex;
             justify-content: center;
@@ -66,6 +83,7 @@
         .search-box button:hover {
             background-color: #39ff14;
         }    </style>
+    </style>
 </head>
 <body>
 <div class="status-bar">[READY] :: LIFE IS RANDOM</div>
