@@ -40,17 +40,17 @@
             color: #00ff99;
             font-size: 50px;
             line-height: 1.2;
-            margin: 16px 0;
+            margin: 160px 0;
             text-shadow: 0 0 6px #00ff99;
             white-space: pre;
         }
         .search-box {
             display: flex;
-            flex-direction: column;
+            flex-direction: row; /* <-- side by side */
             align-items: center;
-            width: 100%;
-            max-width: 600px;
-            text-align: center;
+            justify-content: center;
+            gap: 10px; /* space between input and button */
+            flex-wrap: wrap; /* optional for responsiveness */
         }
 
         .search-box input[type="text"] {
@@ -99,7 +99,7 @@
 </pre>
 
 <div class="search-box">
-    <input id="room-name-input" type="text" placeholder="Enter chat room name...">
+    <input id="room-name-input" type="text" placeholder="">
     <input id="room-name-submit" type="button" value="Enter">
 </div>
 
