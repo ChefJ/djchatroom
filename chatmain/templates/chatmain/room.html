@@ -150,8 +150,8 @@
                 bubble.classList.add('other-message');
                 img.src = `/static/chatmain/${messageId}.jpg?t=${timestamp}`;
                 refreshImageById(message.id);
-                msgDiv.ondblclick = () => {
-                    const msgId = msgDiv.dataset.id;
+                bubble.ondblclick = () => {
+                    const msgId = bubble.dataset.id;
                     if (msgId) {
                         refreshImageById(msgId);
                     }
@@ -167,7 +167,6 @@
             chatLog.scrollTop = chatLog.scrollHeight;
         }
 
-        refreshImage();
     };
 
     chatSocket.onclose = function(e) {
