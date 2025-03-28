@@ -5,6 +5,26 @@
     <meta charset="utf-8"/>
     <title>Chat Room</title>
     <style>
+        .chat-message {
+            max-width: 70%;
+            padding: 8px 12px;
+            border-radius: 12px;
+            word-wrap: break-word;
+            position: relative;
+            cursor: pointer;
+            background-color: #e1e1e1;
+        }
+        .own-message {
+            align-self: flex-end;
+            background-color: #dcf8c6;
+            margin-left: auto;
+        }
+
+        .other-message {
+            align-self: flex-start;
+            background-color: #f1f0f0;
+            margin-right: auto;
+        }
         body {
             font-family: sans-serif;
             margin: 20px;
