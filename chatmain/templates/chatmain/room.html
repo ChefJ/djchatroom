@@ -142,7 +142,7 @@
         if (typeof message === 'object' && message !== null) {
             const bubble = document.createElement('div');
             bubble.classList.add('chat-message');
-
+            bubble.dataset.id = message.id;
             if (message.id === lastSentMessageId) {
                 bubble.classList.add('own-message', 'my-message');
                 lastSentMessageId = null; // Clear after use
