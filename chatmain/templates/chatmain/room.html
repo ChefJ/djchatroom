@@ -5,6 +5,7 @@
     <meta charset="utf-8"/>
     <title>Chat Room</title>
     <link href="https://fonts.googleapis.com/css2?family=Courier+Prime&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <style>
         html, body {
             height: 100%;
@@ -103,6 +104,43 @@
         .own-message {
             background-color: rgba(0, 255, 153, 0.25);
             border: 1px solid #00ff99;
+        }
+
+        .message-text h1,
+        .message-text h2,
+        .message-text h3 {
+            color: #00ff99;
+            margin: 0 0 5px 0;
+        }
+
+        .message-text p {
+            margin: 4px 0;
+        }
+
+        .message-text ul, .message-text ol {
+            margin: 4px 0 4px 20px;
+        }
+
+        .message-text li {
+            margin-bottom: 3px;
+        }
+
+        .message-text strong {
+            color: #39ff14;
+            font-weight: bold;
+        }
+
+        .message-text em {
+            font-style: italic;
+            color: #66ffcc;
+        }
+
+        .message-text code {
+            background-color: #222;
+            padding: 2px 4px;
+            border-radius: 4px;
+            color: #00ff99;
+            font-family: monospace;
         }
 
         .input-row {
@@ -266,7 +304,7 @@
                 bubble.dataset.id = message.id;
 
                 bubble.innerHTML = `
-                    <div class="message-text">${message.message}</div>
+                    <div class="message-text">${marked.parse(message.message)}</div>
                     <div class="meta">ID: ${message.id}</div>
                 `;
 
