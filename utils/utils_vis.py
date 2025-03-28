@@ -138,7 +138,7 @@ def ask_gpt(question):
             # {
             #     "role": "developer",
             #     "content": "Talk like a pirate."
-            # }, # this is going to be useful if we need a further instruction on sentiment
+            # }, # this is going to be useful if we need a further instruction on pos
             {
             "role": "user",
             "content": question
