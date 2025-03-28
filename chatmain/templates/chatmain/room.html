@@ -114,10 +114,10 @@
 
 {{ room_name|json_script:"room-name" }}
 <script>
-    function refreshImage() {
+    function refreshImage(messageId) {
         const img = document.getElementById("visbias-image");
         const timestamp = new Date().getTime();
-        const baseSrc = "{% static 'chatmain/1.jpg' %}";
+        img.src = `/static/chatmain/${messageId}.jpg?t=${timestamp}`;
         img.src = baseSrc + "?t=" + timestamp;
     }
 
@@ -148,6 +148,14 @@
                 lastSentMessageId = null; // Clear after use
             } else {
                 bubble.classList.add('other-message');
+                img.src = `/static/chatmain/${messageId}.jpg?t=${timestamp}`;
+                refreshImageById(message.id);
+                msgDiv.ondblclick = () => {
+                    const msgId = msgDiv.dataset.id;
+                    if (msgId) {
+                        refreshImageById(msgId);
+                    }
+                };
             }
 
             bubble.innerHTML = `
