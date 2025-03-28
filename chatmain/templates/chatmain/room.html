@@ -25,13 +25,24 @@
             background-color: #f1f0f0;
             margin-right: auto;
         }
-        .sender-name {
-            font-weight: bold;
-            margin-bottom: 4px;
-            font-size: 13px;
-            color: #333;
+        .message-wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
         }
 
+        .sender-name {
+            font-weight: bold;
+            margin: 4px 0 2px 6px;
+            font-size: 13px;
+            color: #444;
+        }
+
+        .own-message ~ .sender-name {
+            align-self: flex-end;
+            text-align: right;
+            margin-right: 6px;
+        }
         .message-text {
             font-size: 14px;
             margin-bottom: 4px;
@@ -171,15 +182,21 @@
         const message = data.message;
 
         if (typeof message === 'object' && message !== null) {
+            const messageWrapper = document.createElement('div');
+            messageWrapper.classList.add('message-wrapper');
+
+            const sender = document.createElement('div');
+            sender.classList.add('sender-name');
+            sender.textContent = message.user;
+
             const bubble = document.createElement('div');
             bubble.classList.add('chat-message');
             bubble.dataset.id = message.id;
             if (message.id === lastSentMessageId) {
                 bubble.classList.add('own-message', 'my-message');
-                lastSentMessageId = null; // Clear after use
+                lastSentMessageId = null;
             } else {
                 bubble.classList.add('other-message');
-              //  img.src = `/static/chatmain/${messageId}.jpg?t=${timestamp}`;
                 refreshImageById(message.id);
                 bubble.ondblclick = () => {
                     const msgId = bubble.dataset.id;
@@ -190,13 +207,15 @@
             }
 
             bubble.innerHTML = `
-                <div class="sender-name">${message.user}</div>
                 <div class="message-text">${message.message}</div>
                 <div class="meta">ID: ${message.id}</div>
             `;
 
-            chatLog.appendChild(bubble);
+            messageWrapper.appendChild(sender);
+            messageWrapper.appendChild(bubble);
+            chatLog.appendChild(messageWrapper);
             chatLog.scrollTop = chatLog.scrollHeight;
+
         }
 
     };
