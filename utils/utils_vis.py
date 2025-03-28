@@ -132,10 +132,9 @@ def ask_gpt(question):
     from openai import OpenAI
     client = OpenAI(api_key="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")
 
-    completion = client.responses.create(
+    completion = client.chat.completions.create(
         model="gpt-4o",
-        tools=[{"type": "web_search_preview"}],
-        input=[
+        messages=[
             # {
             #     "role": "developer",
             #     "content": "Talk like a pirate."
@@ -145,7 +144,7 @@ def ask_gpt(question):
             "content": question
         }]
     )
-    rst = completion.output
+    rst = completion.choices[0].message.content
     print(rst)
     return rst
 
