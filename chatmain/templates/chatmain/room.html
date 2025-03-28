@@ -41,6 +41,13 @@
             overflow: hidden;
         }
 
+        .main-content {
+            display: flex;
+            flex: 1;
+            gap: 20px;
+            height: 100%;
+        }
+
         .chat-box {
             flex: 2;
             display: flex;
@@ -62,7 +69,6 @@
             flex-direction: column;
             gap: 8px;
             box-shadow: 0 0 10px #00ff99;
-            margin-bottom: 10px;
         }
 
         .message-wrapper {
@@ -146,7 +152,8 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            padding: 10px;
+            padding: 10px 20px;
+            border-top: 1px solid #00ff99;
         }
 
         #chat-message-input {
@@ -244,18 +251,21 @@
 <div class="status-bar" id="status-bar">[CONNECTING] :: SERVER: <span id="server-ip"></span> :: ROOM: <span id="room-display"></span></div>
 
 <div class="container">
-    <div class="chat-box">
-        <div id="chat-log" class="chat-log"></div>
-        <div class="input-row">
-            <input id="chat-message-input" type="text" placeholder="Type your message here..." class="typing-cursor">
-            <input id="chat-message-submit" type="button" value="Send">
+    <div class="main-content">
+        <div class="chat-box">
+            <div id="chat-log" class="chat-log"></div>
+        </div>
+
+        <div class="image-box">
+            <img src="{% static 'chatmain/1.jpg' %}" alt="Sentiment Visualization" id="visbias-image">
+            <label>Sentiment Analysis</label>
         </div>
     </div>
+</div>
 
-    <div class="image-box">
-        <img src="{% static 'chatmain/1.jpg' %}" alt="Sentiment Visualization" id="visbias-image">
-        <label>Sentiment Analysis</label>
-    </div>
+<div class="input-row">
+    <input id="chat-message-input" type="text" placeholder="Type your message here..." class="typing-cursor">
+    <input id="chat-message-submit" type="button" value="Send">
 </div>
 
 {{ room_name|json_script:"room-name" }}
