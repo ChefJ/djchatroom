@@ -30,7 +30,7 @@ def save_chat_message(group_name, msg_json):
                                          msg_uuid=msg_json["msg_uuid"],
                                          user_uuid=msg_json["user_uuid"],
                                          message=msg_json["message"],
-                                         message_with_scores =msg_json["message_with_scores"] if "message_with_scores" in msg_json.keys() )
+                                         message_with_scores=msg_json["message_with_scores"] )
     tmp_obj.save()
 
 
