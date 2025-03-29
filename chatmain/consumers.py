@@ -56,8 +56,6 @@ class ChatConsumer(AsyncWebsocketConsumer):
         await self.channel_layer.group_discard(self.room_group_name, self.channel_name)
 
     def handle_gpt_response(self, message):
-        if "@GPT" not in message:
-            return
         previous_messages_obj = ChatMessage.objects.filter(chat_room_str=self.room_name)
         previous_messages_list = []
         for an_obj in previous_messages_obj:
@@ -90,6 +88,11 @@ class ChatConsumer(AsyncWebsocketConsumer):
         )
         threading.Thread(target=save_chat_message, args=(self.room_name, response_payload,)).start()
 
+    def save_and_ask_GPT(self, message_payload, message):
+        if "@GPT" not in message_payload["message"]:
+            return
+        save_chat_message(self.room_name, message_payload)
+        self.handle_gpt_response(message)
 
     async def receive(self, text_data):
         text_data_json = json.loads(text_data)
@@ -111,8 +114,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
         )
 
         print(self.room_group_name)
-        save_chat_message(self.room_name, message_payload)
-        self.handle_gpt_response(message)
+        threading.Thread(target=save_chat_message, args=(message_payload,)).start()
         # threading.Thread(target=save_chat_message, args=(self.room_name, message_payload,)).start()
         #
         # threading.Thread(target=self.handle_gpt_response, args=(message,)).start()
