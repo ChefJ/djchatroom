@@ -285,7 +285,7 @@
     const maxReconnect = 5;
     let anon_id = localStorage.getItem('anon_id');
     if (!anon_id) {
-        anon_id = crypto.randomUUID();
+        anon_id = generateCleanUUID();
         localStorage.setItem('anon_id', anon_id);
     }
 
