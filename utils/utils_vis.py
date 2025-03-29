@@ -137,15 +137,16 @@ def ask_gpt(question):
 
     completion = client.chat.completions.create(
         model="gpt-4o",
-        messages=[
-            # {
-            #     "role": "developer",
-            #     "content": "Talk like a pirate."
-            # }, # this is going to be useful if we need a further instruction on pos
-            {
-            "role": "user",
-            "content": question
-        }]
+        messages=question
+        # [
+        #     # {
+        #     #     "role": "developer",
+        #     #     "content": "Talk like a pirate."
+        #     # }, # this is going to be useful if we need a further instruction on pos
+        #     {
+        #     "role": "user",
+        #     "content": question
+        # }]
     )
     rst = completion.choices[0].message.content
     print(rst)
@@ -153,7 +154,7 @@ def ask_gpt(question):
 
 
 def test_graph_gpt(question):
-    gpt_answer = ask_gpt(question)
+    gpt_answer = ask_gpt([question])
     neg_scores, neu_scores, pos_scores, compound_scores = text_to_score(gpt_answer)
     generate_sentiment_graph(neg_scores, neu_scores, pos_scores, compound_scores, "E:\\repos\\djchatroom\\chatmain\\static\\")
 

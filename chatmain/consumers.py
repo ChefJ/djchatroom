@@ -58,7 +58,15 @@ class ChatConsumer(AsyncWebsocketConsumer):
     def handle_gpt_response(self, message):
         if "@GPT" not in message:
             return
-        gpt_rsp = ask_gpt(message)
+        previous_messages_obj = ChatMessage.objects.filter(chat_room_str=self.room_name)
+        previous_messages_list = []
+        for an_obj in previous_messages_obj:
+            if an_obj.user_uuid == "GPT":
+                previous_messages_list.append({"role":"system", "content": an_obj.message})
+            else:
+                previous_messages_list.append({"role":"user", "content": an_obj.message})
+
+        gpt_rsp = ask_gpt(previous_messages_list)
         msg_id= str(uuid.uuid4()).replace("-","")
         neg_scores, neu_scores, pos_scores, compound_scores, sentence_with_scores = text_to_score(gpt_rsp)
         generate_sentiment_graph(
