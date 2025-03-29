@@ -20,6 +20,7 @@ def index(request):
 def room(request, room_name):
     return render(request, "chatmain/room.html", {"room_name": room_name})
 
+
 def room_chat_history(request, room_name):
     room_obj = get_or_create_room(room_name)
     rst_obj = ChatMessage.objects.filter(chat_room = room_obj)
