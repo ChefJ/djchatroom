@@ -30,7 +30,7 @@ def save_chat_message(group_name, msg_json):
                                          msg_uuid=msg_json["msg_uuid"],
                                          user_uuid=msg_json["user_uuid"],
                                          message=msg_json["message"],
-                                         message_with_scores =msg_json["message_with_scores"] )
+                                         message_with_scores =msg_json["message_with_scores"] if "message_with_scores" in msg_json.keys() )
     tmp_obj.save()
 
 
@@ -92,6 +92,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
             "msg_uuid": str(uuid.uuid4()) if "msg_uuid" not in text_data_json.keys() else text_data_json["msg_uuid"],
             "user": user_ip,
             "message": message,
+            "message_with_scores": "",
             "user_uuid": text_data_json["user_uuid"],
             "timestamp": now().isoformat(),  # Optional
         }
