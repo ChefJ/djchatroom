@@ -331,7 +331,7 @@
                 } else {
                     messageWrapper.classList.add('other-wrapper');
                     bubble.classList.add('other-message');
-                    refreshImageById(message.id);
+                    refreshImageById(message.msg_uuid);
                     bubble.ondblclick = () => {
                         const msgId = bubble.dataset.id;
                         if (msgId) {
