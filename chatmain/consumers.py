@@ -12,6 +12,21 @@ from chatmain.models import ChatMessage, ChatRoom
 from utils.utils_vis import ask_gpt, text_to_score, generate_sentiment_graph
 
 
+def save_chat_message(group_name, msg_json):
+    tmp_chatroom = None
+    if ChatRoom.objects.filter(room_name=group_name).count() < 1:
+        tmp_chatroom = ChatRoom.objects.create(room_name=group_name)
+        tmp_chatroom.save()
+    else:
+        tmp_chatroom = ChatRoom.objects.filter(room_name=group_name).first()
+    tmp_obj = ChatMessage.objects.create(chat_room_str=group_name,
+                                         chat_room=tmp_chatroom,
+                                         user_ip=msg_json["user"],
+                                         msg_uuid=msg_json["msg_uuid"],
+                                         content=msg_json["message"])
+    tmp_obj.save()
+
+    
 class ChatConsumer(AsyncWebsocketConsumer):
     async def connect(self):
         self.room_name = self.scope["url_route"]["kwargs"]["room_name"]
@@ -69,18 +84,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
             "message": message,
             "timestamp": now().isoformat(),  # Optional
         }
-        tmp_chatroom = None
-        if ChatRoom.objects.filter(room_name=self.room_group_name).count() < 1:
-            tmp_chatroom = ChatRoom.objects.create(room_name=self.room_group_name)
-            tmp_chatroom.save()
-        else:
-            tmp_chatroom = ChatRoom.objects.filter(room_name=self.room_group_name).first()
-        tmp_obj = ChatMessage.objects.create(chat_room_str=self.room_group_name,
-                                             chat_room=tmp_chatroom,
-                                             user_ip=message_payload["user"],
-                                             msg_uuid=message_payload["msg_uuid"],
-                                             content=message_payload["message"])
-        tmp_obj.save()
+
         # Send message to room group
         await self.channel_layer.group_send(
             self.room_group_name, {"type": "chat.message", "message": message_payload}
@@ -88,6 +92,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
 
         print(self.room_group_name)
         threading.Thread(target=self.handle_gpt_response, args=(message,)).start()
+        threading.Thread(target=save_chat_message, args=(self.room_group_name, message,)).start()
 
         # Receive message from room group
     async def chat_message(self, event):
