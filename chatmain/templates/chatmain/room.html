@@ -360,6 +360,9 @@
 
     connectWebSocket();
 
+    const historyUrl = window.location.pathname.endsWith('/')
+        ? window.location.pathname + 'history'
+        : window.location.pathname + '/history';
     function appendMessageToChatLog(message) {
         const messageWrapper = document.createElement('div');
         messageWrapper.classList.add('message-wrapper');
@@ -396,20 +399,23 @@
         messageWrapper.appendChild(bubble);
         chatLog.appendChild(messageWrapper);
         chatLog.scrollTop = chatLog.scrollHeight;
-        fetch(`/history?room=${roomName}`)
-            .then(response => response.json())
-            .then(data => {
-                data.forEach(message => {
-                    appendMessageToChatLog({
-                        user: message.user_uuid,
-                        message: message.content,
-                        msg_uuid: message.msg_uuid
-                    });
+    }
+    fetch(historyUrl)
+        .then(response => response.json())
+        .then(data => {
+            console.log('✅ 历史消息获取成功', data);
+            data.forEach(message => {
+                appendMessageToChatLog({
+                    user: message.user_uuid,
+                    message: message.content,
+                    msg_uuid: message.msg_uuid
                 });
-            })
-            .catch(error => {
-                console.error('加载历史消息失败:', error);
             });
+        })
+        .catch(error => {
+            console.error('❌ 加载历史消息失败:', error);
+        });
+
     const chatLog = document.getElementById('chat-log');
     let lastSentMessageId = null;
 
