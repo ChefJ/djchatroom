@@ -8,6 +8,7 @@ from channels.generic.websocket import AsyncWebsocketConsumer
 from django.conf import settings
 from django.utils.timezone import now
 
+from chatmain.models import ChatMessage, ChatRoom
 from utils.utils_vis import ask_gpt, text_to_score, generate_sentiment_graph
 
 
@@ -68,7 +69,18 @@ class ChatConsumer(AsyncWebsocketConsumer):
             "message": message,
             "timestamp": now().isoformat(),  # Optional
         }
-
+        tmp_chatroom = None
+        if ChatRoom.objects.filter(room_name=self.room_group_name).count() < 1:
+            tmp_chatroom = ChatRoom.objects.create(room_name=self.room_group_name)
+            tmp_chatroom.save()
+        else:
+            tmp_chatroom = ChatRoom.objects.filter(room_name=self.room_group_name).first()
+        tmp_obj = ChatMessage.objects.create(chat_room_str=self.room_group_name,
+                                             chat_room=tmp_chatroom,
+                                             user_ip=message_payload["user"],
+                                             msg_uuid=message_payload["msg_uuid"],
+                                             content=message_payload["message"])
+        tmp_obj.save()
         # Send message to room group
         await self.channel_layer.group_send(
             self.room_group_name, {"type": "chat.message", "message": message_payload}
