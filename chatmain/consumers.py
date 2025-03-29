@@ -12,13 +12,18 @@ from chatmain.models import ChatMessage, ChatRoom
 from utils.utils_vis import ask_gpt, text_to_score, generate_sentiment_graph
 
 
-def save_chat_message(group_name, msg_json):
+def get_or_create_room(room_name):
     tmp_chatroom = None
-    if ChatRoom.objects.filter(room_name=group_name).count() < 1:
-        tmp_chatroom = ChatRoom.objects.create(room_name=group_name)
+    if ChatRoom.objects.filter(room_name=room_name).count() < 1:
+        tmp_chatroom = ChatRoom.objects.create(room_name=room_name)
         tmp_chatroom.save()
     else:
-        tmp_chatroom = ChatRoom.objects.filter(room_name=group_name).first()
+        tmp_chatroom = ChatRoom.objects.filter(room_name=room_name).first()
+    return tmp_chatroom
+
+
+def save_chat_message(group_name, msg_json):
+
     tmp_obj = ChatMessage.objects.create(chat_room_str=group_name,
                                          chat_room=tmp_chatroom,
                                          user_ip=msg_json["user"],
