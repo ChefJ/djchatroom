@@ -78,9 +78,11 @@ class ChatConsumer(AsyncWebsocketConsumer):
             self.room_group_name,
             {"type": "chat.message", "message": response_payload}
         )
+        threading.Thread(target=save_chat_message, args=(self.room_name, response_payload,)).start()
 
 
-    async def receive(self, text_data):
+
+async def receive(self, text_data):
         text_data_json = json.loads(text_data)
         message = text_data_json["message"]
         user_ip = self.get_client_ip()
