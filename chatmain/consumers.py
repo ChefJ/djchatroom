@@ -26,7 +26,7 @@ def save_chat_message(group_name, msg_json):
                                          content=msg_json["message"])
     tmp_obj.save()
 
-    
+
 class ChatConsumer(AsyncWebsocketConsumer):
     async def connect(self):
         self.room_name = self.scope["url_route"]["kwargs"]["room_name"]
@@ -92,7 +92,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
 
         print(self.room_group_name)
         threading.Thread(target=self.handle_gpt_response, args=(message,)).start()
-        threading.Thread(target=save_chat_message, args=(self.room_group_name, message,)).start()
+        threading.Thread(target=save_chat_message, args=(self.room_group_name, message_payload,)).start()
 
         # Receive message from room group
     async def chat_message(self, event):
