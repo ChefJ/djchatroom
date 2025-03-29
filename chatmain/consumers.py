@@ -111,8 +111,11 @@ class ChatConsumer(AsyncWebsocketConsumer):
         )
 
         print(self.room_group_name)
-        threading.Thread(target=self.handle_gpt_response, args=(message,)).start()
-        threading.Thread(target=save_chat_message, args=(self.room_name, message_payload,)).start()
+        save_chat_message(self.room_name, message_payload)
+        self.handle_gpt_response(message)
+        # threading.Thread(target=save_chat_message, args=(self.room_name, message_payload,)).start()
+        #
+        # threading.Thread(target=self.handle_gpt_response, args=(message,)).start()
 
         # Receive message from room group
     async def chat_message(self, event):
