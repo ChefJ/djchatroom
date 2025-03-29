@@ -283,6 +283,11 @@
     let chatSocket;
     let reconnectAttempts = 0;
     const maxReconnect = 5;
+    let anon_id = localStorage.getItem('anon_id');
+    if (!anon_id) {
+        anon_id = crypto.randomUUID();
+        localStorage.setItem('anon_id', anon_id);
+    }
 
     function updateStatus(text) {
         const bar = document.getElementById('status-bar');
@@ -312,14 +317,14 @@
 
                 const bubble = document.createElement('div');
                 bubble.classList.add('chat-message');
-                bubble.dataset.id = message.id;
+                bubble.dataset.id = message.msg_uuid;
 
                 bubble.innerHTML = `
                     <div class="message-text">${marked.parse(message.message)}</div>
                     <div class="meta">ID: ${message.id}</div>
                 `;
 
-                if (message.id === lastSentMessageId) {
+                if (message.msg_uuid === lastSentMessageId) {
                     messageWrapper.classList.add('own-wrapper');
                     bubble.classList.add('own-message', 'my-message');
                     lastSentMessageId = null;
