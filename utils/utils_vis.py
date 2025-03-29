@@ -110,7 +110,7 @@ def text_to_score(sentences):
     for a_s in sentences:
         vs = analyzer.polarity_scores(a_s)
         print(vs)
-        sentences.append({"content": a_s,
+        sentences_with_score.append({"content": a_s,
                           "sentiment_score": vs})
         neg_scores.append(vs['neg']) if vs['neg'] !=0 else 1+1
         neu_scores.append(vs['neu']) if vs['neu'] !=0 else 1+1
