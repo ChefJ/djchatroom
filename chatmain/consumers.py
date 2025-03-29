@@ -114,7 +114,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
         )
 
         print(self.room_group_name)
-        threading.Thread(target=save_and_ask_GPT, args=(message_payload,)).start()
+        threading.Thread(target=self.save_and_ask_GPT, args=(message_payload,)).start()
         # threading.Thread(target=save_chat_message, args=(self.room_name, message_payload,)).start()
         #
         # threading.Thread(target=self.handle_gpt_response, args=(message,)).start()
