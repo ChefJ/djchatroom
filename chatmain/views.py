@@ -5,7 +5,7 @@ from django.http import HttpResponse
 from django.shortcuts import render
 
 from chatmain.consumers import get_or_create_room
-from chatmain.models import ChatMessage
+from chatmain.models import ChatMessage,ChatRoom
 from django.core.serializers import serialize
 
 
