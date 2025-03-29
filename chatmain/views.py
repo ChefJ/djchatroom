@@ -1,5 +1,4 @@
-from django.http import HttpResponse
-
+from django.http import HttpResponse, JsonResponse
 
 # chat/views.py
 from django.shortcuts import render
@@ -23,7 +22,5 @@ def room(request, room_name):
 
 def room_chat_history(request, room_name):
     room_obj = get_or_create_room(room_name)
-    rst_obj = ChatMessage.objects.filter(chat_room = room_obj).values()
-    json_data = serialize('json', rst_obj) # Converts QuerySet to JSON string
-
-    return HttpResponse(json_data, content_type='application/json')
+    rst_obj = ChatMessage.objects.filter(chat_room=room_obj).values()
+    return JsonResponse(list(rst_obj), safe=False)
