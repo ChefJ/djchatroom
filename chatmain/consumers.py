@@ -28,6 +28,7 @@ def save_chat_message(group_name, msg_json):
                                          chat_room=tmp_chatroom,
                                          user_ip=msg_json["user"],
                                          msg_uuid=msg_json["msg_uuid"],
+                                         user_uuid=msg_json["user_uuid"],
                                          content=msg_json["message"])
     tmp_obj.save()
 
