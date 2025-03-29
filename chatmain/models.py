@@ -18,5 +18,6 @@ class ChatMessage(models.Model):
     chat_room_str = models.CharField(max_length=200)
     user_ip = models.CharField(max_length=200, default="unknown")
     msg_uuid = models.CharField(max_length=50)
+    user_uuid = models.CharField(max_length=50)
     created_date = models.DateTimeField(auto_now=True)
     content = models.TextField(default="")
