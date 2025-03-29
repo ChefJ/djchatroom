@@ -387,7 +387,7 @@
 
             chatSocket.send(JSON.stringify({
                 'message': message,
-                'id': customId
+                'msg_uuid': customId
             }));
 
             messageInput.value = '';
