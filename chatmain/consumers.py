@@ -23,7 +23,7 @@ def get_or_create_room(room_name):
 
 
 def save_chat_message(group_name, msg_json):
-
+    tmp_chatroom = get_or_create_room(group_name)
     tmp_obj = ChatMessage.objects.create(chat_room_str=group_name,
                                          chat_room=tmp_chatroom,
                                          user_ip=msg_json["user"],
