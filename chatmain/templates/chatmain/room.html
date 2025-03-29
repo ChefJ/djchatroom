@@ -317,8 +317,9 @@
                         } else if (compound < 0) {
                             bgColor = `rgba(255, 80, 80, ${alpha})`;
                         }
+                        const formatted = marked.parseInline(text);
 
-                        messageHtml += `<span style="background-color: ${bgColor}; border-radius: 6px; padding: 2px 4px; margin: 2px; display: inline-block;">${text}</span> `;
+                        messageHtml += `<span style="background-color: ${bgColor}; border-radius: 6px; padding: 2px 4px; margin: 2px; display: inline;">${formatted}</span> `;
                     });
                 } catch (err) {
                     console.error('Failed to parse message_with_scores:', err);
