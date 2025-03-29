@@ -408,7 +408,7 @@
                 appendMessageToChatLog({
                     user: message.user_uuid,
                     message: message.content,
-                    msg_uuid: message.msg_uuid
+                    msg_uuid: message.user_uuid.slice(0, 4)
                 });
             });
         })
