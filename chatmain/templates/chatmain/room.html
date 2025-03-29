@@ -111,56 +111,19 @@
             border: 1px solid #00ff99;
         }
 
-        .message-text h1,
-        .message-text h2,
-        .message-text h3 {
-            color: #00ff99;
-            margin: 0 0 5px 0;
-        }
-
-        .message-text p {
-            margin: 4px 0;
-        }
-
-        .message-text ul, .message-text ol {
-            margin: 4px 0 4px 20px;
-        }
-
-        .message-text li {
-            margin-bottom: 3px;
-        }
-
-        .message-text strong {
-            color: #39ff14;
-            font-weight: bold;
-        }
-
-        .message-text em {
-            font-style: italic;
-            color: #66ffcc;
-        }
-
-        .message-text code {
-            background-color: #222;
-            padding: 2px 4px;
-            border-radius: 4px;
-            color: #00ff99;
-            font-family: monospace;
-        }
-
         .input-row {
             display: flex;
             justify-content: center;
             align-items: center;
             padding: 10px 20px;
             border-top: 1px solid #00ff99;
+            gap: 10px;
         }
 
         #chat-message-input {
             padding: 8px;
             font-size: 14px;
             width: 60%;
-            margin-right: 10px;
             border-radius: 4px;
             border: 1px solid #00ff99;
             background-color: #000;
@@ -195,13 +158,11 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
-
             border: 2px solid #00ff99;
             padding: 10px;
             background-color: #000;
             box-shadow: 0 0 10px #00ff99;
             color: #00ff99;
-            font-family: 'Courier Prime', monospace;
         }
 
         #visbias-image {
@@ -266,10 +227,16 @@
 <div class="input-row">
     <input id="chat-message-input" type="text" placeholder="Type your message here..." class="typing-cursor">
     <input id="chat-message-submit" type="button" value="Send">
+    <label><input type="checkbox" id="toggle-colorize" checked> Colorize Sentiment</label>
 </div>
 
 {{ room_name|json_script:"room-name" }}
 <script>
+    let enableColorize = true;
+    document.getElementById('toggle-colorize').addEventListener('change', function () {
+        enableColorize = this.checked;
+    });
+
     function refreshImageById(messageId) {
         const img = document.getElementById("visbias-image");
         const timestamp = new Date().getTime();
@@ -305,46 +272,8 @@
 
         chatSocket.onmessage = function(e) {
             const data = JSON.parse(e.data);
-            const message = data.message;
-
-            if (typeof message === 'object' && message !== null) {
-                const messageWrapper = document.createElement('div');
-                messageWrapper.classList.add('message-wrapper');
-
-                const sender = document.createElement('div');
-                sender.classList.add('sender-name');
-                sender.textContent = message.user_uuid.slice(0, 4);
-
-                const bubble = document.createElement('div');
-                bubble.classList.add('chat-message');
-                bubble.dataset.id = message.msg_uuid;
-
-                bubble.innerHTML = `
-                    <div class="message-text">${marked.parse(message.message)}</div>
-                    <div class="meta">ID: ${message.msg_uuid}</div>
-                `;
-
-                if (message.msg_uuid === lastSentMessageId) {
-                    messageWrapper.classList.add('own-wrapper');
-                    bubble.classList.add('own-message', 'my-message');
-                    lastSentMessageId = null;
-                } else {
-                    messageWrapper.classList.add('other-wrapper');
-                    bubble.classList.add('other-message');
-                    refreshImageById(message.msg_uuid);
-                    bubble.ondblclick = () => {
-                        const msgId = bubble.dataset.id;
-                        if (msgId) {
-                            refreshImageById(msgId);
-                        }
-                    };
-                }
-
-                messageWrapper.appendChild(sender);
-                messageWrapper.appendChild(bubble);
-                chatLog.appendChild(messageWrapper);
-                chatLog.scrollTop = chatLog.scrollHeight;
-            }
+            const messages = Array.isArray(data) ? data : [data.message || data];
+            messages.forEach(handleIncomingMessage);
         };
 
         chatSocket.onclose = function(e) {
@@ -360,61 +289,72 @@
 
     connectWebSocket();
 
-    const historyUrl = window.location.pathname.endsWith('/')
-        ? window.location.pathname + 'history'
-        : window.location.pathname + '/history';
-    function appendMessageToChatLog(message) {
-        const messageWrapper = document.createElement('div');
-        messageWrapper.classList.add('message-wrapper');
+    function handleIncomingMessage(message) {
+        if (typeof message === 'object' && message !== null) {
+            const messageWrapper = document.createElement('div');
+            messageWrapper.classList.add('message-wrapper');
 
-        const sender = document.createElement('div');
-        sender.classList.add('sender-name');
-        sender.textContent = message.user;
+            const sender = document.createElement('div');
+            sender.classList.add('sender-name');
+            sender.textContent = message.user_uuid.slice(0, 4);
 
-        const bubble = document.createElement('div');
-        bubble.classList.add('chat-message');
-        bubble.dataset.id = message.msg_uuid;
+            const bubble = document.createElement('div');
+            bubble.classList.add('chat-message');
+            bubble.dataset.id = message.msg_uuid;
 
-        bubble.innerHTML = `
-        <div class="message-text">${marked.parse(message.message)}</div>
-        <div class="meta">ID: ${message.msg_uuid}</div>
-    `;
+            let messageHtml = '';
+            if (enableColorize && message.user_uuid === 'GPT') {
+                try {
+                    const segments = JSON.parse(message.message_with_scores);
+                    segments.forEach(seg => {
+                        const text = seg.content;
+                        const compound = seg.sentiment_score.compound;
+                        let bgColor = '';
+                        const alpha = Math.min(Math.abs(compound), 1).toFixed(2);
 
-        if (message.user === anon_id) {
-            messageWrapper.classList.add('own-wrapper');
-            bubble.classList.add('own-message');
-        } else {
-            messageWrapper.classList.add('other-wrapper');
-            bubble.classList.add('other-message');
-            refreshImageById(message.msg_uuid);
-            bubble.ondblclick = () => {
-                const msgId = bubble.dataset.id;
-                if (msgId) {
-                    refreshImageById(msgId);
+                        if (compound > 0) {
+                            bgColor = `rgba(0, 255, 153, ${alpha})`;
+                        } else if (compound < 0) {
+                            bgColor = `rgba(255, 80, 80, ${alpha})`;
+                        }
+
+                        messageHtml += `<span style="background-color: ${bgColor}; border-radius: 6px; padding: 2px 4px; margin: 2px; display: inline-block;">${text}</span> `;
+                    });
+                } catch (err) {
+                    console.error('Failed to parse message_with_scores:', err);
+                    messageHtml = marked.parse(message.message);
                 }
-            };
-        }
+            } else {
+                messageHtml = marked.parse(message.message);
+            }
 
-        messageWrapper.appendChild(sender);
-        messageWrapper.appendChild(bubble);
-        chatLog.appendChild(messageWrapper);
-        chatLog.scrollTop = chatLog.scrollHeight;
+            bubble.innerHTML = `
+                <div class="message-text">${messageHtml}</div>
+                <div class="meta">ID: ${message.msg_uuid}</div>
+            `;
+
+            if (message.msg_uuid === lastSentMessageId) {
+                messageWrapper.classList.add('own-wrapper');
+                bubble.classList.add('own-message', 'my-message');
+                lastSentMessageId = null;
+            } else {
+                messageWrapper.classList.add('other-wrapper');
+                bubble.classList.add('other-message');
+                refreshImageById(message.msg_uuid);
+                bubble.ondblclick = () => {
+                    const msgId = bubble.dataset.id;
+                    if (msgId) {
+                        refreshImageById(msgId);
+                    }
+                };
+            }
+
+            messageWrapper.appendChild(sender);
+            messageWrapper.appendChild(bubble);
+            chatLog.appendChild(messageWrapper);
+            chatLog.scrollTop = chatLog.scrollHeight;
+        }
     }
-    fetch(historyUrl)
-        .then(response => response.json())
-        .then(data => {
-            console.log('✅ 历史消息获取成功', data);
-            data.forEach(message => {
-                appendMessageToChatLog({
-                    user: message.user_uuid,
-                    message: message.message,
-                    msg_uuid: message.msg_uuid
-                });
-            });
-        })
-        .catch(error => {
-            console.error('❌ 加载历史消息失败:', error);
-        });
 
     const chatLog = document.getElementById('chat-log');
     let lastSentMessageId = null;
@@ -444,12 +384,32 @@
             chatSocket.send(JSON.stringify({
                 'message': message,
                 'msg_uuid': customId,
-                'user_uuid':anon_id
+                'user_uuid': anon_id
             }));
 
             messageInput.value = '';
         }
     };
+
+    const historyUrl = window.location.pathname.endsWith('/')
+        ? window.location.pathname + 'history'
+        : window.location.pathname + '/history';
+
+    fetch(historyUrl)
+        .then(response => response.json())
+        .then(data => {
+            data.forEach(message => {
+                handleIncomingMessage({
+                    user_uuid: message.user_uuid,
+                    message: message.message,
+                    msg_uuid: message.msg_uuid,
+                    message_with_scores: message.message_with_scores
+                });
+            });
+        })
+        .catch(error => {
+            console.error('❌ 加载历史消息失败:', error);
+        });
 </script>
 
 </body>
