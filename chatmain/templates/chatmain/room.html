@@ -406,9 +406,9 @@
             console.log('✅ 历史消息获取成功', data);
             data.forEach(message => {
                 appendMessageToChatLog({
-                    user: message.user_uuid,
+                    user: message.user_uuid.slice(0,4),
                     message: message.message,
-                    msg_uuid: message.user_uuid.slice(0, 4)
+                    msg_uuid: message.id
                 });
             });
         })
