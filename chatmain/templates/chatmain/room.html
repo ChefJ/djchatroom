@@ -313,7 +313,7 @@
 
                 const sender = document.createElement('div');
                 sender.classList.add('sender-name');
-                sender.textContent = message.user;
+                sender.textContent = message.user_uuid.slice(0, 4);
 
                 const bubble = document.createElement('div');
                 bubble.classList.add('chat-message');
