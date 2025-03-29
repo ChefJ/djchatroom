@@ -68,6 +68,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
         response_payload = {
             "msg_uuid": msg_id,
             "user": "GPT",
+            "user_uuid":"GPT",
             "message": gpt_rsp,
             "timestamp": now().isoformat(),  # Optional
         }
@@ -87,6 +88,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
             "msg_uuid": str(uuid.uuid4()) if "msg_uuid" not in text_data_json.keys() else text_data_json["msg_uuid"],
             "user": user_ip,
             "message": message,
+            "user_uuid": text_data_json["user_uuid"],
             "timestamp": now().isoformat(),  # Optional
         }
 
