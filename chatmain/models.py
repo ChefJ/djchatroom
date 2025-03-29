@@ -20,4 +20,5 @@ class ChatMessage(models.Model):
     msg_uuid = models.CharField(max_length=50)
     user_uuid = models.CharField(max_length=50)
     created_date = models.DateTimeField(auto_now=True)
-    content = models.TextField(default="")
+    message = models.TextField(default="")
+    message_with_scores = models.TextField(default="")

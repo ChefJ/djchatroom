@@ -29,7 +29,8 @@ def save_chat_message(group_name, msg_json):
                                          user_ip=msg_json["user"],
                                          msg_uuid=msg_json["msg_uuid"],
                                          user_uuid=msg_json["user_uuid"],
-                                         content=msg_json["message"])
+                                         message=msg_json["message"],
+                                         message_with_scores =msg_json["message_with_scores"] )
     tmp_obj.save()
 
 
@@ -59,7 +60,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
             return
         gpt_rsp = ask_gpt(message)
         msg_id= str(uuid.uuid4()).replace("-","")
-        neg_scores, neu_scores, pos_scores, compound_scores = text_to_score(gpt_rsp)
+        neg_scores, neu_scores, pos_scores, compound_scores, sentence_with_scores = text_to_score(gpt_rsp)
         generate_sentiment_graph(
             neg_scores, neu_scores, pos_scores, compound_scores,
             str(settings.BASE_DIR) + "/chatmain/static/chatmain/",
@@ -71,6 +72,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
             "user": "GPT",
             "user_uuid":"GPT",
             "message": gpt_rsp,
+            "message_with_scores": sentence_with_scores,
             "timestamp": now().isoformat(),  # Optional
         }
 

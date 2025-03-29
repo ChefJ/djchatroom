@@ -99,6 +99,7 @@ def generate_sentiment_graph(neg_scores, neu_scores, pos_scores, compound_scores
 
 
 def text_to_score(sentences):
+    sentences_with_score = []
     if type(sentences) == str:
         sentences = sentences.split(".")
     neg_scores = []
@@ -109,22 +110,24 @@ def text_to_score(sentences):
     for a_s in sentences:
         vs = analyzer.polarity_scores(a_s)
         print(vs)
+        sentences.append({"content": a_s,
+                          "sentiment_score": vs})
         neg_scores.append(vs['neg']) if vs['neg'] !=0 else 1+1
         neu_scores.append(vs['neu']) if vs['neu'] !=0 else 1+1
         pos_scores.append(vs['pos']) if vs['pos'] !=0  else 1+1
         compound_scores.append(vs['compound']) if vs['compound'] !=0 else 1+1
-    return neg_scores, neu_scores, pos_scores, compound_scores
+    return neg_scores, neu_scores, pos_scores, compound_scores, sentences_with_score
 
 
 def file_to_scores(filename="china_dp_zh.txt"):
     sentences = read_and_split_file(filename)
-    neg_scores, neu_scores, pos_scores, compound_scores = text_to_score(sentences)
+    neg_scores, neu_scores, pos_scores, compound_scores, _ = text_to_score(sentences)
 
-    return neg_scores, neu_scores, pos_scores, compound_scores
+    return neg_scores, neu_scores, pos_scores, compound_scores, _
 
 
 def test_vis():
-    neg_scores, neu_scores, pos_scores, compound_scores = file_to_scores()
+    neg_scores, neu_scores, pos_scores, compound_scores, _ = file_to_scores()
     generate_sentiment_graph(neg_scores, neu_scores, pos_scores, compound_scores)
 
 
