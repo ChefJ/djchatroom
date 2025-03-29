@@ -359,6 +359,59 @@
     }
 
     connectWebSocket();
+    function appendMessageToChatLog(message) {
+        const messageWrapper = document.createElement('div');
+        messageWrapper.classList.add('message-wrapper');
+
+        const sender = document.createElement('div');
+        sender.classList.add('sender-name');
+        sender.textContent = message.user;
+
+        const bubble = document.createElement('div');
+        bubble.classList.add('chat-message');
+        bubble.dataset.id = message.msg_uuid;
+
+        bubble.innerHTML = `
+        <div class="message-text">${marked.parse(message.message)}</div>
+        <div class="meta">ID: ${message.msg_uuid}</div>
+    `;
+
+        if (message.user === anon_id) {
+            messageWrapper.classList.add('own-wrapper');
+            bubble.classList.add('own-message');
+        } else {
+            messageWrapper.classList.add('other-wrapper');
+            bubble.classList.add('other-message');
+            refreshImageById(message.msg_uuid);
+            bubble.ondblclick = () => {
+                const msgId = bubble.dataset.id;
+                if (msgId) {
+                    refreshImageById(msgId);
+                }
+            };
+        }
+
+        messageWrapper.appendChild(sender);
+        messageWrapper.appendChild(bubble);
+        chatLog.appendChild(messageWrapper);
+        chatLog.scrollTop = chatLog.scrollHeight;
+
+        const historyUrl = window.location.pathname + 'history';
+
+        fetch(historyUrl)
+        .then(response => response.json())
+        .then(data => {
+            data.forEach(message => {
+                appendMessageToChatLog({
+                    user: message.user_uuid,
+                    message: message.content,
+                    msg_uuid: message.msg_uuid
+                });
+            });
+        })
+        .catch(error => {
+            console.error('加载历史消息失败:', error);
+        });
 
     const chatLog = document.getElementById('chat-log');
     let lastSentMessageId = null;
