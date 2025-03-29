@@ -334,7 +334,7 @@
                 <div class="meta">ID: ${message.msg_uuid}</div>
             `;
 
-            if (message.msg_uuid === anon_id) {
+            if (message.user_uuid === anon_id) {
                 messageWrapper.classList.add('own-wrapper');
                 bubble.classList.add('own-message', 'my-message');
             } else {
