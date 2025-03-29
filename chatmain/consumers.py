@@ -89,10 +89,10 @@ class ChatConsumer(AsyncWebsocketConsumer):
         threading.Thread(target=save_chat_message, args=(self.room_name, response_payload,)).start()
 
     def save_and_ask_GPT(self, message_payload):
-        if "@GPT" not in message_payload["message"]:
-            return
+
         save_chat_message(self.room_name, message_payload)
-        self.handle_gpt_response()
+        if "@GPT" in message_payload["message"]:
+            self.handle_gpt_response()
 
     async def receive(self, text_data):
         text_data_json = json.loads(text_data)
