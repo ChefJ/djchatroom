@@ -242,6 +242,8 @@
     let chatSocket;
     let reconnectAttempts = 0;
     const maxReconnect = 5;
+    let lastMessageTime = Date.now();
+
     let anon_id = localStorage.getItem('anon_id');
     if (!anon_id) {
         anon_id = generateCleanUUID();
@@ -278,6 +280,7 @@
         };
 
         chatSocket.onmessage = function(e) {
+            lastMessageTime = Date.now();
             const data = JSON.parse(e.data);
             const messages = Array.isArray(data) ? data : [data.message || data];
             messages.forEach(handleIncomingMessage);
@@ -486,6 +489,13 @@
         .catch(error => {
             console.error('❌ 加载历史消息失败:', error);
         });
+    setInterval(() => {
+        const now = Date.now();
+        if (now - lastMessageTime > 60000) { // 60s without messages
+            console.warn('⚠️ No messages in a while. Reconnecting...');
+            chatSocket.close(); // trigger onclose → reconnect
+        }
+    }, 30000);
 </script>
 
 </body>
