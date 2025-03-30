@@ -6,6 +6,8 @@
     <title>Chat Room</title>
     <link href="https://fonts.googleapis.com/css2?family=Courier+Prime&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
     <style>
         html, body {
             height: 100%;
@@ -218,6 +220,11 @@
         </div>
 
         <div class="image-box">
+            <div id="chart-container" style="width: 100%; margin-bottom: 20px;">
+                <canvas id="neg-chart"></canvas>
+                <canvas id="neu-chart"></canvas>
+                <canvas id="pos-chart"></canvas>
+            </div>
             <img src="{% static 'chatmain/1.jpg' %}" alt="Sentiment Visualization" id="visbias-image">
             <label>Sentiment Analysis</label>
         </div>
@@ -289,6 +296,59 @@
 
     connectWebSocket();
 
+    function renderSentimentCharts(scores) {
+        const bins = Array(10).fill(0).map((_, i) => `${(i / 10).toFixed(1)}–${((i + 1) / 10).toFixed(1)}`);
+        const negCounts = Array(10).fill(0);
+        const neuCounts = Array(10).fill(0);
+        const posCounts = Array(10).fill(0);
+
+        scores.forEach(s => {
+            const getBin = v => Math.min(9, Math.floor(v * 10));
+            negCounts[getBin(s.neg)]++;
+            neuCounts[getBin(s.neu)]++;
+            posCounts[getBin(s.pos)]++;
+        });
+
+        const chartOptions = {
+            type: 'bar',
+            options: {
+                scales: {
+                    y: {
+                        ticks: { color: '#00ff99' },
+                        grid: { color: '#444' }
+                    },
+                    x: {
+                        beginAtZero: true,
+                        ticks: { color: '#00ff99' },
+                        grid: { color: '#444' }
+                    }
+                },
+                plugins: {
+                    legend: { display: false }
+                }
+            }
+        };
+
+        const createChart = (ctxId, label, data, color) => {
+            const ctx = document.getElementById(ctxId).getContext('2d');
+            new Chart(ctx, {
+                ...chartOptions,
+                data: {
+                    labels: bins,
+                    datasets: [{
+                        label,
+                        data,
+                        backgroundColor: color
+                    }]
+                }
+            });
+        };
+
+        createChart('neg-chart', 'Negative', negCounts, 'rgba(255,80,80,0.7)');
+        createChart('neu-chart', 'Neutral', neuCounts, 'rgba(255,255,255,0.6)');
+        createChart('pos-chart', 'Positive', posCounts, 'rgba(0,255,153,0.7)');
+    }
+
     function handleIncomingMessage(message) {
         if (typeof message === 'object' && message !== null) {
             const messageWrapper = document.createElement('div');
@@ -327,6 +387,15 @@
                 }
             } else {
                 messageHtml = marked.parse(message.message);
+            }
+            if (message.user_uuid === 'GPT' && enableColorize) {
+                try {
+                    const segments = JSON.parse(message.message_with_scores);
+                    const scores = segments.map(s => s.sentiment_score);
+                    renderSentimentCharts(scores);
+                } catch (err) {
+                    console.error('📊 Failed to render sentiment chart:', err);
+                }
             }
 
             bubble.innerHTML = `
