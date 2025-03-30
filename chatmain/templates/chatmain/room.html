@@ -236,6 +236,17 @@
 {{ room_name|json_script:"room-name" }}
 <script>
     let enableColorize = true;
+    let negChart = null;
+    let neuChart = null;
+    let posChart = null;
+    let chatSocket;
+    let reconnectAttempts = 0;
+    const maxReconnect = 5;
+    let anon_id = localStorage.getItem('anon_id');
+    if (!anon_id) {
+        anon_id = generateCleanUUID();
+        localStorage.setItem('anon_id', anon_id);
+    }
     document.getElementById('toggle-colorize').addEventListener('change', function () {
         enableColorize = this.checked;
     });
@@ -250,14 +261,7 @@
     document.getElementById('room-display').textContent = roomName;
     document.getElementById('server-ip').textContent = window.location.hostname;
 
-    let chatSocket;
-    let reconnectAttempts = 0;
-    const maxReconnect = 5;
-    let anon_id = localStorage.getItem('anon_id');
-    if (!anon_id) {
-        anon_id = generateCleanUUID();
-        localStorage.setItem('anon_id', anon_id);
-    }
+
 
     function updateStatus(text) {
         const bar = document.getElementById('status-bar');
@@ -325,24 +329,28 @@
             }
         };
 
-        const createChart = (ctxId, label, data, color) => {
+        const createChart = (ctxId, label, data, color, chartRef) => {
             const ctx = document.getElementById(ctxId).getContext('2d');
-            new Chart(ctx, {
+            if (chartRef && chartRef.chart) {
+                chartRef.chart.destroy();
+            }
+            chartRef.chart = new Chart(ctx, {
                 ...chartOptions,
                 data: {
                     labels: bins,
-                    datasets: [{
-                        label,
-                        data,
-                        backgroundColor: color
-                    }]
+                    datasets: [{ label, data, backgroundColor: color }]
                 }
             });
         };
 
-        createChart('neg-chart', 'Negative', negCounts, 'rgba(255,80,80,0.7)');
-        createChart('neu-chart', 'Neutral', neuCounts, 'rgba(255,255,255,0.6)');
-        createChart('pos-chart', 'Positive', posCounts, 'rgba(0,255,153,0.7)');
+        negChart = { chart: negChart?.chart };
+        createChart('neg-chart', 'Negative', negCounts, 'rgba(255,80,80,0.7)', negChart);
+
+        neuChart = { chart: neuChart?.chart };
+        createChart('neu-chart', 'Neutral', neuCounts, 'rgba(255,255,255,0.6)', neuChart);
+
+        posChart = { chart: posChart?.chart };
+        createChart('pos-chart', 'Positive', posCounts, 'rgba(0,255,153,0.7)', posChart);
     }
 
     function handleIncomingMessage(message) {
@@ -373,9 +381,12 @@
                         } else if (compound < 0) {
                             bgColor = `rgba(255, 80, 80, ${alpha})`;
                         }
+                        // const formatted = marked.parseInline(text);
+                        //
+                        // messageHtml += `<span style="background-color: ${bgColor}; border-radius: 6px; padding: 2px 4px; margin: 2px; display: inline;">${formatted}</span> `;
                         const formatted = marked.parseInline(text);
-
-                        messageHtml += `<span style="background-color: ${bgColor}; border-radius: 6px; padding: 2px 4px; margin: 2px; display: inline;">${formatted}</span> `;
+                        const tooltip = `neg: ${seg.sentiment_score.neg.toFixed(2)}, neu: ${seg.sentiment_score.neu.toFixed(2)}, pos: ${seg.sentiment_score.pos.toFixed(2)}, compound: ${seg.sentiment_score.compound.toFixed(2)}`;
+                        messageHtml += `<span title="${tooltip}" style="background-color: ${bgColor}; border-radius: 6px; padding: 2px 4px; margin: 2px; display: inline;">${formatted}</span> `;
                     });
                 } catch (err) {
                     console.error('Failed to parse message_with_scores:', err);
