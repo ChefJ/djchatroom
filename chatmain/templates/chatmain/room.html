@@ -436,6 +436,8 @@
                         const text = seg.content;
                         const compound = seg.sentiment_score.compound;
                         let bgColor = '';
+                        let textColor = '#00ff99'; // default light text
+
                         const alpha = Math.min(Math.abs(compound), 1).toFixed(2);
 
                         if (compound > 0) {
@@ -443,12 +445,15 @@
                         } else if (compound < 0) {
                             bgColor = `rgba(255, 80, 80, ${alpha})`;
                         }
+                        if (compound >= 0.8 || compound <= -0.8) {
+                            textColor = '#000'; // dark text on bright backgrounds
+                        }
                         // const formatted = marked.parseInline(text);
                         //
                         // messageHtml += `<span style="background-color: ${bgColor}; border-radius: 6px; padding: 2px 4px; margin: 2px; display: inline;">${formatted}</span> `;
                         const formatted = marked.parseInline(text);
                         const tooltip = `neg: ${seg.sentiment_score.neg.toFixed(2)}, neu: ${seg.sentiment_score.neu.toFixed(2)}, pos: ${seg.sentiment_score.pos.toFixed(2)}, compound: ${seg.sentiment_score.compound.toFixed(2)}`;
-                        messageHtml += `<span title="${tooltip}" style="background-color: ${bgColor}; border-radius: 6px; padding: 2px 4px; margin: 2px; display: inline;">${formatted}</span> `;
+                        messageHtml += `<span title="${tooltip}" style="background-color: ${bgColor};color: ${textColor}; border-radius: 6px; padding: 2px 4px; margin: 2px; display: inline;">${formatted}</span> `;
                     });
                 } catch (err) {
                     console.error('Failed to parse message_with_scores:', err);
