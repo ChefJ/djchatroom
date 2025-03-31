@@ -239,11 +239,8 @@
 {{ room_name|json_script:"room-name" }}
 <script>
     let enableColorize = true;
-    let negChart = null;
-    let neuChart = null;
-    let posChart = null;
-    let ratiochart= null;
-    let sumchart = null;
+    const chartRefs = {};
+
     let chatSocket;
     let reconnectAttempts = 0;
     const maxReconnect = 5;
@@ -360,126 +357,61 @@
             }
         };
 
-        const createChart = (ctxId, label, data, color) => {
-            const ctx = document.getElementById(ctxId).getContext('2d');
+        function createChart(canvasId, label, data, color, chartKey, isHorizontal = false) {
+            const ctx = document.getElementById(canvasId).getContext('2d');
 
-            const chartConfig = JSON.parse(JSON.stringify(baseChartOptions)); // deep clone
-            chartConfig.options.plugins.title.text = label;
+            // Destroy existing chart before creating a new one
+            if (chartRefs[chartKey]) {
+                chartRefs[chartKey].destroy();
+            }
 
-            chartConfig.data = {
-                labels: bins,
-                datasets: [{
-                    label,
-                    data,
-                    backgroundColor: color
-                }]
+            const baseOptions = {
+                type: 'bar',
+                options: {
+                    indexAxis: isHorizontal ? 'y' : 'x',
+                    scales: {
+                        x: {
+                            beginAtZero: true,
+                            ticks: { color: '#00ff99' },
+                            grid: { color: '#444' }
+                        },
+                        y: {
+                            ticks: { color: '#00ff99' },
+                            grid: { color: '#444' }
+                        }
+                    },
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: label,
+                            color: '#00ff99',
+                            font: { size: 14, weight: 'bold' },
+                            padding: { top: 10, bottom: 10 }
+                        },
+                        legend: {
+                            labels: { color: '#00ff99' }
+                        }
+                    }
+                },
+                data: {
+                    labels: isHorizontal ? [''] : bins,
+                    datasets: [{
+                        label,
+                        data,
+                        backgroundColor: color
+                    }]
+                }
             };
 
-            new Chart(ctx, chartConfig);
-        };
+            chartRefs[chartKey] = new Chart(ctx, baseOptions);
+        }
 
-        negChart = { chart: negChart?.chart };
-        createChart('neg-chart', 'Negative', negCounts, 'rgba(255,80,80,0.7)', negChart);
 
-        neuChart = { chart: neuChart?.chart };
-        createChart('neu-chart', 'Neutral', neuCounts, 'rgba(255,255,255,0.6)', neuChart);
-
-        posChart = { chart: posChart?.chart };
-        createChart('pos-chart', 'Positive', posCounts, 'rgba(0,255,153,0.7)', posChart);
-
-        if (ratiochart) ratiochart.destroy();
-        ratiochart = new Chart(document.getElementById('ratio-bar').getContext('2d'), {
-            type: 'bar',
-            data: {
-                labels: ['Sentiment Ratio'],
-                datasets: [
-                    {
-                        label: 'Negative',
-                        data: [negCount],
-                        backgroundColor: 'rgba(255,80,80,0.7)'
-                    },
-                    {
-                        label: 'Positive',
-                        data: [posCount],
-                        backgroundColor: 'rgba(0,255,153,0.7)'
-                    }
-                ]
-            },
-            options: {
-                indexAxis: 'y',
-                plugins: {
-                    title: {
-                        display: true,
-                        text: 'Sentence Count: Negative vs Positive',
-                        color: '#00ff99',
-                        font: { size: 14, weight: 'bold' }
-                    },
-                    legend: {
-                        labels: { color: '#00ff99' }
-                    }
-                },
-                scales: {
-                    x: {
-                        beginAtZero: true,
-                        ticks: { color: '#00ff99' },
-                        grid: { color: '#444' }
-                    },
-                    y: {
-                        ticks: { color: '#00ff99' },
-                        grid: { color: '#444' }
-                    }
-                }
-            }
-        });
-
-        if (sumchart) sumchart.destroy();
-        sumchart =         new Chart(document.getElementById('sum-bar').getContext('2d'), {
-            type: 'bar',
-            data: {
-                labels: ['Sentiment Strength'],
-                datasets: [
-                    {
-                        label: 'Negative',
-                        data: [negSum.toFixed(2)],
-                        backgroundColor: 'rgba(255,80,80,0.7)'
-                    },
-                    {
-                        label: 'Positive',
-                        data: [posSum.toFixed(2)],
-                        backgroundColor: 'rgba(0,255,153,0.7)'
-                    }
-                ]
-            },
-            options: {
-                indexAxis: 'y',
-                plugins: {
-                    title: {
-                        display: true,
-                        text: 'Sum of Sentiment Scores',
-                        color: '#00ff99',
-                        font: { size: 14, weight: 'bold' }
-                    },
-                    legend: {
-                        labels: { color: '#00ff99' }
-                    }
-                },
-                scales: {
-                    x: {
-                        beginAtZero: true,
-                        ticks: { color: '#00ff99' },
-                        grid: { color: '#444' }
-                    },
-                    y: {
-                        ticks: { color: '#00ff99' },
-                        grid: { color: '#444' }
-                    }
-                }
-            }
-        });
-        // Horizontal bar: Ratio of Positive vs Negative counts
-
-// Horizontal bar: Sum of sentiment strength
-
+        createChart('neg-chart', 'Negative', negCounts, 'rgba(255,80,80,0.7)', 'neg');
+        createChart('neu-chart', 'Neutral', neuCounts, 'rgba(255,255,255,0.6)', 'neu');
+        createChart('pos-chart', 'Positive', posCounts, 'rgba(0,255,153,0.7)', 'pos');
+        createChart('ratio-bar', 'Sentence Count: Negative vs Positive', [negCount, posCount], ['rgba(255,80,80,0.7)', 'rgba(0,255,153,0.7)'], 'ratio', true);
+        createChart('sum-bar', 'Sum of Sentiment Scores', [negSum.toFixed(2), posSum.toFixed(2)], ['rgba(255,80,80,0.7)', 'rgba(0,255,153,0.7)'], 'sum', true);
 
     }
 
