@@ -220,9 +220,12 @@
                 <canvas id="neg-chart"></canvas>
                 <canvas id="neu-chart"></canvas>
                 <canvas id="pos-chart"></canvas>
+                <canvas id="ratio-bar" height="40" style="margin-top: 10px;"></canvas>
+                <canvas id="sum-bar" height="40" style="margin-bottom: 30px;"></canvas>
             </div>
-            <img src="{% static 'chatmain/1.jpg' %}" alt="Sentiment Visualization" id="visbias-image">
-            <label>Sentiment Analysis</label>
+
+<!--            <img src="{% static 'chatmain/1.jpg' %}" alt="Sentiment Visualization" id="visbias-image">-->
+<!--            <label>Sentiment Analysis</label>-->
         </div>
     </div>
 </div>
@@ -304,12 +307,22 @@
         const negCounts = Array(10).fill(0);
         const neuCounts = Array(10).fill(0);
         const posCounts = Array(10).fill(0);
+        let posCount = 0, negCount = 0, posSum = 0, negSum = 0;
 
         scores.forEach(s => {
             const getBin = v => Math.min(9, Math.floor(v * 10));
             if (s.neg > 0) negCounts[getBin(s.neg)]++;
             if (s.neu > 0) neuCounts[getBin(s.neu)]++;
             if (s.pos > 0) posCounts[getBin(s.pos)]++;
+
+            if (s.pos > 0) {
+                posCount++;
+                posSum += s.pos;
+            }
+            if (s.neg > 0) {
+                negCount++;
+                negSum += s.neg;
+            }
         });
 
         const baseChartOptions = {
@@ -371,6 +384,96 @@
 
         posChart = { chart: posChart?.chart };
         createChart('pos-chart', 'Positive', posCounts, 'rgba(0,255,153,0.7)', posChart);
+        // Horizontal bar: Ratio of Positive vs Negative counts
+        new Chart(document.getElementById('ratio-bar').getContext('2d'), {
+            type: 'bar',
+            data: {
+                labels: ['Sentiment Ratio'],
+                datasets: [
+                    {
+                        label: 'Negative',
+                        data: [negCount],
+                        backgroundColor: 'rgba(255,80,80,0.7)'
+                    },
+                    {
+                        label: 'Positive',
+                        data: [posCount],
+                        backgroundColor: 'rgba(0,255,153,0.7)'
+                    }
+                ]
+            },
+            options: {
+                indexAxis: 'y',
+                plugins: {
+                    title: {
+                        display: true,
+                        text: 'Sentence Count: Negative vs Positive',
+                        color: '#00ff99',
+                        font: { size: 14, weight: 'bold' }
+                    },
+                    legend: {
+                        labels: { color: '#00ff99' }
+                    }
+                },
+                scales: {
+                    x: {
+                        beginAtZero: true,
+                        ticks: { color: '#00ff99' },
+                        grid: { color: '#444' }
+                    },
+                    y: {
+                        ticks: { color: '#00ff99' },
+                        grid: { color: '#444' }
+                    }
+                }
+            }
+        });
+
+// Horizontal bar: Sum of sentiment strength
+        new Chart(document.getElementById('sum-bar').getContext('2d'), {
+            type: 'bar',
+            data: {
+                labels: ['Sentiment Strength'],
+                datasets: [
+                    {
+                        label: 'Negative',
+                        data: [negSum.toFixed(2)],
+                        backgroundColor: 'rgba(255,80,80,0.7)'
+                    },
+                    {
+                        label: 'Positive',
+                        data: [posSum.toFixed(2)],
+                        backgroundColor: 'rgba(0,255,153,0.7)'
+                    }
+                ]
+            },
+            options: {
+                indexAxis: 'y',
+                plugins: {
+                    title: {
+                        display: true,
+                        text: 'Sum of Sentiment Scores',
+                        color: '#00ff99',
+                        font: { size: 14, weight: 'bold' }
+                    },
+                    legend: {
+                        labels: { color: '#00ff99' }
+                    }
+                },
+                scales: {
+                    x: {
+                        beginAtZero: true,
+                        ticks: { color: '#00ff99' },
+                        grid: { color: '#444' }
+                    },
+                    y: {
+                        ticks: { color: '#00ff99' },
+                        grid: { color: '#444' }
+                    }
+                }
+            }
+        });
+
     }
 
     function handleIncomingMessage(message) {
