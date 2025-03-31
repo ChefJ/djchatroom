@@ -220,8 +220,8 @@
                 <canvas id="neg-chart"></canvas>
                 <canvas id="neu-chart"></canvas>
                 <canvas id="pos-chart"></canvas>
-                <canvas id="ratio-bar" height="40" style="margin-top: 10px;"></canvas>
-                <canvas id="sum-bar" height="40" style="margin-bottom: 30px;"></canvas>
+<!--                <canvas id="ratio-bar" height="40" style="margin-top: 10px;"></canvas>-->
+<!--                <canvas id="sum-bar" height="40" style="margin-bottom: 30px;"></canvas>-->
             </div>
 
             <img src="{% static 'chatmain/1.jpg' %}" alt="Sentiment Visualization" id="visbias-image">
@@ -410,8 +410,8 @@
         createChart('neg-chart', 'Negative', negCounts, 'rgba(255,80,80,0.7)', 'neg');
         createChart('neu-chart', 'Neutral', neuCounts, 'rgba(255,255,255,0.6)', 'neu');
         createChart('pos-chart', 'Positive', posCounts, 'rgba(0,255,153,0.7)', 'pos');
-        createChart('ratio-bar', 'Sentence Count: Negative vs Positive', [negCount, posCount], ['rgba(255,80,80,0.7)', 'rgba(0,255,153,0.7)'], 'ratio', true);
-        createChart('sum-bar', 'Sum of Sentiment Scores', [negSum.toFixed(2), posSum.toFixed(2)], ['rgba(255,80,80,0.7)', 'rgba(0,255,153,0.7)'], 'sum', true);
+        // createChart('ratio-bar', 'Sentence Count: Negative vs Positive', [negCount, posCount], ['rgba(255,80,80,0.7)', 'rgba(0,255,153,0.7)'], 'ratio', true);
+        // createChart('sum-bar', 'Sum of Sentiment Scores', [negSum.toFixed(2), posSum.toFixed(2)], ['rgba(255,80,80,0.7)', 'rgba(0,255,153,0.7)'], 'sum', true);
 
     }
 
