@@ -307,9 +307,9 @@
 
         scores.forEach(s => {
             const getBin = v => Math.min(9, Math.floor(v * 10));
-            negCounts[getBin(s.neg)]++;
-            neuCounts[getBin(s.neu)]++;
-            posCounts[getBin(s.pos)]++;
+            if (s.neg > 0) negCounts[getBin(s.neg)]++;
+            if (s.neu > 0) neuCounts[getBin(s.neu)]++;
+            if (s.pos > 0) posCounts[getBin(s.pos)]++;
         });
 
         const chartOptions = {
