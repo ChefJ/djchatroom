@@ -312,7 +312,7 @@
             if (s.pos > 0) posCounts[getBin(s.pos)]++;
         });
 
-        const chartOptions = {
+        const baseChartOptions = {
             type: 'bar',
             options: {
                 scales: {
@@ -327,23 +327,40 @@
                     }
                 },
                 plugins: {
-                    legend: { display: false }
+                    legend: { display: false },
+                    title: {
+                        display: true,
+                        text: '', // ← this will be set per chart
+                        color: '#00ff99',
+                        font: {
+                            size: 16,
+                            weight: 'bold'
+                        },
+                        padding: {
+                            top: 10,
+                            bottom: 10
+                        }
+                    }
                 }
             }
         };
 
-        const createChart = (ctxId, label, data, color, chartRef) => {
+        const createChart = (ctxId, label, data, color) => {
             const ctx = document.getElementById(ctxId).getContext('2d');
-            if (chartRef && chartRef.chart) {
-                chartRef.chart.destroy();
-            }
-            chartRef.chart = new Chart(ctx, {
-                ...chartOptions,
-                data: {
-                    labels: bins,
-                    datasets: [{ label, data, backgroundColor: color }]
-                }
-            });
+
+            const chartConfig = JSON.parse(JSON.stringify(baseChartOptions)); // deep clone
+            chartConfig.options.plugins.title.text = label;
+
+            chartConfig.data = {
+                labels: bins,
+                datasets: [{
+                    label,
+                    data,
+                    backgroundColor: color
+                }]
+            };
+
+            new Chart(ctx, chartConfig);
         };
 
         negChart = { chart: negChart?.chart };
