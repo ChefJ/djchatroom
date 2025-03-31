@@ -242,6 +242,8 @@
     let negChart = null;
     let neuChart = null;
     let posChart = null;
+    let ratiochart= null;
+    let sumchart = null;
     let chatSocket;
     let reconnectAttempts = 0;
     const maxReconnect = 5;
@@ -384,8 +386,9 @@
 
         posChart = { chart: posChart?.chart };
         createChart('pos-chart', 'Positive', posCounts, 'rgba(0,255,153,0.7)', posChart);
-        // Horizontal bar: Ratio of Positive vs Negative counts
-        new Chart(document.getElementById('ratio-bar').getContext('2d'), {
+
+        if (ratiochart) ratiochart.destroy();
+        ratiochart = new Chart(document.getElementById('ratio-bar').getContext('2d'), {
             type: 'bar',
             data: {
                 labels: ['Sentiment Ratio'],
@@ -429,8 +432,8 @@
             }
         });
 
-// Horizontal bar: Sum of sentiment strength
-        new Chart(document.getElementById('sum-bar').getContext('2d'), {
+        if (sumchart) sumchart.destroy();
+        sumchart =         new Chart(document.getElementById('sum-bar').getContext('2d'), {
             type: 'bar',
             data: {
                 labels: ['Sentiment Strength'],
@@ -473,6 +476,10 @@
                 }
             }
         });
+        // Horizontal bar: Ratio of Positive vs Negative counts
+
+// Horizontal bar: Sum of sentiment strength
+
 
     }
 
