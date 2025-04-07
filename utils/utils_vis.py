@@ -5,6 +5,7 @@ import matplotlib.pyplot as plt
 from vaderSentiment.vaderSentiment import SentimentIntensityAnalyzer
 import os
 from django.conf import settings
+import spacy
 
 APP_DIR = os.path.dirname(os.path.abspath(__file__))
 
@@ -97,11 +98,12 @@ def generate_sentiment_graph(neg_scores, neu_scores, pos_scores, compound_scores
 #neu_scores = np.random.uniform(0, 1, num_sentences)  # Random neutral scores
 #pos_scores = np.random.uniform(0, 1, num_sentences)  # Random positive scores
 
-
+spacy.load("en_core_web_sm")
 def text_to_score(sentences):
     sentences_with_score = []
     if type(sentences) == str:
-        sentences = sentences.split(".")
+        doc = nlp(sentences)
+        sentences = doc.sents
     neg_scores = []
     neu_scores = []
     pos_scores = []
