@@ -470,7 +470,7 @@
                     segments.forEach(seg => {
                         const text = seg.content;
                         const compound = seg.sentiment_score.compound;
-                        let bgColor = gridColor;
+                        let bgColor = '';
                         let textColor = textColor; // default light text
 
                         const alpha = Math.min(Math.abs(compound), 1).toFixed(2);
