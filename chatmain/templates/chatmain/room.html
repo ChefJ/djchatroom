@@ -277,6 +277,10 @@
     const maxReconnect = 5;
     let lastMessageTime = Date.now();
 
+    const getCSSVar = name => getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+    const textColor = getCSSVar('--text-color') || '#00ff99';
+    const gridColor = getCSSVar('--border-color') || '#444';
+
     let anon_id = localStorage.getItem('anon_id');
     if (!anon_id) {
         anon_id = generateCleanUUID();
@@ -360,13 +364,13 @@
             options: {
                 scales: {
                     y: {
-                        ticks: { color: '#00ff99' },
-                        grid: { color: '#444' }
+                        ticks: { color: textColor },
+                        grid: { color: gridColor}
                     },
                     x: {
                         beginAtZero: true,
-                        ticks: { color: '#00ff99' },
-                        grid: { color: '#444' }
+                        ticks: { color: textColor },
+                        grid: { color: gridColor }
                     }
                 },
                 plugins: {
@@ -374,7 +378,7 @@
                     title: {
                         display: true,
                         text: '', // ← this will be set per chart
-                        color: '#00ff99',
+                        color: textColor,
                         font: {
                             size: 16,
                             weight: 'bold'
@@ -403,24 +407,24 @@
                     scales: {
                         x: {
                             beginAtZero: true,
-                            ticks: { color: '#00ff99' },
-                            grid: { color: '#444' }
+                            ticks: { color: textColor },
+                            grid: { color: gridColor }
                         },
                         y: {
-                            ticks: { color: '#00ff99' },
-                            grid: { color: '#444' }
+                            ticks: { color: textColor },
+                            grid: { color: gridColor }
                         }
                     },
                     plugins: {
                         title: {
                             display: true,
                             text: label,
-                            color: '#00ff99',
+                            color: textColor,
                             font: { size: 14, weight: 'bold' },
                             padding: { top: 10, bottom: 10 }
                         },
                         legend: {
-                            labels: { color: '#00ff99' }
+                            labels: { color:  textColor }
                         }
                     }
                 },
@@ -466,8 +470,8 @@
                     segments.forEach(seg => {
                         const text = seg.content;
                         const compound = seg.sentiment_score.compound;
-                        let bgColor = '';
-                        let textColor = '#00ff99'; // default light text
+                        let bgColor = gridColor;
+                        let textColor = textColor; // default light text
 
                         const alpha = Math.min(Math.abs(compound), 1).toFixed(2);
 
