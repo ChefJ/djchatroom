@@ -21,6 +21,7 @@
             --input-border: #00ff99;
             --scroll-thumb: #00ff99;
             --scroll-track: #000;
+
         }
 
         body[data-theme='modern'] {
@@ -278,8 +279,8 @@
     let lastMessageTime = Date.now();
 
     const getCSSVar = name => getComputedStyle(document.documentElement).getPropertyValue(name).trim();
-    const glbTextColor = getCSSVar('--text-color') || '#000000';
-    const glbGridColor = getCSSVar('--border-color') || '#444';
+    let glbTextColor = getCSSVar('--text-color') || '#000000';
+    let glbGridColor = getCSSVar('--border-color') || '#444';
 
     let anon_id = localStorage.getItem('anon_id');
     if (!anon_id) {
@@ -359,38 +360,6 @@
             }
         });
 
-        const baseChartOptions = {
-            type: 'bar',
-            options: {
-                scales: {
-                    y: {
-                        ticks: { color: glbTextColor },
-                        grid: { color: glbGridColor}
-                    },
-                    x: {
-                        beginAtZero: true,
-                        ticks: { color: glbTextColor },
-                        grid: { color: glbGridColor }
-                    }
-                },
-                plugins: {
-                    legend: { display: false },
-                    title: {
-                        display: true,
-                        text: '', // ← this will be set per chart
-                        color: glbTextColor,
-                        font: {
-                            size: 16,
-                            weight: 'bold'
-                        },
-                        padding: {
-                            top: 10,
-                            bottom: 10
-                        }
-                    }
-                }
-            }
-        };
 
         function createChart(canvasId, label, data, color, chartKey, isHorizontal = false) {
             const ctx = document.getElementById(canvasId).getContext('2d');
@@ -424,7 +393,7 @@
                             padding: { top: 10, bottom: 10 }
                         },
                         legend: {
-                            labels: { color:  glbTextColor }
+                            display: false
                         }
                     }
                 },
@@ -443,7 +412,7 @@
 
 
         createChart('neg-chart', 'Negative', negCounts, 'rgba(255,80,80,0.7)', 'neg');
-        createChart('neu-chart', 'Neutral', neuCounts, 'rgba(255,255,255,0.6)', 'neu');
+        createChart('neu-chart', 'Neutral', neuCounts, 'rgba(255,80,80,0.7)', 'neu');
         createChart('pos-chart', 'Positive', posCounts, 'rgba(0,255,153,0.7)', 'pos');
         // createChart('ratio-bar', 'Sentence Count: Negative vs Positive', [negCount, posCount], ['rgba(255,80,80,0.7)', 'rgba(0,255,153,0.7)'], 'ratio', true);
         // createChart('sum-bar', 'Sum of Sentiment Scores', [negSum.toFixed(2), posSum.toFixed(2)], ['rgba(255,80,80,0.7)', 'rgba(0,255,153,0.7)'], 'sum', true);
@@ -506,6 +475,8 @@
                     console.error('📊 Failed to render sentiment chart:', err);
                 }
             }
+            bubble.__messageWithScores = message.message_with_scores;
+
 
             bubble.innerHTML = `
                 <div class="message-text">${messageHtml}</div>
@@ -616,6 +587,31 @@
         const theme = toggle.checked ? 'modern' : 'default';
         document.body.setAttribute('data-theme', theme);
         localStorage.setItem('chat-theme', theme);
+
+        // Re-render sentiment charts from the last GPT message
+        const allMessages = document.querySelectorAll('.chat-message');
+        const gptMessage = Array.from(allMessages).reverse().find(el => {
+            const sender = el.previousElementSibling?.textContent;
+            return sender === 'GPT';
+        });
+        glbTextColor = getCSSVar('--text-color') || '#000000';
+        glbGridColor = getCSSVar('--border-color') || '#444';
+        if (gptMessage) {
+            const messageId = gptMessage.dataset.id;
+            // Look up message in JS (if you have message data stored), or grab its attached data
+            const msgData = gptMessage.__messageWithScores;  // Optional: if you previously stored it
+
+            if (msgData) {
+                try {
+                    const segments = JSON.parse(msgData);
+                    const scores = segments.map(s => s.sentiment_score);
+                    Object.values(chartRefs).forEach(chart => chart.destroy());
+                    renderSentimentCharts(scores);
+                } catch (err) {
+                    console.warn('🧠 Failed to parse stored scores for re-render:', err);
+                }
+            }
+        }
     });
 </script>
 
