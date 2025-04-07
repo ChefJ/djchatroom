@@ -9,13 +9,41 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
     <style>
+        :root {
+            --bg-color: #1a1a1a;
+            --text-color: #00ff99;
+            --border-color: #00ff99;
+            --accent-color: #39ff14;
+            --chat-bg: rgba(0, 255, 153, 0.1);
+            --own-bg: rgba(0, 255, 153, 0.25);
+            --shadow-color: #00ff99;
+            --input-bg: #000;
+            --input-border: #00ff99;
+            --scroll-thumb: #00ff99;
+            --scroll-track: #000;
+        }
+
+        body[data-theme='modern'] {
+            --bg-color: #f4f4f5;
+            --text-color: #222;
+            --border-color: #ccc;
+            --accent-color: #444;
+            --chat-bg: #fff;
+            --own-bg: #e0e0e0;
+            --shadow-color: rgba(0, 0, 0, 0.1);
+            --input-bg: #fff;
+            --input-border: #ccc;
+            --scroll-thumb: #888;
+            --scroll-track: #f0f0f0;
+        }
+
         html, body {
             height: 100%;
             margin: 0;
             padding: 0;
             font-family: 'Courier Prime', monospace;
-            background-color: #1a1a1a;
-            color: #00ff99;
+            background-color: var(--bg-color);
+            color: var(--text-color);
         }
 
         body {
@@ -24,12 +52,12 @@
         }
 
         .status-bar {
-            background-color: #000;
-            color: #00ff99;
+            background-color: var(--input-bg);
+            color: var(--text-color);
+            border-bottom: 1px solid var(--border-color);
+            box-shadow: 0 2px 10px var(--shadow-color);
             padding: 6px 12px;
             font-size: 13px;
-            border-bottom: 1px solid #00ff99;
-            box-shadow: 0 2px 10px #00ff99;
             text-transform: uppercase;
             letter-spacing: 1px;
         }
@@ -62,15 +90,15 @@
             padding: 10px;
             font-size: 14px;
             line-height: 1.5;
-            border: 2px solid #00ff99;
+            border: 2px solid var(--border-color);
             border-radius: 8px;
-            background-color: #000;
-            color: #00ff99;
+            background-color: var(--bg-color)0;
+            color: var(--text-color);
             overflow-y: auto;
             display: flex;
             flex-direction: column;
             gap: 8px;
-            box-shadow: 0 0 10px #00ff99;
+            box-shadow: 0 0 10px var(--shadow-color);
         }
 
         .message-wrapper {
@@ -102,15 +130,15 @@
             position: relative;
             cursor: pointer;
             background-color: rgba(0, 255, 153, 0.1);
-            border: 1px dashed #00ff99;
+            border: 1px dashed var(--border-color);
             font-size: 14px;
-            color: #00ff99;
+            color: var(--text-color);
             animation: typein 0.3s ease-out;
         }
 
         .own-message {
             background-color: rgba(0, 255, 153, 0.25);
-            border: 1px solid #00ff99;
+            border: 1px solid var(--border-color);
         }
 
         .input-row {
@@ -118,7 +146,7 @@
             justify-content: center;
             align-items: center;
             padding: 10px 20px;
-            border-top: 1px solid #00ff99;
+            border-top: 1px solid var(--border-color);
             gap: 10px;
         }
 
@@ -127,8 +155,8 @@
             font-size: 14px;
             width: 60%;
             border-radius: 4px;
-            border: 1px solid #00ff99;
-            background-color: #000;
+            border: 1px solid var(--border-color);
+            background-color: var(--bg-color);
             color: #00ff99;
         }
 
@@ -143,7 +171,7 @@
             font-size: 14px;
             border-radius: 4px;
             border: none;
-            background-color: #00ff99;
+            background-color: var(--bg-color);
             color: #000;
             cursor: pointer;
             text-transform: uppercase;
@@ -151,16 +179,16 @@
         }
 
         #chat-message-submit:hover {
-            background-color: #39ff14;
+            background-color: var(--accent-color);
         }
 
         .image-box {
             width: 500px;
-            border: 2px solid #00ff99;
+            border: 2px solid var(--border-color);
             padding: 10px;
-            background-color: #000;
-            box-shadow: 0 0 10px #00ff99;
-            color: #00ff99;
+            background-color: var(--bg-color);
+            box-shadow: 0 0 10px var(--shadow-color);
+            color: var(--text-color);
         }
 
         #visbias-image {
@@ -175,7 +203,7 @@
             margin-top: 10px;
             font-weight: bold;
             font-size: 13px;
-            text-shadow: 0 0 2px #00ff99;
+            text-shadow: 0 0 2px var(--shadow-color);
         }
 
         body::before {
@@ -208,7 +236,10 @@
 <body>
 
 <div class="status-bar" id="status-bar">[CONNECTING] :: SERVER: <span id="server-ip"></span> :: ROOM: <span id="room-display"></span></div>
-
+<label style="margin-left:auto; display:flex; align-items:center; gap:6px; cursor:pointer;">
+    <input type="checkbox" id="theme-toggle">
+    <span style="font-size: 13px;">Modern</span>
+</label>
 <div class="container">
     <div class="main-content">
         <div class="chat-box">
@@ -570,6 +601,18 @@
             chatSocket.close(); // trigger onclose → reconnect
         }
     }, 30000);
+
+    const toggle = document.getElementById('theme-toggle');
+    const currentTheme = localStorage.getItem('chat-theme') || 'default';
+
+    document.body.setAttribute('data-theme', currentTheme);
+    toggle.checked = currentTheme === 'modern';
+
+    toggle.addEventListener('change', () => {
+        const theme = toggle.checked ? 'modern' : 'default';
+        document.body.setAttribute('data-theme', theme);
+        localStorage.setItem('chat-theme', theme);
+    });
 </script>
 
 </body>
