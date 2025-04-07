@@ -296,8 +296,6 @@
     document.getElementById('room-display').textContent = roomName;
     document.getElementById('server-ip').textContent = window.location.hostname;
 
-
-
     function updateStatus(text) {
         const bar = document.getElementById('status-bar');
         bar.textContent = text;
@@ -355,46 +353,15 @@
             }
         });
 
-        const baseChartOptions = {
-            type: 'bar',
-            options: {
-                scales: {
-                    y: {
-                        ticks: { color: '#00ff99' },
-                        grid: { color: '#444' }
-                    },
-                    x: {
-                        beginAtZero: true,
-                        ticks: { color: '#00ff99' },
-                        grid: { color: '#444' }
-                    }
-                },
-                plugins: {
-                    legend: { display: false },
-                    title: {
-                        display: true,
-                        text: '', // ← this will be set per chart
-                        color: '#00ff99',
-                        font: {
-                            size: 16,
-                            weight: 'bold'
-                        },
-                        padding: {
-                            top: 10,
-                            bottom: 10
-                        }
-                    }
-                }
-            }
-        };
-
         function createChart(canvasId, label, data, color, chartKey, isHorizontal = false) {
             const ctx = document.getElementById(canvasId).getContext('2d');
 
-            // Destroy existing chart before creating a new one
             if (chartRefs[chartKey]) {
                 chartRefs[chartKey].destroy();
             }
+
+            const currentTextColor = getComputedStyle(document.documentElement).getPropertyValue('--text-color').trim() || '#00ff99';
+            const currentGridColor = getComputedStyle(document.documentElement).getPropertyValue('--border-color').trim() || '#444';
 
             const baseOptions = {
                 type: 'bar',
@@ -403,24 +370,24 @@
                     scales: {
                         x: {
                             beginAtZero: true,
-                            ticks: { color: '#00ff99' },
-                            grid: { color: '#444' }
+                            ticks: { color: currentTextColor },
+                            grid: { color: currentGridColor }
                         },
                         y: {
-                            ticks: { color: '#00ff99' },
-                            grid: { color: '#444' }
+                            ticks: { color: currentTextColor },
+                            grid: { color: currentGridColor }
                         }
                     },
                     plugins: {
                         title: {
                             display: true,
                             text: label,
-                            color: '#00ff99',
+                            color: currentTextColor,
                             font: { size: 14, weight: 'bold' },
                             padding: { top: 10, bottom: 10 }
                         },
                         legend: {
-                            labels: { color: '#00ff99' }
+                            labels: { color: currentTextColor }
                         }
                     }
                 },
@@ -437,13 +404,9 @@
             chartRefs[chartKey] = new Chart(ctx, baseOptions);
         }
 
-
         createChart('neg-chart', 'Negative', negCounts, 'rgba(255,80,80,0.7)', 'neg');
         createChart('neu-chart', 'Neutral', neuCounts, 'rgba(255,255,255,0.6)', 'neu');
         createChart('pos-chart', 'Positive', posCounts, 'rgba(0,255,153,0.7)', 'pos');
-        // createChart('ratio-bar', 'Sentence Count: Negative vs Positive', [negCount, posCount], ['rgba(255,80,80,0.7)', 'rgba(0,255,153,0.7)'], 'ratio', true);
-        // createChart('sum-bar', 'Sum of Sentiment Scores', [negSum.toFixed(2), posSum.toFixed(2)], ['rgba(255,80,80,0.7)', 'rgba(0,255,153,0.7)'], 'sum', true);
-
     }
 
     function handleIncomingMessage(message) {
@@ -467,7 +430,7 @@
                         const text = seg.content;
                         const compound = seg.sentiment_score.compound;
                         let bgColor = '';
-                        let textColor = '#00ff99'; // default light text
+                        let textColor = getComputedStyle(document.documentElement).getPropertyValue('--text-color').trim();
 
                         const alpha = Math.min(Math.abs(compound), 1).toFixed(2);
 
@@ -476,15 +439,14 @@
                         } else if (compound < 0) {
                             bgColor = `rgba(255, 80, 80, ${alpha})`;
                         }
-                        if (compound >= 0.8 ) {
-                            textColor = '#000'; // dark text on bright backgrounds
+
+                        if (compound >= 0.8) {
+                            textColor = '#000'; // for contrast on bright green
                         }
-                        // const formatted = marked.parseInline(text);
-                        //
-                        // messageHtml += `<span style="background-color: ${bgColor}; border-radius: 6px; padding: 2px 4px; margin: 2px; display: inline;">${formatted}</span> `;
+
                         const formatted = marked.parseInline(text);
                         const tooltip = `neg: ${seg.sentiment_score.neg.toFixed(2)}, neu: ${seg.sentiment_score.neu.toFixed(2)}, pos: ${seg.sentiment_score.pos.toFixed(2)}, compound: ${seg.sentiment_score.compound.toFixed(2)}`;
-                        messageHtml += `<span title="${tooltip}" style="background-color: ${bgColor};color: ${textColor}; border-radius: 6px; padding: 2px 4px; margin: 2px; display: inline;">${formatted}</span> `;
+                        messageHtml += `<span title="${tooltip}" style="background-color: ${bgColor}; color: ${textColor}; border-radius: 6px; padding: 2px 4px; margin: 2px; display: inline;">${formatted}</span> `;
                     });
                 } catch (err) {
                     console.error('Failed to parse message_with_scores:', err);
@@ -493,6 +455,7 @@
             } else {
                 messageHtml = marked.parse(message.message);
             }
+
             if (message.user_uuid === 'GPT' && enableColorize) {
                 try {
                     const segments = JSON.parse(message.message_with_scores);
@@ -594,24 +557,43 @@
         .catch(error => {
             console.error('❌ 加载历史消息失败:', error);
         });
+
     setInterval(() => {
         const now = Date.now();
-        if (now - lastMessageTime > 60000) { // 60s without messages
+        if (now - lastMessageTime > 60000) {
             console.warn('⚠️ No messages in a while. Reconnecting...');
-            chatSocket.close(); // trigger onclose → reconnect
+            chatSocket.close();
         }
     }, 30000);
 
+    // Theme handling
     const toggle = document.getElementById('theme-toggle');
     const currentTheme = localStorage.getItem('chat-theme') || 'default';
-
     document.body.setAttribute('data-theme', currentTheme);
     toggle.checked = currentTheme === 'modern';
+
+    function applyChartThemeColors(theme) {
+        const isModern = theme === 'modern';
+        const axisColor = isModern ? '#444' : '#00ff99';
+        const textColor = isModern ? '#222' : '#00ff99';
+
+        Object.values(chartRefs).forEach(chart => {
+            chart.options.scales.x.ticks.color = textColor;
+            chart.options.scales.y.ticks.color = textColor;
+            chart.options.scales.x.grid.color = axisColor;
+            chart.options.scales.y.grid.color = axisColor;
+            if (chart.options.plugins.title) chart.options.plugins.title.color = textColor;
+            chart.update();
+        });
+    }
+
+    applyChartThemeColors(currentTheme);
 
     toggle.addEventListener('change', () => {
         const theme = toggle.checked ? 'modern' : 'default';
         document.body.setAttribute('data-theme', theme);
         localStorage.setItem('chat-theme', theme);
+        applyChartThemeColors(theme);
     });
 </script>
 
