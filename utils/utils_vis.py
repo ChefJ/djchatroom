@@ -104,7 +104,7 @@ def text_to_score(sentences):
     sentences_with_score = []
     if type(sentences) == str:
         doc = nlp(sentences)
-        sentences = doc.sents
+        sentences = [sent.text for sent in doc.sents]
     neg_scores = []
     neu_scores = []
     pos_scores = []
