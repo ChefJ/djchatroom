@@ -278,7 +278,7 @@
     let lastMessageTime = Date.now();
 
     const getCSSVar = name => getComputedStyle(document.documentElement).getPropertyValue(name).trim();
-    const glbTextColor = getCSSVar('--text-color') || '#00ff99';
+    const glbTextColor = getCSSVar('--text-color') || '#000000';
     const glbGridColor = getCSSVar('--border-color') || '#444';
 
     let anon_id = localStorage.getItem('anon_id');
