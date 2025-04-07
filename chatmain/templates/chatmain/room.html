@@ -278,8 +278,8 @@
     let lastMessageTime = Date.now();
 
     const getCSSVar = name => getComputedStyle(document.documentElement).getPropertyValue(name).trim();
-    const textColor = getCSSVar('--text-color') || '#00ff99';
-    const gridColor = getCSSVar('--border-color') || '#444';
+    const glbTextColor = getCSSVar('--text-color') || '#00ff99';
+    const glbGridColor = getCSSVar('--border-color') || '#444';
 
     let anon_id = localStorage.getItem('anon_id');
     if (!anon_id) {
@@ -364,13 +364,13 @@
             options: {
                 scales: {
                     y: {
-                        ticks: { color: textColor },
-                        grid: { color: gridColor}
+                        ticks: { color: glbTextColor },
+                        grid: { color: glbGridColor}
                     },
                     x: {
                         beginAtZero: true,
-                        ticks: { color: textColor },
-                        grid: { color: gridColor }
+                        ticks: { color: glbTextColor },
+                        grid: { color: glbGridColor }
                     }
                 },
                 plugins: {
@@ -378,7 +378,7 @@
                     title: {
                         display: true,
                         text: '', // ← this will be set per chart
-                        color: textColor,
+                        color: glbTextColor,
                         font: {
                             size: 16,
                             weight: 'bold'
@@ -407,24 +407,24 @@
                     scales: {
                         x: {
                             beginAtZero: true,
-                            ticks: { color: textColor },
-                            grid: { color: gridColor }
+                            ticks: { color: glbTextColor },
+                            grid: { color: glbGridColor }
                         },
                         y: {
-                            ticks: { color: textColor },
-                            grid: { color: gridColor }
+                            ticks: { color: glbTextColor },
+                            grid: { color: glbGridColor }
                         }
                     },
                     plugins: {
                         title: {
                             display: true,
                             text: label,
-                            color: textColor,
+                            color: glbTextColor,
                             font: { size: 14, weight: 'bold' },
                             padding: { top: 10, bottom: 10 }
                         },
                         legend: {
-                            labels: { color:  textColor }
+                            labels: { color:  glbTextColor }
                         }
                     }
                 },
@@ -471,7 +471,7 @@
                         const text = seg.content;
                         const compound = seg.sentiment_score.compound;
                         let bgColor = '';
-                        let textColor = textColor; // default light text
+                        let textColor = glbTextColor; // default light text
 
                         const alpha = Math.min(Math.abs(compound), 1).toFixed(2);
 
