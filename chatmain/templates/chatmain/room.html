@@ -269,61 +269,40 @@
 
 {{ room_name|json_script:"room-name" }}
 <script>
-    // ===== 🌈 Theme Helpers =====
-    const getCSSVar = name => getComputedStyle(document.documentElement).getPropertyValue(name).trim();
-    const chartRefs = {};
-    function applyChartThemeColors(theme) {
-        const textColor = getCSSVar('--text-color') || '#00ff99';
-        const gridColor = getCSSVar('--border-color') || '#444';
-
-        Object.values(chartRefs).forEach(chart => {
-            chart.options.scales.x.ticks.color = textColor;
-            chart.options.scales.y.ticks.color = textColor;
-            chart.options.scales.x.grid.color = gridColor;
-            chart.options.scales.y.grid.color = gridColor;
-            if (chart.options.plugins.title) chart.options.plugins.title.color = textColor;
-            chart.update();
-        });
-    }
-
-    function setTheme(theme) {
-        document.body.setAttribute('data-theme', theme);
-        localStorage.setItem('chat-theme', theme);
-        applyChartThemeColors(theme);
-    }
-
-    // ===== 🎨 Theme Toggle Setup =====
-    const themeToggle = document.getElementById('theme-toggle');
-    const savedTheme = localStorage.getItem('chat-theme') || 'default';
-    themeToggle.checked = savedTheme === 'modern';
-    setTheme(savedTheme);
-
-    themeToggle.addEventListener('change', () => {
-        setTheme(themeToggle.checked ? 'modern' : 'default');
-    });
-
-
-    // ===== 🔧 State and Config =====
     let enableColorize = true;
     const chartRefs = {};
+
     let chatSocket;
     let reconnectAttempts = 0;
     const maxReconnect = 5;
     let lastMessageTime = Date.now();
-    let lastSentMessageId = null;
 
     let anon_id = localStorage.getItem('anon_id');
     if (!anon_id) {
         anon_id = generateCleanUUID();
         localStorage.setItem('anon_id', anon_id);
     }
-
     document.getElementById('toggle-colorize').addEventListener('change', function () {
         enableColorize = this.checked;
     });
 
+    function refreshImageById(messageId) {
+        const img = document.getElementById("visbias-image");
+        const timestamp = new Date().getTime();
+        img.src = `/static/chatmain/${messageId}.jpg?t=${timestamp}`;
+    }
 
-    // ===== 📡 WebSocket Setup =====
+    const roomName = JSON.parse(document.getElementById('room-name').textContent);
+    document.getElementById('room-display').textContent = roomName;
+    document.getElementById('server-ip').textContent = window.location.hostname;
+
+
+
+    function updateStatus(text) {
+        const bar = document.getElementById('status-bar');
+        bar.textContent = text;
+    }
+
     function connectWebSocket() {
         updateStatus(`[CONNECTING] :: SERVER: ${window.location.hostname} :: ROOM: ${roomName}`);
         chatSocket = new WebSocket('ws://' + window.location.host + '/ws/chat/' + roomName + '/');
@@ -340,7 +319,7 @@
             messages.forEach(handleIncomingMessage);
         };
 
-        chatSocket.onclose = function() {
+        chatSocket.onclose = function(e) {
             updateStatus(`[DISCONNECTED] :: RETRYING (${reconnectAttempts + 1}/${maxReconnect})...`);
             if (reconnectAttempts < maxReconnect) {
                 setTimeout(connectWebSocket, 2000);
@@ -351,186 +330,289 @@
         };
     }
 
+    connectWebSocket();
 
-    // ===== 📈 Chart Rendering =====
     function renderSentimentCharts(scores) {
         const bins = Array(10).fill(0).map((_, i) => `${(i / 10).toFixed(1)}–${((i + 1) / 10).toFixed(1)}`);
         const negCounts = Array(10).fill(0);
         const neuCounts = Array(10).fill(0);
         const posCounts = Array(10).fill(0);
+        let posCount = 0, negCount = 0, posSum = 0, negSum = 0;
 
         scores.forEach(s => {
             const getBin = v => Math.min(9, Math.floor(v * 10));
             if (s.neg > 0) negCounts[getBin(s.neg)]++;
             if (s.neu > 0) neuCounts[getBin(s.neu)]++;
             if (s.pos > 0) posCounts[getBin(s.pos)]++;
+
+            if (s.pos > 0) {
+                posCount++;
+                posSum += s.pos;
+            }
+            if (s.neg > 0) {
+                negCount++;
+                negSum += s.neg;
+            }
         });
+
+        const baseChartOptions = {
+            type: 'bar',
+            options: {
+                scales: {
+                    y: {
+                        ticks: { color: '#00ff99' },
+                        grid: { color: '#444' }
+                    },
+                    x: {
+                        beginAtZero: true,
+                        ticks: { color: '#00ff99' },
+                        grid: { color: '#444' }
+                    }
+                },
+                plugins: {
+                    legend: { display: false },
+                    title: {
+                        display: true,
+                        text: '', // ← this will be set per chart
+                        color: '#00ff99',
+                        font: {
+                            size: 16,
+                            weight: 'bold'
+                        },
+                        padding: {
+                            top: 10,
+                            bottom: 10
+                        }
+                    }
+                }
+            }
+        };
+
+        function createChart(canvasId, label, data, color, chartKey, isHorizontal = false) {
+            const ctx = document.getElementById(canvasId).getContext('2d');
+
+            // Destroy existing chart before creating a new one
+            if (chartRefs[chartKey]) {
+                chartRefs[chartKey].destroy();
+            }
+
+            const baseOptions = {
+                type: 'bar',
+                options: {
+                    indexAxis: isHorizontal ? 'y' : 'x',
+                    scales: {
+                        x: {
+                            beginAtZero: true,
+                            ticks: { color: '#00ff99' },
+                            grid: { color: '#444' }
+                        },
+                        y: {
+                            ticks: { color: '#00ff99' },
+                            grid: { color: '#444' }
+                        }
+                    },
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: label,
+                            color: '#00ff99',
+                            font: { size: 14, weight: 'bold' },
+                            padding: { top: 10, bottom: 10 }
+                        },
+                        legend: {
+                            labels: { color: '#00ff99' }
+                        }
+                    }
+                },
+                data: {
+                    labels: isHorizontal ? [''] : bins,
+                    datasets: [{
+                        label,
+                        data,
+                        backgroundColor: color
+                    }]
+                }
+            };
+
+            chartRefs[chartKey] = new Chart(ctx, baseOptions);
+        }
+
 
         createChart('neg-chart', 'Negative', negCounts, 'rgba(255,80,80,0.7)', 'neg');
         createChart('neu-chart', 'Neutral', neuCounts, 'rgba(255,255,255,0.6)', 'neu');
         createChart('pos-chart', 'Positive', posCounts, 'rgba(0,255,153,0.7)', 'pos');
+        // createChart('ratio-bar', 'Sentence Count: Negative vs Positive', [negCount, posCount], ['rgba(255,80,80,0.7)', 'rgba(0,255,153,0.7)'], 'ratio', true);
+        // createChart('sum-bar', 'Sum of Sentiment Scores', [negSum.toFixed(2), posSum.toFixed(2)], ['rgba(255,80,80,0.7)', 'rgba(0,255,153,0.7)'], 'sum', true);
+
     }
 
-    function createChart(canvasId, label, data, color, chartKey, isHorizontal = false) {
-        const ctx = document.getElementById(canvasId).getContext('2d');
-        if (chartRefs[chartKey]) chartRefs[chartKey].destroy();
-
-        const textColor = getCSSVar('--text-color') || '#00ff99';
-        const gridColor = getCSSVar('--border-color') || '#444';
-
-        chartRefs[chartKey] = new Chart(ctx, {
-            type: 'bar',
-            options: {
-                indexAxis: isHorizontal ? 'y' : 'x',
-                scales: {
-                    x: { beginAtZero: true, ticks: { color: textColor }, grid: { color: gridColor } },
-                    y: { ticks: { color: textColor }, grid: { color: gridColor } }
-                },
-                plugins: {
-                    title: { display: true, text: label, color: textColor, font: { size: 14, weight: 'bold' } },
-                    legend: { labels: { color: textColor } }
-                }
-            },
-            data: { labels: isHorizontal ? [''] : bins, datasets: [{ label, data, backgroundColor: color }] }
-        });
-    }
-
-
-    // ===== 💬 Message Handling =====
     function handleIncomingMessage(message) {
-        if (!message || typeof message !== 'object') return;
+        if (typeof message === 'object' && message !== null) {
+            const messageWrapper = document.createElement('div');
+            messageWrapper.classList.add('message-wrapper');
 
-        const wrapper = document.createElement('div');
-        wrapper.classList.add('message-wrapper');
-        const sender = document.createElement('div');
-        sender.classList.add('sender-name');
-        sender.textContent = message.user_uuid.slice(0, 4);
+            const sender = document.createElement('div');
+            sender.classList.add('sender-name');
+            sender.textContent = message.user_uuid.slice(0, 4);
 
-        const bubble = document.createElement('div');
-        bubble.classList.add('chat-message');
-        bubble.dataset.id = message.msg_uuid;
+            const bubble = document.createElement('div');
+            bubble.classList.add('chat-message');
+            bubble.dataset.id = message.msg_uuid;
 
-        let html = '';
-        if (enableColorize && message.user_uuid === 'GPT') {
-            try {
-                const segments = JSON.parse(message.message_with_scores);
-                segments.forEach(seg => {
-                    const text = seg.content;
-                    const compound = seg.sentiment_score.compound;
-                    let bgColor = '', textColor = getCSSVar('--text-color') || '#00ff99';
-                    const alpha = Math.min(Math.abs(compound), 1).toFixed(2);
-                    if (compound > 0) bgColor = `rgba(0, 255, 153, ${alpha})`;
-                    else if (compound < 0) bgColor = `rgba(255, 80, 80, ${alpha})`;
-                    if (compound >= 0.8) textColor = '#000';
+            let messageHtml = '';
+            if (enableColorize && message.user_uuid === 'GPT') {
+                try {
+                    const segments = JSON.parse(message.message_with_scores);
+                    segments.forEach(seg => {
+                        const text = seg.content;
+                        const compound = seg.sentiment_score.compound;
+                        let bgColor = '';
+                        let textColor = '#00ff99'; // default light text
 
-                    const formatted = marked.parseInline(text);
-                    const tooltip = `neg: ${seg.sentiment_score.neg.toFixed(2)}, neu: ${seg.sentiment_score.neu.toFixed(2)}, pos: ${seg.sentiment_score.pos.toFixed(2)}, compound: ${seg.sentiment_score.compound.toFixed(2)}`;
-                    html += `<span title="${tooltip}" style="background-color: ${bgColor}; color: ${textColor}; border-radius: 6px; padding: 2px 4px; margin: 2px; display: inline;">${formatted}</span> `;
-                });
-            } catch (err) {
-                console.error('Parse failed:', err);
-                html = marked.parse(message.message);
-            }
-        } else {
-            html = marked.parse(message.message);
-        }
+                        const alpha = Math.min(Math.abs(compound), 1).toFixed(2);
 
-        if (message.user_uuid === 'GPT' && enableColorize) {
-            try {
-                const segments = JSON.parse(message.message_with_scores);
-                const scores = segments.map(s => s.sentiment_score);
-                renderSentimentCharts(scores);
-            } catch (err) {
-                console.error('Chart error:', err);
-            }
-        }
-
-        bubble.innerHTML = `<div class="message-text">${html}</div><div class="meta">ID: ${message.msg_uuid}</div>`;
-
-        if (message.user_uuid === anon_id) {
-            wrapper.classList.add('own-wrapper');
-            bubble.classList.add('own-message', 'my-message');
-        } else {
-            wrapper.classList.add('other-wrapper');
-            bubble.classList.add('other-message');
-            refreshImageById(message.msg_uuid);
-            bubble.ondblclick = () => {
-                refreshImageById(message.msg_uuid);
-                if (message.user_uuid === 'GPT' && enableColorize) {
-                    try {
-                        const segments = JSON.parse(message.message_with_scores);
-                        const scores = segments.map(s => s.sentiment_score);
-                        renderSentimentCharts(scores);
-                    } catch (err) {
-                        console.error('Chart dblclick error:', err);
-                    }
+                        if (compound > 0) {
+                            bgColor = `rgba(0, 255, 153, ${alpha})`;
+                        } else if (compound < 0) {
+                            bgColor = `rgba(255, 80, 80, ${alpha})`;
+                        }
+                        if (compound >= 0.8 ) {
+                            textColor = '#000'; // dark text on bright backgrounds
+                        }
+                        // const formatted = marked.parseInline(text);
+                        //
+                        // messageHtml += `<span style="background-color: ${bgColor}; border-radius: 6px; padding: 2px 4px; margin: 2px; display: inline;">${formatted}</span> `;
+                        const formatted = marked.parseInline(text);
+                        const tooltip = `neg: ${seg.sentiment_score.neg.toFixed(2)}, neu: ${seg.sentiment_score.neu.toFixed(2)}, pos: ${seg.sentiment_score.pos.toFixed(2)}, compound: ${seg.sentiment_score.compound.toFixed(2)}`;
+                        messageHtml += `<span title="${tooltip}" style="background-color: ${bgColor};color: ${textColor}; border-radius: 6px; padding: 2px 4px; margin: 2px; display: inline;">${formatted}</span> `;
+                    });
+                } catch (err) {
+                    console.error('Failed to parse message_with_scores:', err);
+                    messageHtml = marked.parse(message.message);
                 }
-            };
+            } else {
+                messageHtml = marked.parse(message.message);
+            }
+            if (message.user_uuid === 'GPT' && enableColorize) {
+                try {
+                    const segments = JSON.parse(message.message_with_scores);
+                    const scores = segments.map(s => s.sentiment_score);
+                    renderSentimentCharts(scores);
+                } catch (err) {
+                    console.error('📊 Failed to render sentiment chart:', err);
+                }
+            }
+
+            bubble.innerHTML = `
+                <div class="message-text">${messageHtml}</div>
+                <div class="meta">ID: ${message.msg_uuid}</div>
+            `;
+
+            if (message.user_uuid === anon_id) {
+                messageWrapper.classList.add('own-wrapper');
+                bubble.classList.add('own-message', 'my-message');
+            } else {
+                messageWrapper.classList.add('other-wrapper');
+                bubble.classList.add('other-message');
+                refreshImageById(message.msg_uuid);
+                bubble.ondblclick = () => {
+                    const msgId = bubble.dataset.id;
+                    if (msgId) {
+                        refreshImageById(msgId);
+                    }
+
+                    if (message.user_uuid === 'GPT' && enableColorize) {
+                        try {
+                            const segments = JSON.parse(message.message_with_scores);
+                            const scores = segments.map(s => s.sentiment_score);
+                            renderSentimentCharts(scores);
+                        } catch (err) {
+                            console.error('📊 Failed to update sentiment chart on double-click:', err);
+                        }
+                    }
+                };
+            }
+
+            messageWrapper.appendChild(sender);
+            messageWrapper.appendChild(bubble);
+            chatLog.appendChild(messageWrapper);
+            chatLog.scrollTop = chatLog.scrollHeight;
         }
-
-        wrapper.appendChild(sender);
-        wrapper.appendChild(bubble);
-        chatLog.appendChild(wrapper);
-        chatLog.scrollTop = chatLog.scrollHeight;
     }
 
-
-    // ===== 📜 History & Message Sending =====
-    const roomName = JSON.parse(document.getElementById('room-name').textContent);
-    document.getElementById('room-display').textContent = roomName;
-    document.getElementById('server-ip').textContent = window.location.hostname;
     const chatLog = document.getElementById('chat-log');
-
-    function refreshImageById(messageId) {
-        const img = document.getElementById("visbias-image");
-        const timestamp = new Date().getTime();
-        img.src = `/static/chatmain/${messageId}.jpg?t=${timestamp}`;
-    }
-
-    function updateStatus(text) {
-        const bar = document.getElementById('status-bar');
-        bar.textContent = text;
-    }
+    let lastSentMessageId = null;
 
     function generateCleanUUID() {
-        return 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx'.replace(/[x]/g, () => (Math.random() * 16 | 0).toString(16));
+        return 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx'.replace(/[x]/g, function () {
+            const r = Math.random() * 16 | 0;
+            return r.toString(16);
+        });
     }
 
     document.querySelector('#chat-message-input').focus();
     document.querySelector('#chat-message-input').onkeyup = function(e) {
-        if (e.key === 'Enter') document.querySelector('#chat-message-submit').click();
+        if (e.key === 'Enter') {
+            document.querySelector('#chat-message-submit').click();
+        }
     };
 
-    document.querySelector('#chat-message-submit').onclick = function() {
-        const input = document.querySelector('#chat-message-input');
-        const message = input.value.trim();
+    document.querySelector('#chat-message-submit').onclick = function(e) {
+        const messageInput = document.querySelector('#chat-message-input');
+        const message = messageInput.value.trim();
+
         if (message !== '') {
             const customId = generateCleanUUID();
             lastSentMessageId = customId;
-            chatSocket.send(JSON.stringify({ message, msg_uuid: customId, user_uuid: anon_id }));
-            input.value = '';
+
+            chatSocket.send(JSON.stringify({
+                'message': message,
+                'msg_uuid': customId,
+                'user_uuid': anon_id
+            }));
+
+            messageInput.value = '';
         }
     };
 
-    const historyUrl = window.location.pathname.endsWith('/') ? window.location.pathname + 'history' : window.location.pathname + '/history';
-    fetch(historyUrl)
-        .then(res => res.json())
-        .then(data => data.forEach(msg => handleIncomingMessage({
-            user_uuid: msg.user_uuid,
-            message: msg.message,
-            msg_uuid: msg.msg_uuid,
-            message_with_scores: msg.message_with_scores
-        })))
-        .catch(err => console.error('❌ History load failed:', err));
+    const historyUrl = window.location.pathname.endsWith('/')
+        ? window.location.pathname + 'history'
+        : window.location.pathname + '/history';
 
+    fetch(historyUrl)
+        .then(response => response.json())
+        .then(data => {
+            data.forEach(message => {
+                handleIncomingMessage({
+                    user_uuid: message.user_uuid,
+                    message: message.message,
+                    msg_uuid: message.msg_uuid,
+                    message_with_scores: message.message_with_scores
+                });
+            });
+        })
+        .catch(error => {
+            console.error('❌ 加载历史消息失败:', error);
+        });
     setInterval(() => {
-        if (Date.now() - lastMessageTime > 60000) {
-            console.warn('⚠️ Reconnecting...');
-            chatSocket.close();
+        const now = Date.now();
+        if (now - lastMessageTime > 60000) { // 60s without messages
+            console.warn('⚠️ No messages in a while. Reconnecting...');
+            chatSocket.close(); // trigger onclose → reconnect
         }
     }, 30000);
 
-    connectWebSocket();
+    const toggle = document.getElementById('theme-toggle');
+    const currentTheme = localStorage.getItem('chat-theme') || 'default';
+
+    document.body.setAttribute('data-theme', currentTheme);
+    toggle.checked = currentTheme === 'modern';
+
+    toggle.addEventListener('change', () => {
+        const theme = toggle.checked ? 'modern' : 'default';
+        document.body.setAttribute('data-theme', theme);
+        localStorage.setItem('chat-theme', theme);
+    });
 </script>
 
 </body>
