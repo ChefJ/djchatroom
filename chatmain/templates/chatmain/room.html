@@ -271,7 +271,7 @@
 <script>
     // ===== 🌈 Theme Helpers =====
     const getCSSVar = name => getComputedStyle(document.documentElement).getPropertyValue(name).trim();
-
+    const chartRefs = {};
     function applyChartThemeColors(theme) {
         const textColor = getCSSVar('--text-color') || '#00ff99';
         const gridColor = getCSSVar('--border-color') || '#444';
