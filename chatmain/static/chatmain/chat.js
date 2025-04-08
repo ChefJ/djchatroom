@@ -1,7 +1,6 @@
 let enableColorize = true;
 const chartRefs = {};
-glbTextColor = getCSSVar('--text-color') || '#000000';
-glbGridColor = getCSSVar('--border-color') || '#444';
+
 
 let reconnectAttempts = 0;
 const maxReconnect = 5;
@@ -16,7 +15,8 @@ let lastSentMessageId = null;
 
 let anon_id = localStorage.getItem('anon_id');
 
-
+glbTextColor = getCSSVar('--text-color') || '#000000';
+glbGridColor = getCSSVar('--border-color') || '#444';
 function ultRoomSettings(){
     document.getElementById('toggle-colorize').addEventListener('change', function () {
         enableColorize = this.checked;
