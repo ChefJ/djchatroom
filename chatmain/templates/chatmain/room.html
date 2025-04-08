@@ -7,7 +7,6 @@
     <link href="https://fonts.googleapis.com/css2?family=Courier+Prime&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="{% static 'chatmain/chat.js' %}"></script>
     <link rel="stylesheet" href="{% static 'chatmain/chat.css' %}">
 
 
@@ -50,6 +49,7 @@
 </div>
 
 {{ room_name|json_script:"room-name" }}
+<script src="{% static 'chatmain/chat.js' %}"></script>
 
 </body>
 </html>
