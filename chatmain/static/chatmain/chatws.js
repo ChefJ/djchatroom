@@ -1,9 +1,9 @@
 const chatLog = document.getElementById('chat-log');
 const roomName = JSON.parse(document.getElementById('room-name').textContent);
+document.getElementById('room-display').textContent = roomName;
+document.getElementById('server-ip').textContent = window.location.hostname;
 
 function updateStatus(text) {
-    document.getElementById('room-display').textContent = roomName;
-    document.getElementById('server-ip').textContent = window.location.hostname;
     const bar = document.getElementById('status-bar');
     bar.textContent = text;
 }
