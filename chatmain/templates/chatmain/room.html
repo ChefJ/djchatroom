@@ -249,10 +249,11 @@
 
         <div class="image-box">
             <div id="chart-container" style="width: 100%; margin-bottom: 20px;">
-                <canvas id="neg-chart"></canvas>
-                <canvas id="neu-chart"></canvas>
-                <canvas id="pos-chart"></canvas>
-                <canvas id="compound-curve-chart" width="600" height="300"></canvas>
+<!--                <canvas id="neg-chart"></canvas>-->
+<!--                <canvas id="neu-chart"></canvas>-->
+<!--                <canvas id="pos-chart"></canvas>-->
+                <canvas id="compound-curve-chart" ></canvas>
+                <canvas id="polarity-bar-chart" ></canvas>
 
                 <!--                <canvas id="ratio-bar" height="40" style="margin-top: 10px;"></canvas>-->
 <!--                <canvas id="sum-bar" height="40" style="margin-bottom: 30px;"></canvas>-->
@@ -487,6 +488,78 @@
             }
         });
     }
+
+    function renderSentimentPolarityBar(scores) {
+        const { labels, normalized } = getCompoundBins(scores, 20);
+
+        let posSum = 0, negSum = 0;
+        normalized.forEach((val, i) => {
+            const score = parseFloat(labels[i]);
+            if (score > 0) posSum += val;
+            if (score < 0) negSum += val;
+        });
+
+        const ctx = document.getElementById('polarity-bar-chart').getContext('2d');
+        if (chartRefs['polarityBar']) chartRefs['polarityBar'].destroy();
+
+        chartRefs['polarityBar'] = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: ['Polarity'],
+                datasets: [
+                    {
+                        label: 'Negative',
+                        data: [negSum],
+                        backgroundColor: 'rgba(255, 80, 80, 0.7)',
+                        stack: 'sentiment'
+                    },
+                    {
+                        label: 'Positive',
+                        data: [posSum],
+                        backgroundColor: 'rgba(0, 255, 153, 0.7)',
+                        stack: 'sentiment'
+                    }
+                ]
+            },
+            options: {
+                indexAxis: 'y',
+                responsive: true,
+                scales: {
+                    x: {
+                        stacked: true,
+                        max: 100,
+                        title: { display: true, text: 'Percentage of Sentiment Area (%)', color: glbTextColor },
+                        ticks: { color: glbTextColor },
+                        grid: { color: glbGridColor }
+                    },
+                    y: {
+                        stacked: true,
+                        ticks: { color: glbTextColor },
+                        grid: { display: false }
+                    }
+                },
+                plugins: {
+                    tooltip: {
+                        callbacks: {
+                            label: ctx => `${ctx.dataset.label}: ${ctx.raw.toFixed(2)}%`
+                        }
+                    },
+                    legend: {
+                        labels: {
+                            color: glbTextColor
+                        }
+                    },
+                    title: {
+                        display: true,
+                        text: 'Sentiment Polarity Balance',
+                        color: glbTextColor,
+                        font: { size: 14, weight: 'bold' }
+                    }
+                }
+            }
+        });
+    }
+
     function handleIncomingMessage(message) {
         if (typeof message === 'object' && message !== null) {
             const messageWrapper = document.createElement('div');
@@ -538,8 +611,9 @@
                 try {
                     const segments = JSON.parse(message.message_with_scores);
                     const scores = segments.map(s => s.sentiment_score);
-                    renderSentimentCharts(scores);
+                  //  renderSentimentCharts(scores);
                     renderSentimentDistributionChart(scores);
+                    renderSentimentPolarityBar(scores);
 
                 } catch (err) {
                     console.error('📊 Failed to render sentiment chart:', err);
@@ -570,8 +644,9 @@
                         try {
                             const segments = JSON.parse(message.message_with_scores);
                             const scores = segments.map(s => s.sentiment_score);
-                            renderSentimentCharts(scores);
+                    //        renderSentimentCharts(scores);
                             renderSentimentDistributionChart(scores)
+                            renderSentimentPolarityBar(scores);
                         } catch (err) {
                             console.error('📊 Failed to update sentiment chart on double-click:', err);
                         }
@@ -677,8 +752,9 @@
                     const segments = JSON.parse(msgData);
                     const scores = segments.map(s => s.sentiment_score);
                     Object.values(chartRefs).forEach(chart => chart.destroy());
-                    renderSentimentCharts(scores);
+           //         renderSentimentCharts(scores);
                     renderSentimentDistributionChart(scores);
+                    renderSentimentPolarityBar(scores);
 
                 } catch (err) {
                     console.warn('🧠 Failed to parse stored scores for re-render:', err);
