@@ -28,22 +28,12 @@ function refreshImageById(messageId) {
     const timestamp = new Date().getTime();
     img.src = `/static/chatmain/${messageId}.jpg?t=${timestamp}`;
 }
-
 function initUsrId(){
     if (!anon_id) {
         anon_id = generateCleanUUID();
         localStorage.setItem('anon_id', anon_id);
     }
 }
-
-function updateStatus(text) {
-    const roomName = JSON.parse(document.getElementById('room-name').textContent);
-    document.getElementById('room-display').textContent = roomName;
-    document.getElementById('server-ip').textContent = window.location.hostname;
-    const bar = document.getElementById('status-bar');
-    bar.textContent = text;
-}
-
 function generateCleanUUID() {
     return 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx'.replace(/[x]/g, function () {
         const r = Math.random() * 16 | 0;
