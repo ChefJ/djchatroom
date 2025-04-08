@@ -1,4 +1,5 @@
 const chatLog = document.getElementById('chat-log');
+const roomName = JSON.parse(document.getElementById('room-name').textContent);
 
 function updateStatus(text) {
     document.getElementById('room-display').textContent = roomName;
