@@ -1,4 +1,6 @@
 let enableColorize = true;
+let chatSocket;
+
 const chartRefs = {};
 
 
@@ -17,6 +19,14 @@ let anon_id = localStorage.getItem('anon_id');
 
 glbTextColor = getCSSVar('--text-color') || '#000000';
 glbGridColor = getCSSVar('--border-color') || '#444';
+
+function updateStatus(text) {
+    const roomName = JSON.parse(document.getElementById('room-name').textContent);
+    document.getElementById('room-display').textContent = roomName;
+    document.getElementById('server-ip').textContent = window.location.hostname;
+    const bar = document.getElementById('status-bar');
+    bar.textContent = text;
+}
 function ultRoomSettings(){
     document.getElementById('toggle-colorize').addEventListener('change', function () {
         enableColorize = this.checked;
@@ -103,6 +113,7 @@ function initChatroom(){
     ultRoomSettings();
     getHistory();
     checkAlive();
+    connectWebSocket();
 }
 
 initChatroom();

@@ -1,5 +1,5 @@
-let chatSocket;
 const chatLog = document.getElementById('chat-log');
+
 
 function connectWebSocket() {
     updateStatus(`[CONNECTING] :: SERVER: ${window.location.hostname} :: ROOM: ${roomName}`);
@@ -27,7 +27,6 @@ function connectWebSocket() {
         }
     };
 }
-
 function handleIncomingMessage(message) {
     if (typeof message === 'object' && message !== null) {
         const messageWrapper = document.createElement('div');
@@ -129,5 +128,4 @@ function handleIncomingMessage(message) {
     }
 }
 
-connectWebSocket();
 
