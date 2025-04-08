@@ -1,5 +1,11 @@
 const chatLog = document.getElementById('chat-log');
 
+function updateStatus(text) {
+    document.getElementById('room-display').textContent = roomName;
+    document.getElementById('server-ip').textContent = window.location.hostname;
+    const bar = document.getElementById('status-bar');
+    bar.textContent = text;
+}
 
 function connectWebSocket() {
     updateStatus(`[CONNECTING] :: SERVER: ${window.location.hostname} :: ROOM: ${roomName}`);

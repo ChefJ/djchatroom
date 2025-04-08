@@ -21,12 +21,7 @@ let anon_id = localStorage.getItem('anon_id');
 glbTextColor = getCSSVar('--text-color') || '#000000';
 glbGridColor = getCSSVar('--border-color') || '#444';
 
-function updateStatus(text) {
-    document.getElementById('room-display').textContent = roomName;
-    document.getElementById('server-ip').textContent = window.location.hostname;
-    const bar = document.getElementById('status-bar');
-    bar.textContent = text;
-}
+
 function ultRoomSettings(){
     document.getElementById('toggle-colorize').addEventListener('change', function () {
         enableColorize = this.checked;
