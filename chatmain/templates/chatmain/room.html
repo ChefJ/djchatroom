@@ -571,6 +571,7 @@
                             const segments = JSON.parse(message.message_with_scores);
                             const scores = segments.map(s => s.sentiment_score);
                             renderSentimentCharts(scores);
+                            renderSentimentDistributionChart(scores)
                         } catch (err) {
                             console.error('📊 Failed to update sentiment chart on double-click:', err);
                         }
