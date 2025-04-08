@@ -339,7 +339,24 @@
     }
 
     connectWebSocket();
+    function getCompoundBins(scores, binCount = 20) {
+        const binWidth = 2 / binCount; // from -1 to 1
+        const bins = Array(binCount).fill(0);
+        const total = scores.length;
 
+        scores.forEach(s => {
+            const compound = s.compound;
+            const index = Math.min(Math.floor((compound + 1) / binWidth), binCount - 1);
+            bins[index]++;
+        });
+
+        const normalized = bins.map(count => (count / total) * 100);
+        const labels = Array.from({ length: binCount }, (_, i) =>
+            (-(1 - binWidth / 2) + i * binWidth).toFixed(2)
+        );
+
+        return { labels, normalized };
+    }
     function renderSentimentCharts(scores) {
         const bins = Array(10).fill(0).map((_, i) => `${(i / 10).toFixed(1)}–${((i + 1) / 10).toFixed(1)}`);
         const negCounts = Array(10).fill(0);
@@ -559,6 +576,7 @@
             }
         });
     }
+
 
     function handleIncomingMessage(message) {
         if (typeof message === 'object' && message !== null) {
