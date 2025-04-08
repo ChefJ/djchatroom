@@ -91,9 +91,9 @@ class ChatConsumer(AsyncWebsocketConsumer):
     def save_and_ask_GPT(self, message_payload):
 
         save_chat_message(self.room_name, message_payload)
-        if "@GPT" in message_payload["message"]:
-            self.handle_gpt_response()
-
+        # if "@GPT" in message_payload["message"]:
+        #     self.handle_gpt_response()
+        self.handle_gpt_response()
     async def receive(self, text_data):
         text_data_json = json.loads(text_data)
         message = text_data_json["message"]

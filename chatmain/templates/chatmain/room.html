@@ -249,6 +249,8 @@
 
         <div class="image-box">
             <div id="chart-container" style="width: 100%; margin-bottom: 20px;">
+                <canvas id="sentimentChart"></canvas>
+
                 <canvas id="neg-chart"></canvas>
                 <canvas id="neu-chart"></canvas>
                 <canvas id="pos-chart"></canvas>
@@ -376,7 +378,7 @@
                     scales: {
                         x: {
                             beginAtZero: true,
-                            ticks: { color: glbTextColor },
+                            ticks: { color: 'rgba(128,128,128,0.7)' },
                             grid: { display: 'rgba(128,128,128,0.7)' }
                         },
                         y: {
@@ -613,6 +615,72 @@
             }
         }
     });
+
+    function renderSentimentDistributionChart(data, canvasId = 'sentimentChart', binCount = 20) {
+        // Extract compound scores
+        const compoundScores = data.map(d => d.sentiment_score.compound);
+
+        // Binning logic
+        const binWidth = 2 / binCount; // from -1.0 to 1.0
+        const bins = Array(binCount).fill(0);
+        compoundScores.forEach(score => {
+            const index = Math.min(Math.floor((score + 1) / binWidth), binCount - 1);
+            bins[index]++;
+        });
+
+        // Normalize to percentage
+        const total = compoundScores.length;
+        const normalizedBins = bins.map(count => (count / total) * 100);
+
+        // X-axis labels (center of bins)
+        const labels = Array.from({ length: binCount }, (_, i) =>
+            (-(1 - binWidth / 2) + i * binWidth).toFixed(2)
+        );
+
+        // Create chart
+        new Chart(document.getElementById(canvasId), {
+            type: 'line',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: 'Percentage of Segments',
+                    data: normalizedBins,
+                    fill: true,
+                    tension: 0.4, // smooth curve
+                    borderWidth: 2,
+                    borderColor: 'rgba(75,192,192,1)',
+                    backgroundColor: 'rgba(75,192,192,0.2)',
+                    pointRadius: 3,
+                    pointHoverRadius: 5
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    x: {
+                        title: { display: true, text: 'Compound Sentiment Score' },
+                        ticks: { callback: value => labels[value] }
+                    },
+                    y: {
+                        beginAtZero: true,
+                        title: { display: true, text: 'Percentage (%)' }
+                    }
+                },
+                plugins: {
+                    tooltip: {
+                        callbacks: {
+                            label: ctx => `${ctx.raw.toFixed(2)}%`
+                        }
+                    }
+                }
+            }
+        });
+    }
+
+    // Example usage:
+    const rawMessageWithScores = JSON.parse(`[{"content":"...","sentiment_score":{"neg":0.148,"neu":0.546,"pos":0.306,"compound":0.4404}},{"content":"...","sentiment_score":{"neg":0.0,"neu":0.647,"pos":0.353,"compound":0.7184}},{"content":"...","sentiment_score":{"neg":0.0,"neu":0.479,"pos":0.521,"compound":0.765}},{"content":"...","sentiment_score":{"neg":0.0,"neu":0.737,"pos":0.263,"compound":0.6908}},{"content":"...","sentiment_score":{"neg":0.0,"neu":0.69,"pos":0.31,"compound":0.4019}},{"content":"...","sentiment_score":{"neg":0.0,"neu":0.643,"pos":0.357,"compound":0.875}},{"content":"...","sentiment_score":{"neg":0.0,"neu":1.0,"pos":0.0,"compound":0.0}},{"content":"...","sentiment_score":{"neg":0.0,"neu":0.758,"pos":0.242,"compound":0.5859}},{"content":"...","sentiment_score":{"neg":0.0,"neu":1.0,"pos":0.0,"compound":0.0}},{"content":"...","sentiment_score":{"neg":0.0,"neu":0.783,"pos":0.217,"compound":0.3612}},{"content":"...","sentiment_score":{"neg":0.0,"neu":0.547,"pos":0.453,"compound":0.7003}},{"content":"...","sentiment_score":{"neg":0.73,"neu":0.27,"pos":0.0,"compound":-0.4019}},{"content":"...","sentiment_score":{"neg":0.186,"neu":0.814,"pos":0.0,"compound":-0.4939}},{"content":"...","sentiment_score":{"neg":0.39,"neu":0.61,"pos":0.0,"compound":-0.743}},{"content":"...","sentiment_score":{"neg":0.243,"neu":0.757,"pos":0.0,"compound":-0.5423}},{"content":"...","sentiment_score":{"neg":0.0,"neu":1.0,"pos":0.0,"compound":0.0}},{"content":"...","sentiment_score":{"neg":0.116,"neu":0.56,"pos":0.325,"compound":0.6808}},{"content":"...","sentiment_score":{"neg":0.0,"neu":1.0,"pos":0.0,"compound":0.0}},{"content":"...","sentiment_score":{"neg":0.267,"neu":0.634,"pos":0.099,"compound":-0.5742}},{"content":"...","sentiment_score":{"neg":0.146,"neu":0.703,"pos":0.151,"compound":0.0258}}]`);
+
+    renderSentimentDistributionChart(rawMessageWithScores);
 </script>
 
 </body>
