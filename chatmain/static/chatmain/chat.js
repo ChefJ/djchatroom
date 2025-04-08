@@ -14,7 +14,7 @@ const getCSSVar = name => getComputedStyle(document.documentElement).getProperty
 let glbTextColor = getCSSVar('--text-color') || '#000000';
 let glbGridColor = getCSSVar('--border-color') || '#444';
 let lastSentMessageId = null;
-const roomName = JSON.parse(document.getElementById('room-name').textContent);
+// const roomName = JSON.parse(document.getElementById('room-name').textContent);
 
 let anon_id = localStorage.getItem('anon_id');
 
