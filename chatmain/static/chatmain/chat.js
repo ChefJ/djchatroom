@@ -83,7 +83,7 @@ function ultUX(){
         }
     };
     document.getElementById('input-overlay').addEventListener('click', () => {
-        const allGPTMessages = document.querySelectorAll('.chat-message');
+        const allGPTMessages = document.querySelectorAll('.score-buttons-wrapper');
         const lastBubble = Array.from(allGPTMessages).reverse().find(bubble => {
             const wrapper = bubble.closest('.message-wrapper');
             const sender = wrapper?.querySelector('.sender-name');
