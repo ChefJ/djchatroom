@@ -73,6 +73,23 @@ function ultUX(){
 
         }
     };
+    const chatInput = document.getElementById('chat-message-input');
+
+    chatInput.addEventListener('click', () => {
+        if (chatInput.disabled) {
+            const allGPTMessages = document.querySelectorAll('.chat-message');
+            const lastBubble = Array.from(allGPTMessages).reverse().find(bubble => {
+                const wrapper = bubble.closest('.message-wrapper');
+                const sender = wrapper?.querySelector('.sender-name');
+                return sender && sender.textContent === 'GPT';
+            });
+
+            if (lastBubble) {
+                lastBubble.classList.add('blink-border');
+                setTimeout(() => lastBubble.classList.remove('blink-border'), 1200);
+            }
+        }
+    });
 }
 
 function getHistory(){

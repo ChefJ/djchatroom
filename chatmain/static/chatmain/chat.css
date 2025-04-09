@@ -270,3 +270,16 @@ body::before {
 .score-buttons.scored {
     opacity: 0.8;
 }
+
+@keyframes blink {
+    0%   { box-shadow: 0 0 0px rgba(255, 80, 80, 0); }
+    25%  { box-shadow: 0 0 6px rgba(255, 80, 80, 1); }
+    50%  { box-shadow: 0 0 0px rgba(255, 80, 80, 0); }
+    75%  { box-shadow: 0 0 6px rgba(255, 80, 80, 1); }
+    100% { box-shadow: 0 0 0px rgba(255, 80, 80, 0); }
+}
+
+.blink-border {
+    animation: blink 1.2s ease-in-out;
+    border-radius: 8px;
+}
