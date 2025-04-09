@@ -116,6 +116,40 @@ function handleIncomingMessage(message) {
         messageWrapper.appendChild(sender);
         messageWrapper.appendChild(bubble);
 
+
+
+        if (message.user_uuid === anon_id) {
+            messageWrapper.classList.add('own-wrapper');
+            bubble.classList.add('own-message', 'my-message');
+        } else {
+            messageWrapper.classList.add('other-wrapper');
+            bubble.classList.add('other-message');
+            refreshImageById(message.msg_uuid);
+            bubble.ondblclick = () => {
+                const msgId = bubble.dataset.id;
+                if (msgId) {
+                    refreshImageById(msgId);
+                }
+
+                if (message.user_uuid === 'GPT' && enableColorize) {
+                    try {
+                        const segments = JSON.parse(message.message_with_scores);
+                        const scores = segments.map(s => s.sentiment_score);
+//        renderSentimentCharts(scores);
+                        renderSentimentDistributionChart(scores)
+                        renderSentimentPolarityBar(scores);
+                    } catch (err) {
+                        console.error('📊 Failed to update sentiment chart on double-click:', err);
+                    }
+                }
+            };
+        }
+
+        messageWrapper.appendChild(sender);
+        messageWrapper.appendChild(bubble);
+        chatLog.appendChild(messageWrapper);
+
+        chatLog.scrollTop = chatLog.scrollHeight;
         if (message.user_uuid === 'GPT') {
             // Deactivate input until scoring is done
             document.getElementById('chat-message-input').disabled = true;
@@ -171,69 +205,7 @@ function handleIncomingMessage(message) {
                 }
             });
         }
-
-
-        if (message.user_uuid === anon_id) {
-            messageWrapper.classList.add('own-wrapper');
-            bubble.classList.add('own-message', 'my-message');
-        } else {
-            messageWrapper.classList.add('other-wrapper');
-            bubble.classList.add('other-message');
-            refreshImageById(message.msg_uuid);
-            bubble.ondblclick = () => {
-                const msgId = bubble.dataset.id;
-                if (msgId) {
-                    refreshImageById(msgId);
-                }
-
-                if (message.user_uuid === 'GPT' && enableColorize) {
-                    try {
-                        const segments = JSON.parse(message.message_with_scores);
-                        const scores = segments.map(s => s.sentiment_score);
-//        renderSentimentCharts(scores);
-                        renderSentimentDistributionChart(scores)
-                        renderSentimentPolarityBar(scores);
-                    } catch (err) {
-                        console.error('📊 Failed to update sentiment chart on double-click:', err);
-                    }
-                }
-            };
-        }
-
-        messageWrapper.appendChild(sender);
-        messageWrapper.appendChild(bubble);
-        chatLog.appendChild(messageWrapper);
-
-        chatLog.scrollTop = chatLog.scrollHeight;
-        if (message.user_uuid === 'GPT') {
-            const btnContainer = bubble.querySelector('.score-buttons');
-            btnContainer.addEventListener('click', (e) => {
-                if (e.target.classList.contains('score-btn')) {
-                    const score = parseInt(e.target.dataset.score);
-                    const msgId = btnContainer.dataset.msgId;
-
-                    fetch('/gptscoring', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                            'X-CSRFToken': getCSRFToken(),
-                        },
-                        body: JSON.stringify({ msg_uuid: msgId, score: score })
-                    }).then(response => {
-                        if (!response.ok) {
-                            throw new Error('Failed to submit score');
-                        }
-                        console.log(`Score ${score} submitted for ${msgId}`);
-                    }).catch(err => {
-                        console.error('Error submitting score:', err);
-                    });
-
-                    if (score === 10) {
-                        window.open('/questionnaire', '_blank');
-                    }
-                }
-            });
-        }
+        
     }
 }
 
