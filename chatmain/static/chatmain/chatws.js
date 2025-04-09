@@ -97,9 +97,11 @@ function handleIncomingMessage(message) {
 
 
         bubble.innerHTML = `
-            <div class="message-text">${messageHtml}</div>
-            <div class="meta">ID: ${message.msg_uuid}</div>
-        `;
+    <div class="message-text">${messageHtml}</div>
+    <div class="meta">ID: ${message.msg_uuid}</div>
+    <div class="score-buttons" data-msg-id="${message.msg_uuid}">
+        ${[...Array(11).keys()].map(n => `<button class="score-btn" data-score="${n}">${n}</button>`).join(' ')}
+    </div>`;
 
         if (message.user_uuid === anon_id) {
             messageWrapper.classList.add('own-wrapper');
@@ -131,7 +133,37 @@ function handleIncomingMessage(message) {
         messageWrapper.appendChild(sender);
         messageWrapper.appendChild(bubble);
         chatLog.appendChild(messageWrapper);
+
         chatLog.scrollTop = chatLog.scrollHeight;
+        if (message.user_uuid === 'GPT') {
+            const btnContainer = bubble.querySelector('.score-buttons');
+            btnContainer.addEventListener('click', (e) => {
+                if (e.target.classList.contains('score-btn')) {
+                    const score = parseInt(e.target.dataset.score);
+                    const msgId = btnContainer.dataset.msgId;
+
+                    fetch('/gptscoring', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRFToken': getCSRFToken(),
+                        },
+                        body: JSON.stringify({ msg_uuid: msgId, score: score })
+                    }).then(response => {
+                        if (!response.ok) {
+                            throw new Error('Failed to submit score');
+                        }
+                        console.log(`Score ${score} submitted for ${msgId}`);
+                    }).catch(err => {
+                        console.error('Error submitting score:', err);
+                    });
+
+                    if (score === 10) {
+                        window.open('/questionnaire', '_blank');
+                    }
+                }
+            });
+        }
     }
 }
 
