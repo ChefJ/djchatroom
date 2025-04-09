@@ -170,7 +170,7 @@ function handleIncomingMessage(message) {
 
             scoreContainer.appendChild(scoreButtons);
             messageWrapper.appendChild(scoreContainer);
-
+            chatLog.scrollTop = chatLog.scrollHeight;
             // Button logic
             scoreButtons.addEventListener('click', (e) => {
                 if (e.target.classList.contains('score-btn')) {

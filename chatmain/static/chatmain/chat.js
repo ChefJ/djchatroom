@@ -94,6 +94,7 @@ function ultUX(){
             lastBubble.classList.add('blink-border');
             setTimeout(() => lastBubble.classList.remove('blink-border'), 1200);
         }
+
     });
 }
 
