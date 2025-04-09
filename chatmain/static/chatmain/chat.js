@@ -69,6 +69,8 @@ function ultUX(){
             }));
 
             messageInput.value = '';
+            document.getElementById('chat-message-input').disabled = true;
+
         }
     };
 }

@@ -152,7 +152,6 @@ function handleIncomingMessage(message) {
         chatLog.scrollTop = chatLog.scrollHeight;
         if (message.user_uuid === 'GPT') {
             // Deactivate input until scoring is done
-            document.getElementById('chat-message-input').disabled = true;
 
             const scoreContainer = document.createElement('div');
             scoreContainer.className = 'score-buttons-wrapper';
@@ -188,8 +187,7 @@ function handleIncomingMessage(message) {
                     }).then(response => {
                         if (!response.ok) throw new Error('Failed to submit score');
 
-                        // ✅ Enable input after scoring
-                        document.getElementById('chat-message-input').disabled = false;
+
 
                         // ✅ Visual confirmation
                         scoreButtons.querySelectorAll('button').forEach(btn => btn.disabled = true);
@@ -202,10 +200,12 @@ function handleIncomingMessage(message) {
                     }).catch(err => {
                         console.error('Error submitting score:', err);
                     });
+                    // ✅ Enable input after scoring
+                    document.getElementById('chat-message-input').disabled = false;
                 }
             });
         }
-        
+
     }
 }
 
