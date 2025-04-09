@@ -201,7 +201,7 @@ function handleIncomingMessage(message) {
                         console.error('Error submitting score:', err);
                     });
                     // ✅ Enable input after scoring
-                    document.getElementById('chat-message-input').disabled = false;
+                    setInputDisabled(false);
                 }
             });
         }

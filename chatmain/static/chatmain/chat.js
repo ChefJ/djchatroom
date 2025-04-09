@@ -46,6 +46,14 @@ function generateCleanUUID() {
     });
 }
 
+function setInputDisabled(state) {
+    const input = document.getElementById('chat-message-input');
+    const overlay = document.getElementById('input-overlay');
+
+    input.disabled = state;
+    overlay.style.display = state ? 'block' : 'none';
+}
+
 function ultUX(){
     document.querySelector('#chat-message-input').focus();
     document.querySelector('#chat-message-input').onkeyup = function (e) {
@@ -69,24 +77,22 @@ function ultUX(){
             }));
 
             messageInput.value = '';
-            document.getElementById('chat-message-input').disabled = true;
+            setInputDisabled(true);
+
 
         }
     };
-    document.getElementById('chat-input-wrapper').addEventListener('click', () => {
-        const chatInput = document.getElementById('chat-message-input');
-        if (chatInput.disabled) {
-            const allGPTMessages = document.querySelectorAll('.chat-message');
-            const lastBubble = Array.from(allGPTMessages).reverse().find(bubble => {
-                const wrapper = bubble.closest('.message-wrapper');
-                const sender = wrapper?.querySelector('.sender-name');
-                return sender && sender.textContent === 'GPT';
-            });
+    document.getElementById('input-overlay').addEventListener('click', () => {
+        const allGPTMessages = document.querySelectorAll('.chat-message');
+        const lastBubble = Array.from(allGPTMessages).reverse().find(bubble => {
+            const wrapper = bubble.closest('.message-wrapper');
+            const sender = wrapper?.querySelector('.sender-name');
+            return sender && sender.textContent === 'GPT';
+        });
 
-            if (lastBubble) {
-                lastBubble.classList.add('blink-border');
-                setTimeout(() => lastBubble.classList.remove('blink-border'), 1200);
-            }
+        if (lastBubble) {
+            lastBubble.classList.add('blink-border');
+            setTimeout(() => lastBubble.classList.remove('blink-border'), 1200);
         }
     });
 }
