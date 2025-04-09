@@ -3,6 +3,18 @@ const roomName = JSON.parse(document.getElementById('room-name').textContent);
 document.getElementById('room-display').textContent = roomName;
 document.getElementById('server-ip').textContent = window.location.hostname;
 
+function getCSRFToken() {
+    const name = 'csrftoken';
+    const cookies = document.cookie.split(';');
+    for (let c of cookies) {
+        const trimmed = c.trim();
+        if (trimmed.startsWith(name + '=')) {
+            return decodeURIComponent(trimmed.slice(name.length + 1));
+        }
+    }
+    return '';
+}
+
 function updateStatus(text) {
     const bar = document.getElementById('status-bar');
     bar.textContent = text;
