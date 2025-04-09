@@ -111,9 +111,67 @@ function handleIncomingMessage(message) {
         bubble.innerHTML = `
     <div class="message-text">${messageHtml}</div>
     <div class="meta">ID: ${message.msg_uuid}</div>
-    <div class="score-buttons" data-msg-id="${message.msg_uuid}">
-        ${[...Array(11).keys()].map(n => `<button class="score-btn" data-score="${n}">${n}</button>`).join(' ')}
-    </div>`;
+`;
+
+        messageWrapper.appendChild(sender);
+        messageWrapper.appendChild(bubble);
+
+        if (message.user_uuid === 'GPT') {
+            // Deactivate input until scoring is done
+            document.getElementById('chat-message-input').disabled = true;
+
+            const scoreContainer = document.createElement('div');
+            scoreContainer.className = 'score-buttons-wrapper';
+            scoreContainer.dataset.msgId = message.msg_uuid;
+
+            const scoreButtons = document.createElement('div');
+            scoreButtons.className = 'score-buttons';
+
+            for (let i = 0; i <= 10; i++) {
+                const btn = document.createElement('button');
+                btn.className = 'score-btn';
+                btn.dataset.score = i;
+                btn.textContent = i;
+                scoreButtons.appendChild(btn);
+            }
+
+            scoreContainer.appendChild(scoreButtons);
+            messageWrapper.appendChild(scoreContainer);
+
+            // Button logic
+            scoreButtons.addEventListener('click', (e) => {
+                if (e.target.classList.contains('score-btn')) {
+                    const score = parseInt(e.target.dataset.score);
+                    const msgId = scoreContainer.dataset.msgId;
+
+                    fetch('/gptscoring', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRFToken': getCSRFToken(),
+                        },
+                        body: JSON.stringify({ msg_uuid: msgId, score: score })
+                    }).then(response => {
+                        if (!response.ok) throw new Error('Failed to submit score');
+
+                        // ✅ Enable input after scoring
+                        document.getElementById('chat-message-input').disabled = false;
+
+                        // ✅ Visual confirmation
+                        scoreButtons.querySelectorAll('button').forEach(btn => btn.disabled = true);
+                        scoreButtons.classList.add('scored');
+
+                        // ✅ Jump to questionnaire if score is 10
+                        if (score === 10) {
+                            window.open('/questionnaire', '_blank');
+                        }
+                    }).catch(err => {
+                        console.error('Error submitting score:', err);
+                    });
+                }
+            });
+        }
+
 
         if (message.user_uuid === anon_id) {
             messageWrapper.classList.add('own-wrapper');
