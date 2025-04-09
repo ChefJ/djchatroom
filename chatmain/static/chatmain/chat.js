@@ -73,9 +73,8 @@ function ultUX(){
 
         }
     };
-    const chatInput = document.getElementById('chat-message-input');
-
-    chatInput.addEventListener('click', () => {
+    document.getElementById('chat-input-wrapper').addEventListener('click', () => {
+        const chatInput = document.getElementById('chat-message-input');
         if (chatInput.disabled) {
             const allGPTMessages = document.querySelectorAll('.chat-message');
             const lastBubble = Array.from(allGPTMessages).reverse().find(bubble => {
