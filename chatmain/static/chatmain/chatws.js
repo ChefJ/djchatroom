@@ -177,7 +177,7 @@ function handleIncomingMessage(message) {
                     const score = parseInt(e.target.dataset.score);
                     const msgId = scoreContainer.dataset.msgId;
 
-                    fetch('/gptscoring', {
+                    fetch('/message_scoring/', {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json',
@@ -193,15 +193,21 @@ function handleIncomingMessage(message) {
                         scoreButtons.querySelectorAll('button').forEach(btn => btn.disabled = true);
                         scoreButtons.classList.add('scored');
 
+                        e.target.classList.add('selected');  // 👈 Add highlight class here
+
                         // ✅ Jump to questionnaire if score is 10
-                        if (score === 10) {
-                            window.open('/questionnaire', '_blank');
-                        }
                     }).catch(err => {
                         console.error('Error submitting score:', err);
                     });
+                  //  scoreContainer.appendChild()
+                    if (score === 10) {
+                        let usr_uuid = localStorage.getItem('anon_id');
+                        window.open('/questionnaire/?uuid='+usr_uuid, '_blank');
+                    }
+
                     // ✅ Enable input after scoring
                     setInputDisabled(false);
+                    document.querySelector('#chat-message-input').focus();
                 }
             });
         }

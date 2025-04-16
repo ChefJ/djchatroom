@@ -22,3 +22,4 @@ class ChatMessage(models.Model):
     created_date = models.DateTimeField(auto_now=True)
     message = models.TextField(default="")
     message_with_scores = models.TextField(default="")
+    user_rated_score = models.CharField(max_length=5, default="-1")

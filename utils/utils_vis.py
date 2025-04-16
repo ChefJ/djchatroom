@@ -138,6 +138,8 @@ def ask_gpt(question):
     from openai import OpenAI
     client = OpenAI(api_key="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")
 
+    question.append({"role":  "developer",
+                     "content": "For any answer that has actual contents, keep the number of sentences at approximately the same. Avoid to use bulletpoints in your answer."})
     completion = client.chat.completions.create(
         model="gpt-4o",
         messages=question
@@ -151,6 +153,7 @@ def ask_gpt(question):
         #     "content": question
         # }]
     )
+
     rst = completion.choices[0].message.content
     print(rst)
     return rst

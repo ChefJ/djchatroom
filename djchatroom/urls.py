@@ -19,7 +19,7 @@ from django.urls import path
 from django.urls import include, path
 from django.http.response import HttpResponseRedirect
 
-from chatmain.views import index
+from chatmain.views import index, message_scoring, questionnaire
 
 
 
@@ -28,6 +28,9 @@ urlpatterns = [
     path("", index),
 
     path('admin/', admin.site.urls),
-    path("chat/", include("chatmain.urls"))
+    path("chat/", include("chatmain.urls")),
+    path("questionnaire/", questionnaire, name="questionnaire"),
+    path("message_scoring/", message_scoring, name="message_scoring"),
+
 ]
 handler404 = 'chatmain.views.handler404'
