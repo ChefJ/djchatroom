@@ -127,6 +127,43 @@ function checkAlive(){
     }, 30000);
 }
 
+function add_dbclick_refinement(){
+    document.querySelectorAll('#refine-popup button').forEach(btn => {
+        btn.addEventListener('click', () => {
+            const popup = document.getElementById('refine-popup');
+            const direction = btn.dataset.dir;
+            const sentence = popup.dataset.originalText;
+
+            // 🛑 Check if the parent message bubble has been scored
+            const bubble = popup.__sourceBubble;
+            const scored = bubble?.closest('.message-wrapper')?.querySelector('.score-buttons.scored');
+            if (!scored) {
+                alert("Please score the message before refining.");
+                return;
+            }
+
+            const prompt = `Make "${sentence}" more ${direction}. Keep the rest the same.`;
+
+            const customId = generateCleanUUID();
+            lastSentMessageId = customId;
+
+            chatSocket.send(JSON.stringify({
+                message: prompt,
+                msg_uuid: customId,
+                user_uuid: anon_id
+            }));
+
+            popup.style.display = 'none';
+            setInputDisabled(true);
+        });
+    });
+    document.addEventListener('click', (e) => {
+        const popup = document.getElementById('refine-popup');
+        if (!popup.contains(e.target) && !e.target.classList.contains('sentiment-segment')) {
+            popup.style.display = 'none';
+        }
+    });
+}
 function initChatroom(){
     initUsrId();
     ultUX();
@@ -134,6 +171,7 @@ function initChatroom(){
     getHistory();
     checkAlive();
     connectWebSocket();
+    add_dbclick_refinement();
 }
 
 initChatroom();

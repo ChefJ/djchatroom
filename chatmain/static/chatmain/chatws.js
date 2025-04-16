@@ -234,7 +234,19 @@ function handleIncomingMessage(message) {
                 seg.addEventListener('mouseleave', () => {
                     removeChartHighlights();
                 });
+                seg.addEventListener('dblclick', (e) => {
+                    const popup = document.getElementById('refine-popup');
+                    const rect = seg.getBoundingClientRect();
+
+                    // Position the popup slightly above the clicked span
+                    popup.style.top = `${window.scrollY + rect.top - 40}px`;
+                    popup.style.left = `${window.scrollX + rect.left}px`;
+                    popup.style.display = 'flex';
+                    popup.dataset.originalText = seg.textContent;
+                    popup.__sourceBubble = bubble;
+                });
             });
+
         }, 0);
     }
 }

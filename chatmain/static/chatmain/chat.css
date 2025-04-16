@@ -317,3 +317,27 @@ body::before {
     border-radius: 4px;
     padding: 2px 4px;
 }
+
+.refine-popup {
+    background-color: var(--chat-bg);
+    border: 1px solid var(--border-color);
+    padding: 6px 10px;
+    border-radius: 6px;
+    box-shadow: 0 2px 8px var(--shadow-color);
+    z-index: 1000;
+    display: flex;
+    gap: 6px;
+}
+
+.refine-popup button {
+    background-color: var(--own-bg);
+    border: 1px solid var(--border-color);
+    padding: 4px 8px;
+    font-size: 13px;
+    cursor: pointer;
+}
+
+.refine-popup button:hover {
+    background-color: var(--accent-color);
+    color: var(--bg-color);
+}

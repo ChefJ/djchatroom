@@ -52,7 +52,10 @@
     </div>   <input id="chat-message-submit" type="button" value="Send">
     <label><input type="checkbox" id="toggle-colorize" checked> Colorize Sentiment</label>
 </div>
-
+<div id="refine-popup" class="refine-popup" style="display:none; position:absolute;">
+    <button data-dir="positive">More Positive</button>
+    <button data-dir="negative">More Negative</button>
+</div>
 {{ room_name|json_script:"room-name" }}
 <script src="{% static 'chatmain/theme.js' %}"></script>
 
