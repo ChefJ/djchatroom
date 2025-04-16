@@ -310,3 +310,10 @@ body::before {
     color: white;
     border: 2px solid #009966;
 }
+
+.sentiment-segment.highlight-segment {
+    background-color: rgba(0, 0, 0, 0.1);
+    border: 3px solid #000;
+    border-radius: 4px;
+    padding: 2px 4px;
+}

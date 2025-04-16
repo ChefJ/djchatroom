@@ -82,9 +82,14 @@ function handleIncomingMessage(message) {
 // const formatted = marked.parseInline(text);
 //
 // messageHtml += `<span style="background-color: ${bgColor}; border-radius: 6px; padding: 2px 4px; margin: 2px; display: inline;">${formatted}</span> `;
-                    const formatted = marked.parseInline(text);
                     const tooltip = `neg: ${seg.sentiment_score.neg.toFixed(2)}, neu: ${seg.sentiment_score.neu.toFixed(2)}, pos: ${seg.sentiment_score.pos.toFixed(2)}, compound: ${seg.sentiment_score.compound.toFixed(2)}`;
-                    messageHtml += `<span title="${tooltip}" style="background-color: ${bgColor}; border-radius: 6px; padding: 2px 4px; margin: 2px; display: inline;">${formatted}</span> `;
+                    const formatted = marked.parseInline(text);
+                   // const compound = seg.sentiment_score.compound.toFixed(2);
+
+                    messageHtml += `<span    class="sentiment-segment" data-compound="${compound}" title="${tooltip}"  style="background-color: ${bgColor}; border-radius: 6px; padding: 2px 4px; margin: 2px; display: inline;">${formatted}</span> `;
+
+
+
                 });
             } catch (err) {
                 console.error('Failed to parse message_with_scores:', err);
@@ -100,6 +105,9 @@ function handleIncomingMessage(message) {
 //  renderSentimentCharts(scores);
                 renderSentimentDistributionChart(scores);
                 renderSentimentPolarityBar(scores);
+                renderSentimentBarChart(scores);
+                window.__activeSentimentMessage = bubble;
+
 
             } catch (err) {
                 console.error('📊 Failed to render sentiment chart:', err);
@@ -138,6 +146,10 @@ function handleIncomingMessage(message) {
 //        renderSentimentCharts(scores);
                         renderSentimentDistributionChart(scores)
                         renderSentimentPolarityBar(scores);
+                        renderSentimentBarChart(scores);
+                        window.__activeSentimentMessage = bubble;
+
+
                     } catch (err) {
                         console.error('📊 Failed to update sentiment chart on double-click:', err);
                     }
@@ -212,6 +224,18 @@ function handleIncomingMessage(message) {
             });
         }
 
+        setTimeout(() => {
+            const segments = bubble.querySelectorAll('.sentiment-segment');
+            segments.forEach(seg => {
+                seg.addEventListener('mouseenter', () => {
+                    const score = parseFloat(seg.dataset.compound);
+                    highlightChartBin(score);
+                });
+                seg.addEventListener('mouseleave', () => {
+                    removeChartHighlights();
+                });
+            });
+        }, 0);
     }
 }
 

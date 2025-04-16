@@ -170,6 +170,31 @@ function renderSentimentCharts(scores) {
 
 }
 
+function highlightSentimentSegmentsByBin(binIndex, binCount = 20) {
+    const binWidth = 2 / binCount;
+    const binStart = -1 + binIndex * binWidth;
+    const binEnd = binStart + binWidth;
+
+    const container = window.__activeSentimentMessage;
+    if (!container) return;
+
+    const spans = container.querySelectorAll('.sentiment-segment');
+    spans.forEach(span => {
+        const score = parseFloat(span.dataset.compound);
+        if (score >= binStart && score < binEnd) {
+            span.classList.add('highlight-segment');
+        }
+    });
+}
+
+function removeSegmentHighlights() {
+    const container = window.__activeSentimentMessage;
+    if (!container) return;
+
+    const spans = container.querySelectorAll('.sentiment-segment.highlight-segment');
+    spans.forEach(span => span.classList.remove('highlight-segment'));
+}
+
 function renderSentimentDistributionChart(scores, canvasId = 'compound-curve-chart', binCount = 20) {
     const compoundScores = scores.map(s => s.compound);
     const binWidth = 2 / binCount;
@@ -209,11 +234,19 @@ function renderSentimentDistributionChart(scores, canvasId = 'compound-curve-cha
         },
         options: {
             responsive: true,
+        onHover: (event, elements) => {
+            if (elements.length > 0) {
+                const index = elements[0].index;
+                highlightSentimentSegmentsByBin(index);
+            } else {
+                removeSegmentHighlights();
+            }
+        },
             scales: {
                 x: {
                     title: {display: true, text: 'Compound Sentiment Score'},
                     ticks: {color: glbTextColor},
-                    grid: {color: glbGridColor}
+                    grid: {color: glbGridColor},
                 },
                 y: {
                     beginAtZero: true,
@@ -238,3 +271,104 @@ function renderSentimentDistributionChart(scores, canvasId = 'compound-curve-cha
     });
 }
 
+function renderSentimentBarChart(scores, canvasId = 'compound-bar-chart', binCount = 20) {
+    const compoundScores = scores.map(s => s.compound);
+    const binWidth = 2 / binCount;
+    const bins = Array(binCount).fill(0);
+
+    compoundScores.forEach(score => {
+        const index = Math.min(Math.floor((score + 1) / binWidth), binCount - 1);
+        bins[index]++;
+    });
+
+    const total = compoundScores.length;
+    const normalizedBins = bins.map(count => (count / total) * 100);
+    const labels = Array.from({length: binCount}, (_, i) =>
+        (-(1 - binWidth / 2) + i * binWidth).toFixed(2)
+    );
+
+    const ctx = document.getElementById(canvasId).getContext('2d');
+    if (chartRefs['compoundBar']) {
+        chartRefs['compoundBar'].destroy();
+    }
+
+    chartRefs['compoundBar'] = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: labels,
+            datasets: [{
+                label: 'Compound Score Distribution (Bar)',
+                data: normalizedBins,
+                backgroundColor: 'rgba(75,192,192,0.6)',
+                borderColor: 'rgba(75,192,192,1)',
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            onHover: (event, elements) => {
+                if (elements.length > 0) {
+                    const index = elements[0].index;
+                    highlightSentimentSegmentsByBin(index);
+                } else {
+                    removeSegmentHighlights();
+                }
+            },
+            scales: {
+                x: {
+                    title: {display: true, text: 'Compound Sentiment Score'},
+                    ticks: {color: glbTextColor,
+                        autoSkip: false},
+                    grid: {color: glbGridColor}
+                },
+                y: {
+                    beginAtZero: true,
+                    title: {display: true, text: 'Percentage (%)'},
+                    ticks: {color: glbTextColor},
+                    grid: {color: glbGridColor}
+                }
+            },
+            plugins: {
+                tooltip: {
+                    callbacks: {
+                        label: ctx => `${ctx.raw.toFixed(2)}%`
+                    }
+                },
+                legend: {
+                    labels: {
+                        color: glbTextColor
+                    }
+                },
+
+            }
+        }
+    });
+}
+
+function highlightChartBin(score, binCount = 20) {
+    const binWidth = 2 / binCount;
+    const index = Math.min(Math.floor((score + 1) / binWidth), binCount - 1);
+
+    ['compoundCurve', 'compoundBar'].forEach(chartKey => {
+        const chart = chartRefs[chartKey];
+        if (chart) {
+            chart.data.datasets[0].backgroundColor = chart.data.datasets[0].data.map((_, i) =>
+                i === index ? 'rgba(255, 205, 86, 0.8)' : 'rgba(75,192,192,0.6)'
+            );
+            chart.update();
+        }
+    });
+}
+function removeChartHighlights() {
+    ['compoundCurve', 'compoundBar'].forEach(chartKey => {
+        const chart = chartRefs[chartKey];
+        if (chart) {
+            chart.data.datasets[0].backgroundColor = chart.data.datasets[0].data.map(() =>
+                chart.config.type === 'line'
+                    ? 'rgba(75,192,192,0.2)'
+                    : 'rgba(75,192,192,0.6)'
+            );
+            chart.update();
+        }
+    });
+}

@@ -28,6 +28,8 @@ toggle.addEventListener('change', () => {
 //         renderSentimentCharts(scores);
                 renderSentimentDistributionChart(scores);
                 renderSentimentPolarityBar(scores);
+                renderSentimentBarChart(scores);
+
 
             } catch (err) {
                 console.warn('🧠 Failed to parse stored scores for re-render:', err);
