@@ -1,0 +1,64 @@
+Example information letter and consent form 
+for online surveys involving personal data
+
+This template is for online surveys that involve the collection of personal data . If you are not collecting personal data, please use the template “Online consent, no personal data – adults” on this page.
+General recommendations and guidelines
+•	In the case of online surveys, obtaining signed consent is often impossible. In such cases, you may instead use an information statement with a brief description of the data that will be collected, how they will be processed and used, and include a box to tick to record participants’ consent. Make sure that participants cannot continue to the survey if they have not ticked the box.
+•	For consent to be considered as ‘informed’ and lawful, participants should be able to understand the information you provide them with. Make sure, therefore, that the information letter is written in a comprehensible and clear manner, avoid technical terms and theoretical concepts, and always ask yourself if the information contained in the letter can easily be understood by your target group.
+ Tip: Ask someone without knowledge in your field of study to double-check your information letter to verify if everything is clear, or use a “text simplifier” online tool to convert your information letter into layman’s terms (e.g., Rewordify, ChatGPT, Simplish, Online-Utility).
+
+Information Sheet Template
+Welcome to the online questionnaire for the study <put study title here>
+1.	Introduction
+•	Specify that the participant is being asked to take part in scientific research. 
+2.	What is the background and purpose of this study?
+•	Give a short description of the research project in plain language. 
+•	If your study is (wholly or partly) funded by external parties, you must specify who the funding party is, unless there is a real and demonstrable likelihood that this information will affect the results of your study.
+3.	Who will carry out the study?
+•	Give a description of the research team (including a PhD holder with final responsibility for the study, such as a supervisor, in case applicable). You must provide an email address.
+Please find examples below. 
+•	Example1: This study is carried out by [name] ([email]) as part of my master thesis under supervision of [Name] ([email]). 
+•	Example 2: This study is carried out by [name] ([email]), an assistant professor in the department of Information and Computing Sciences. The study will be supported by [Name1] and [Name2] who will help with taking notes and data analysis. 
+4.	How will the study be carried out?
+•	Explain how long the study will take for the participants and what is expected of them.
+•	Will the participants be compensated and if so, for what, how much and in what form (e.g., voucher, etc.)?
+Please find examples below. 
+•	Example 1. For this study, you will be asked to answer questions about […] and to provide general demographic data about yourself. The survey will take approximately 20 minutes to complete. As a token of appreciation for your participation, you will receive a voucher to your email address once you have completed the survey.
+5.	What will we do with your data?
+•	Describe the types of data you will be collecting from participants such as demographic data, personal opinion, performance data, etc.  Be as specific and descriptive as possible.
+•	For each type of data, describe how long their data will be retained (at least 10 years, see: https://www.uu.nl/sites/default/files/university_policy_framework_for_research_data_utrecht_university_-_january_2016.pdf) and in what form (i.e. as ‘raw data’ or in a form that makes the data unidentifiable [anonymised/pseudonymised]). For more information on pseudonymisation and anonymisation, see: https://www.uu.nl/en/research/research-data-management/guides/handling-personal-data or take the ‘Handling Personal Data’ workshop. Explain what pseudonymisation means. You may also use the term ‘coding’ instead of ‘pseudonymising’, as that is a more widely known term.
+•	If you collaborate with an external company or external organisation, you must specify this. 
+•	Describe what data you intend to share with third parties, with whom (e.g., researchers) and in what way. Specify the conditions under which access to the data may be granted to others (e.g., specific user agreements). For further information, see: https://www.uu.nl/en/research/research-data-management/guides/informed-consent-for-data-sharing#dosdonts
+•	Ensure that whatever you put here is in correspondence with what you say in the consent form. 
+Please find examples below. 
+•	Example 1. For this study, we will collect the following personal data about yourself: demographic information about yourself; your personal opinions about […]; your experience with […]. Survey data will be de-identified as soon as possible after the completion of the survey to protect your confidentiality and will be stored in a secure location only accessible by the researcher. Email address and contact details, for their part, will be stored separately from the rest of the data, and a pseudonym will be used to link the two. In accordance with the Netherlands Code of Conduct for Research Integrity, data will be retained for 10 years after the completion of the study on Yoda, a secure data archive developed at Utrecht University. Email address and contact details, for their part, will be deleted as soon as the study results are published.
+•	Example 2. For this study, we will collect the following personal data about yourself: demographic information about yourself; your personal opinions about […]; your experience with […]. To protect your confidentiality, survey data will be de-identified as soon as possible after the completion of the survey and your email address will be deleted, making your data fully anonymous. This ensures that your data can no longer be traced back to you.
+•	Example 3. De-identified data may be made available after the completion of the study to researchers and other research users upon request through a secured data repository. No personal data that can be traced back to you will be shared with others. 
+6.	What are the possible risks and benefits
+•	Specify if there are any risk or burden associated with participation, as well as potential benefits.
+Please find examples below.
+•	Example 1. This study does not carry any foreseeable risks. Potential benefits include learning to use Python and contributing to the body of knowledge about computational thinking skills.
+•	Example 2. This survey includes questions about personal experiences of victimization that some participants may find distressing. Feel free to take a break from the survey or to stop the study altogether if you feel distressed. Support resources are additionally provided throughout the survey if you feel the need to access them. 
+7.	What are your rights?
+•	Specify that you will collect and process data on the basis of participants’ consent.
+•	Explain that participation is voluntary.
+•	Inform participants that they can withdraw their consent (at any time and without stating reasons), but that the data processing that has taken place until the time of withdrawal will remain legally valid and that you will not be required to undo this processing. Please remember that withdrawing consent should be as easy as giving it. Specify as well whom participants should contact if they no longer wish to participate.
+Please find examples below. 
+•	Example 1 [for non-anonymised data]. Participation is voluntary. We are only allowed to collect your data for our study if you consent to this. If you decide not to participate, you do not have to take any further action or explain why you do not want to participate, and you can simply close this browser window. If you decide to participate, you can always change your mind and stop participating at any time during the survey, in which case we will delete the data you provided. You will even be able to withdraw your consent after you have participated by sending an email to [insert the principal investigator’s contact or the contact of the person collecting the data]. Note, however, that we are not legally required to undo the processing of your data that has taken place up until that time. Nor is it possible to request the deletion of your data once the study results have been published. The personal data we have obtained from you up until the time when you withdraw your consent will be erased (where personal data is any data that can be linked to you, so this excludes any already anonymized data).
+•	Example 2 [for anonymised data]. Participation is voluntary. We are only allowed to collect your data for our study if you consent to this. If you decide not to participate, you do not have to take any further action or explain why you do not want to participate, and you can simply close this browser window. If you decide to participate, you can always change your mind and stop participating at any time during the survey, in which case we will delete the data you provided. You will even be able to withdraw your consent after you have participated by sending an email to [insert the principal investigator’s contact or the contact of the person collecting the data]. Note, however, that once data has been fully anonymised, deletion is no longer possible. 
+8.	Approval of this study
+•	If you were granted Ethical Approval, specify that the study has been approved by the Science-Geo Ethics Review Board (ETC-BETA-GEO). If you did not apply for Ethical approval, but your project was deemed low risk in the Ethics and Privacy Quick Scan, specify that the study has been allowed to proceed by the Research Institute of Information and Computing Sciences on the basis of an Ethics and Privacy Quick Scan.
+•	Inform the participant or their representative of the complaints procedure (include a link to etc-beta-geo@uu.nl if your study was approved by ETC-BETA-GEO, or ics-ethics@uu.nl if you used the Quick Scan)
+•	State that the participant can submit privacy-related questions or complaints to the Faculty of Science Privacy Officer (privacy-beta@uu.nl).
+•	Also mention the University’s privacy statement (which mentions a.o. that the participant has the right to submit a complaint with the Dutch Data Protection Authority). 
+Please find examples below. 
+•	Example 1: This study has been approved by the Science-Geo Ethics Review Board (ETC-BETA-GEO). If you have a complaint about the way this study is carried out, please send an email to the secretary of this Committee: etc-beta-geo@uu.nl. If you have any complaints or questions about the processing of personal data, please send an email to the Faculty of Sciences Privacy Officer: privacy-beta@uu.nl. The Privacy Officer will also be able to assist you in exercising the rights you have under the GDPR. For details of our legal basis for using personal data and the rights you have over your data please see the University’s privacy information at www.uu.nl/en/organisation/privacy.
+•	Example 2: This study has been allowed to proceed by the Research Institute of Information and Computing Sciences on the basis of an Ethics and Privacy Quick Scan. If you have a complaint about the way this study is carried out, please send an email to: ics-ethics@uu.nl. If you have any complaints or questions about the processing of personal data, please send an email to the Faculty of Sciences Privacy Officer: privacy-beta@uu.nl. The Privacy Officer will also be able to assist you in exercising the rights you have under the GDPR. For details of our legal basis for using personal data and the rights you have over your data please see the University’s privacy information at www.uu.nl/en/organisation/privacy.
+9.	More information about this study?
+•	The name and email address of the researcher (including a PhD holder with final responsibility, such as a supervisor in case applicable) must be provided to enable participants to ask questions and obtain additional information before, during, and after the study. If you have set up a specific website for your study, it is advisable to refer to that website.
+Please find an example below
+If you have any questions or concerns about this research, please contact [researcher name] at [email] or my supervisor [Name] at [Email]. 
+10.	 Do you consent to participate in the study?
+⃝ Yes, I have read and understood the information provided above and I consent to my answers being used for the purposes of scientific research as described above.
+
+

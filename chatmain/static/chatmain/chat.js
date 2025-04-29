@@ -164,7 +164,41 @@ function add_dbclick_refinement(){
         }
     });
 }
+
+function checkUserConsent() {
+    document.getElementById('consent-decline-btn').addEventListener('click', () => {
+        alert("You declined consent. This application will now close.");
+        window.close();
+
+        // In case `window.close()` fails (due to browser restrictions),
+        // you can redirect to a "goodbye" page instead:
+        setTimeout(() => {
+            window.location.href = "https://www.example.com/goodbye"; // 🔥 replace with your goodbye page or just about:blank
+        }, 500);
+    });
+
+    document.getElementById('consent-agree-btn').addEventListener('click', () => {
+        localStorage.setItem('user-consented', 'true');
+        document.getElementById('consent-modal').style.display = 'none';
+    });
+
+    const consentGiven = localStorage.getItem('user-consented');
+    if (!consentGiven) {
+        fetch('/static/chatmain/consent.txt')
+            .then(response => response.text())
+            .then(text => {
+                document.getElementById('consent-text').innerText = text;
+                document.getElementById('consent-modal').style.display = 'flex';
+            })
+            .catch(err => {
+                console.error('Failed to load consent form:', err);
+            });
+        return false;  // 👈 Consent not yet given
+    }
+    return true;  // 👈 Consent already given
+}
 function initChatroom(){
+    checkUserConsent();
     initUsrId();
     ultUX();
     ultRoomSettings();
