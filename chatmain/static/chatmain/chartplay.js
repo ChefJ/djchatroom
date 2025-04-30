@@ -175,24 +175,34 @@ function highlightSentimentSegmentsByBin(binIndex, binCount = 20) {
     const binStart = -1 + binIndex * binWidth;
     const binEnd = binStart + binWidth;
 
-    const container = window.__activeSentimentMessage;
-    if (!container) return;
+    // 🧠 Now highlight spans from ALL compared messages
+    const comparedIds = Object.keys(comparedMessages);
+    comparedIds.forEach(msgId => {
+        const bubble = document.querySelector(`[data-id="${msgId}"]`);
+        if (!bubble) return;
 
-    const spans = container.querySelectorAll('.sentiment-segment');
-    spans.forEach(span => {
-        const score = parseFloat(span.dataset.compound);
-        if (score >= binStart && score < binEnd) {
-            span.classList.add('highlight-segment');
-        }
+        const spans = bubble.querySelectorAll('.sentiment-segment');
+        spans.forEach(span => {
+            const score = parseFloat(span.dataset.compound);
+            if (score >= binStart && score < binEnd) {
+                span.classList.add('highlight-segment');
+            }
+        });
     });
 }
 
-function removeSegmentHighlights() {
-    const container = window.__activeSentimentMessage;
-    if (!container) return;
 
-    const spans = container.querySelectorAll('.sentiment-segment.highlight-segment');
-    spans.forEach(span => span.classList.remove('highlight-segment'));
+function removeSegmentHighlights() {
+    const comparedIds = Object.keys(comparedMessages);
+    comparedIds.forEach(msgId => {
+        const bubble = document.querySelector(`[data-id="${msgId}"]`);
+        if (!bubble) return;
+
+        const spans = bubble.querySelectorAll('.sentiment-segment.highlight-segment');
+        spans.forEach(span => {
+            span.classList.remove('highlight-segment');
+        });
+    });
 }
 
 function renderSentimentDistributionChart(scores, canvasId = 'compound-curve-chart', binCount = 20) {
@@ -305,6 +315,7 @@ function renderSentimentBarChart(scores, canvasId = 'compound-bar-chart', binCou
             }]
         },
         options: {
+
             responsive: true,
             onHover: (event, elements) => {
                 if (elements.length > 0) {
@@ -352,9 +363,22 @@ function highlightChartBin(score, binCount = 20) {
     ['compoundCurve', 'compoundBar'].forEach(chartKey => {
         const chart = chartRefs[chartKey];
         if (chart) {
-            chart.data.datasets[0].backgroundColor = chart.data.datasets[0].data.map((_, i) =>
-                i === index ? 'rgba(255, 205, 86, 0.8)' : 'rgba(75,192,192,0.6)'
-            );
+            chart.data.datasets.forEach((dataset, datasetIndex) => {
+                const originalColor = dataset.originalColor || 'rgba(75,192,192,0.6)';
+
+                dataset.backgroundColor = dataset.data.map((_, i) => {
+                    if (i === index) {
+                        return 'rgba(255, 205, 86, 0.8)'; // 🔥 Highlight color
+                    } else {
+                        return originalColor;
+                    }
+                });
+
+                // For curves (lines), also fix borderColor
+                if (chart.config.type === 'line') {
+                    dataset.borderColor = dataset.backgroundColor;
+                }
+            });
             chart.update();
         }
     });
@@ -363,12 +387,152 @@ function removeChartHighlights() {
     ['compoundCurve', 'compoundBar'].forEach(chartKey => {
         const chart = chartRefs[chartKey];
         if (chart) {
-            chart.data.datasets[0].backgroundColor = chart.data.datasets[0].data.map(() =>
-                chart.config.type === 'line'
-                    ? 'rgba(75,192,192,0.2)'
-                    : 'rgba(75,192,192,0.6)'
-            );
+            chart.data.datasets.forEach(dataset => {
+                const originalColor = dataset.originalColor || 'rgba(75,192,192,0.6)';
+                dataset.backgroundColor = dataset.data.map(() => originalColor);
+
+                // Also reset curves borderColor properly
+                if (chart.config.type === 'line') {
+                    dataset.borderColor = originalColor;
+                }
+            });
             chart.update();
         }
+    });
+}
+
+
+function renderMultiSentimentDistributionChart(datasets, canvasId = 'compound-curve-chart') {
+    const labels = Array.from({length: 20}, (_, i) => (-(1 - (1/20)/2) + i * (2/20)).toFixed(2));
+    const ctx = document.getElementById(canvasId).getContext('2d');
+
+    if (chartRefs['compoundCurve']) chartRefs['compoundCurve'].destroy?.();
+
+    // 🧠 Save original colors
+    datasets.forEach(ds => {
+        ds.originalColor = ds.borderColor || 'rgba(75,192,192,0.6)';
+    });
+
+    chartRefs['compoundCurve'] = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: labels,
+            datasets: datasets
+        },
+        options: {
+            responsive: true,
+            onHover: (event, elements) => {
+                if (elements.length > 0) {
+                    const index = elements[0].index;
+                    highlightSentimentSegmentsByBin(index);
+                } else {
+                    removeSegmentHighlights();
+                }
+            },
+            scales: {
+                x: { title: { display: true, text: 'Compound Score' }, ticks: { color: glbTextColor }, grid: { color: glbGridColor } },
+                y: { title: { display: true, text: 'Percentage (%)' }, beginAtZero: true, ticks: { color: glbTextColor }, grid: { color: glbGridColor } }
+            },
+            plugins: {
+                legend: { labels: { color: glbTextColor } }
+            }
+        }
+    });
+}
+
+function renderMultiSentimentBarChart(datasets, canvasId = 'compound-bar-chart') {
+    const labels = Array.from({length: 20}, (_, i) => (-(1 - (1/20)/2) + i * (2/20)).toFixed(2));
+    const ctx = document.getElementById(canvasId).getContext('2d');
+
+    if (chartRefs['compoundBar']) chartRefs['compoundBar'].destroy?.();
+
+    // 🧠 Save original colors
+    datasets.forEach(ds => {
+        ds.originalColor = ds.backgroundColor || 'rgba(75,192,192,0.6)';
+    });
+
+    chartRefs['compoundBar'] = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: labels,
+            datasets: datasets
+        },
+        options: {
+            responsive: true,
+            onHover: (event, elements) => {
+                if (elements.length > 0) {
+                    const index = elements[0].index;
+                    highlightSentimentSegmentsByBin(index);
+                } else {
+                    removeSegmentHighlights();
+                }
+            },
+            scales: {
+                x: { title: { display: true, text: 'Compound Score' }, ticks: { color: glbTextColor, autoSkip: false }, grid: { color: glbGridColor } },
+                y: { title: { display: true, text: 'Percentage (%)' }, beginAtZero: true, ticks: { color: glbTextColor }, grid: { color: glbGridColor } }
+            },
+            plugins: {
+                legend: { labels: { color: glbTextColor } }
+            }
+        }
+    });
+}
+
+
+function renderMultiSentimentPolarityChart(datasets, canvasId = 'polarity-bar-chart') {
+    const ctx = document.getElementById(canvasId).getContext('2d');
+
+    if (chartRefs['polarityBar']) chartRefs['polarityBar'].destroy?.();
+
+    chartRefs['polarityBar'] = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: ['Polarity'],
+            datasets: datasets
+        },
+        options: {
+            responsive: true,
+            indexAxis: 'y',
+            scales: {
+                x: {
+                    title: { display: true, text: 'Percentage (%)' },
+                    beginAtZero: true,
+                    ticks: { color: glbTextColor },
+                    grid: { color: glbGridColor }
+                },
+                y: {
+                    ticks: { color: glbTextColor },
+                    grid: { color: glbGridColor }
+                }
+            },
+            plugins: {
+                legend: { labels: { color: glbTextColor } }
+            }
+        }
+    });
+}
+
+function generateColorPalette(n) {
+    const baseColors = [
+        'rgba(255, 99, 132, 0.8)',   // Red
+        'rgba(54, 162, 235, 0.8)',   // Blue
+        'rgba(255, 206, 86, 0.8)',   // Yellow
+        'rgba(75, 192, 192, 0.8)',   // Teal
+        'rgba(153, 102, 255, 0.8)',  // Purple
+        'rgba(255, 159, 64, 0.8)',   // Orange
+        'rgba(100, 255, 100, 0.8)',  // Light Green
+        'rgba(255, 100, 255, 0.8)',  // Pink
+        'rgba(200, 200, 0, 0.8)',    // Olive
+        'rgba(0, 200, 200, 0.8)'     // Aqua
+    ];
+    while (baseColors.length < n) {
+        baseColors.push(`rgba(${Math.floor(Math.random()*255)},${Math.floor(Math.random()*255)},${Math.floor(Math.random()*255)},0.8)`);
+    }
+    return baseColors.slice(0, n);
+}
+function lightenColor(color, factor) {
+    // Simple lighten: reduce alpha
+    return color.replace(/rgba\(([^,]+),([^,]+),([^,]+),([^,]+)\)/, (match, r, g, b, a) => {
+        return `rgba(${r},${g},${b},${parseFloat(a) * factor})`;
     });
 }

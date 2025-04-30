@@ -58,7 +58,4 @@ Please find examples below.
 •	The name and email address of the researcher (including a PhD holder with final responsibility, such as a supervisor in case applicable) must be provided to enable participants to ask questions and obtain additional information before, during, and after the study. If you have set up a specific website for your study, it is advisable to refer to that website.
 Please find an example below
 If you have any questions or concerns about this research, please contact [researcher name] at [email] or my supervisor [Name] at [Email]. 
-10.	 Do you consent to participate in the study?
-⃝ Yes, I have read and understood the information provided above and I consent to my answers being used for the purposes of scientific research as described above.
-
 

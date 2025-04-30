@@ -1,25 +1,10 @@
+// ==== DOM Cache and Globals ====
 const chatLog = document.getElementById('chat-log');
 const roomName = JSON.parse(document.getElementById('room-name').textContent);
 document.getElementById('room-display').textContent = roomName;
 document.getElementById('server-ip').textContent = window.location.hostname;
 
-function getCSRFToken() {
-    const name = 'csrftoken';
-    const cookies = document.cookie.split(';');
-    for (let c of cookies) {
-        const trimmed = c.trim();
-        if (trimmed.startsWith(name + '=')) {
-            return decodeURIComponent(trimmed.slice(name.length + 1));
-        }
-    }
-    return '';
-}
-
-function updateStatus(text) {
-    const bar = document.getElementById('status-bar');
-    bar.textContent = text;
-}
-
+let comparedMessages = {}; // <-- NEW: Track compared messages
 function connectWebSocket() {
     updateStatus(`[CONNECTING] :: SERVER: ${window.location.hostname} :: ROOM: ${roomName}`);
     chatSocket = new WebSocket('ws://' + window.location.host + '/ws/chat/' + roomName + '/');
@@ -46,209 +31,323 @@ function connectWebSocket() {
         }
     };
 }
+
+// ==== Handle Incoming Messages ====
 function handleIncomingMessage(message) {
-    if (typeof message === 'object' && message !== null) {
-        const messageWrapper = document.createElement('div');
-        messageWrapper.classList.add('message-wrapper');
+    if (typeof message !== 'object' || message === null) return;
 
-        const sender = document.createElement('div');
-        sender.classList.add('sender-name');
-        sender.textContent = message.user_uuid.slice(0, 4);
+    const messageWrapper = document.createElement('div');
+    messageWrapper.classList.add('message-wrapper');
 
-        const bubble = document.createElement('div');
-        bubble.classList.add('chat-message');
-        bubble.dataset.id = message.msg_uuid;
+    const sender = document.createElement('div');
+    sender.classList.add('sender-name');
+    sender.textContent = message.user_uuid.slice(0, 4);
 
-        let messageHtml = '';
-        if (enableColorize && message.user_uuid === 'GPT') {
-            try {
-                const segments = JSON.parse(message.message_with_scores);
-                segments.forEach(seg => {
-                    const text = seg.content;
-                    const compound = seg.sentiment_score.compound;
-                    let bgColor = '';
-                    let textColor = glbTextColor; // default light text
+    const bubble = document.createElement('div');
+    bubble.classList.add('chat-message');
+    bubble.dataset.id = message.msg_uuid;
+    bubble.__messageWithScores = message.message_with_scores;
 
-                    const alpha = Math.min(Math.abs(compound), 1).toFixed(2);
+    let messageHtml = '';
+    if (enableColorize && message.user_uuid === 'GPT') {
+        try {
+            const segments = JSON.parse(message.message_with_scores);
+            segments.forEach(seg => {
+                const text = marked.parseInline(seg.content);
+                const compound = seg.sentiment_score.compound;
+                let bgColor = '';
+                const alpha = Math.min(Math.abs(compound), 1).toFixed(2);
 
-                    if (compound > 0) {
-                        bgColor = `rgba(0, 255, 153, ${alpha})`;
-                    } else if (compound < 0) {
-                        bgColor = `rgba(255, 80, 80, ${alpha})`;
-                    }
-                    if (compound >= 0.8) {
-                        textColor = '#000'; // dark text on bright backgrounds
-                    }
-// const formatted = marked.parseInline(text);
-//
-// messageHtml += `<span style="background-color: ${bgColor}; border-radius: 6px; padding: 2px 4px; margin: 2px; display: inline;">${formatted}</span> `;
-                    const tooltip = `neg: ${seg.sentiment_score.neg.toFixed(2)}, neu: ${seg.sentiment_score.neu.toFixed(2)}, pos: ${seg.sentiment_score.pos.toFixed(2)}, compound: ${seg.sentiment_score.compound.toFixed(2)}`;
-                    const formatted = marked.parseInline(text);
-                   // const compound = seg.sentiment_score.compound.toFixed(2);
+                if (compound > 0) {
+                    bgColor = `rgba(0, 255, 153, ${alpha})`;
+                } else if (compound < 0) {
+                    bgColor = `rgba(255, 80, 80, ${alpha})`;
+                }
+                const tooltip = `neg: ${seg.sentiment_score.neg.toFixed(2)}, neu: ${seg.sentiment_score.neu.toFixed(2)}, pos: ${seg.sentiment_score.pos.toFixed(2)}, compound: ${compound.toFixed(2)}`;
 
-                    messageHtml += `<span    class="sentiment-segment" data-compound="${compound}" title="${tooltip}"  style="background-color: ${bgColor}; border-radius: 6px; padding: 2px 4px; margin: 2px; display: inline;">${formatted}</span> `;
+                messageHtml += `<span class="sentiment-segment" data-compound="${compound}" title="${tooltip}" style="background-color: ${bgColor}; border-radius: 6px; padding: 2px 4px; margin: 2px; display: inline;">${text}</span> `;
 
-
-
-                });
-            } catch (err) {
-                console.error('Failed to parse message_with_scores:', err);
-                messageHtml = marked.parse(message.message);
-            }
-        } else {
+            });
+        } catch (err) {
+            console.error('Failed to parse message_with_scores:', err);
             messageHtml = marked.parse(message.message);
         }
-        if (message.user_uuid === 'GPT' && enableColorize) {
-            try {
-                const segments = JSON.parse(message.message_with_scores);
-                const scores = segments.map(s => s.sentiment_score);
-//  renderSentimentCharts(scores);
-                renderSentimentDistributionChart(scores);
-                renderSentimentPolarityBar(scores);
-                renderSentimentBarChart(scores);
-                window.__activeSentimentMessage = bubble;
+    } else {
+        messageHtml = marked.parse(message.message);
+    }
 
+    bubble.innerHTML = `
+        <div class="message-text">${messageHtml}</div>
+        <div class="meta">ID: ${message.msg_uuid}</div>
+    `;
+    setTimeout(() => {
+        const segments = bubble.querySelectorAll('.sentiment-segment');
+        segments.forEach(seg => {
+            seg.addEventListener('mouseenter', () => {
+                const score = parseFloat(seg.dataset.compound);
+                highlightChartBin(score);
+            });
+            seg.addEventListener('mouseleave', () => {
+                removeChartHighlights();
+            });
 
-            } catch (err) {
-                console.error('📊 Failed to render sentiment chart:', err);
-            }
-        }
-        bubble.__messageWithScores = message.message_with_scores;
+            // ✅ Double-click to open refine popup
+            seg.addEventListener('dblclick', (e) => {
+                const popup = document.getElementById('refine-popup');
+                const rect = seg.getBoundingClientRect();
 
+                // Position popup near clicked text
+                popup.style.top = `${window.scrollY + rect.top - 40}px`;
+                popup.style.left = `${window.scrollX + rect.left}px`;
+                popup.style.display = 'flex';
+                popup.dataset.originalText = seg.textContent;
+                popup.__sourceBubble = bubble;
+            });
+        });
+    }, 0);
+    messageWrapper.appendChild(sender);
+    messageWrapper.appendChild(bubble);
 
-        bubble.innerHTML = `
-    <div class="message-text">${messageHtml}</div>
-    <div class="meta">ID: ${message.msg_uuid}</div>
-`;
+    if (message.user_uuid === anon_id) {
+        messageWrapper.classList.add('own-wrapper');
+        bubble.classList.add('own-message', 'my-message');
+    } else {
+        messageWrapper.classList.add('other-wrapper');
+        bubble.classList.add('other-message');
 
-        messageWrapper.appendChild(sender);
-        messageWrapper.appendChild(bubble);
+        refreshImageById(message.msg_uuid);
 
-
-
-        if (message.user_uuid === anon_id) {
-            messageWrapper.classList.add('own-wrapper');
-            bubble.classList.add('own-message', 'my-message');
-        } else {
-            messageWrapper.classList.add('other-wrapper');
-            bubble.classList.add('other-message');
+/*        bubble.ondblclick = () => {
             refreshImageById(message.msg_uuid);
-            bubble.ondblclick = () => {
-                const msgId = bubble.dataset.id;
-                if (msgId) {
-                    refreshImageById(msgId);
+            if (message.user_uuid === 'GPT' && enableColorize) {
+                try {
+                    const segments = JSON.parse(message.message_with_scores);
+                    const scores = segments.map(s => s.sentiment_score);
+                    renderSentimentDistributionChart(scores);
+                    renderSentimentPolarityBar(scores);
+                    renderSentimentBarChart(scores);
+                    window.__activeSentimentMessage = bubble;
+                } catch (err) {
+                    console.error('📊 Failed to update sentiment chart on double-click:', err);
                 }
+            }
+        };*/
+    }
 
-                if (message.user_uuid === 'GPT' && enableColorize) {
-                    try {
-                        const segments = JSON.parse(message.message_with_scores);
-                        const scores = segments.map(s => s.sentiment_score);
-//        renderSentimentCharts(scores);
-                        renderSentimentDistributionChart(scores)
-                        renderSentimentPolarityBar(scores);
-                        renderSentimentBarChart(scores);
-                        window.__activeSentimentMessage = bubble;
+    // ==== NEW: Add Compare Checkbox + Scoring Buttons for GPT ====
+    if (message.user_uuid === 'GPT') {
+        // Compare checkbox
+        const compareLabel = document.createElement('label');
+        compareLabel.classList.add('compare-checkbox-wrapper');
+        compareLabel.style.display = 'inline-flex';
+        compareLabel.style.alignItems = 'center';
+        compareLabel.style.gap = '6px';
+        compareLabel.style.marginTop = '4px';
+        compareLabel.innerHTML = `
+            <input type="checkbox" class="compare-checkbox" data-msg-id="${message.msg_uuid}">
+            <span style="font-size: 12px;">Compare</span>
+        `;
+        compareLabel.querySelector('input').addEventListener('change', (e) => {
+            const msgId = e.target.dataset.msgId;
+            if (e.target.checked) {
+                comparedMessages[msgId] = message.message_with_scores;
+            } else {
+                delete comparedMessages[msgId];
+            }
+            updateComparisonCharts();
+        });
+        messageWrapper.appendChild(compareLabel);
 
+        // Score buttons
+        const scoreContainer = document.createElement('div');
+        scoreContainer.className = 'score-buttons-wrapper';
+        scoreContainer.dataset.msgId = message.msg_uuid;
 
-                    } catch (err) {
-                        console.error('📊 Failed to update sentiment chart on double-click:', err);
-                    }
-                }
-            };
+        const scoreButtons = document.createElement('div');
+        scoreButtons.className = 'score-buttons';
+
+        for (let i = 0; i <= 10; i++) {
+            const btn = document.createElement('button');
+            btn.className = 'score-btn';
+            btn.dataset.score = i;
+            btn.textContent = i;
+            scoreButtons.appendChild(btn);
         }
 
-        messageWrapper.appendChild(sender);
-        messageWrapper.appendChild(bubble);
-        chatLog.appendChild(messageWrapper);
+        scoreContainer.appendChild(scoreButtons);
+        messageWrapper.appendChild(scoreContainer);
 
-        chatLog.scrollTop = chatLog.scrollHeight;
-        if (message.user_uuid === 'GPT') {
-            // Deactivate input until scoring is done
+        scoreButtons.addEventListener('click', (e) => {
+            if (e.target.classList.contains('score-btn')) {
+                const score = parseInt(e.target.dataset.score);
+                const msgId = scoreContainer.dataset.msgId;
 
-            const scoreContainer = document.createElement('div');
-            scoreContainer.className = 'score-buttons-wrapper';
-            scoreContainer.dataset.msgId = message.msg_uuid;
-
-            const scoreButtons = document.createElement('div');
-            scoreButtons.className = 'score-buttons';
-
-            for (let i = 0; i <= 10; i++) {
-                const btn = document.createElement('button');
-                btn.className = 'score-btn';
-                btn.dataset.score = i;
-                btn.textContent = i;
-                scoreButtons.appendChild(btn);
-            }
-
-            scoreContainer.appendChild(scoreButtons);
-            messageWrapper.appendChild(scoreContainer);
-            chatLog.scrollTop = chatLog.scrollHeight;
-            // Button logic
-            scoreButtons.addEventListener('click', (e) => {
-                if (e.target.classList.contains('score-btn')) {
-                    const score = parseInt(e.target.dataset.score);
-                    const msgId = scoreContainer.dataset.msgId;
-
-                    fetch('/message_scoring/', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                            'X-CSRFToken': getCSRFToken(),
-                        },
-                        body: JSON.stringify({ msg_uuid: msgId, score: score })
-                    }).then(response => {
-                        if (!response.ok) throw new Error('Failed to submit score');
-
-
-
-                        // ✅ Visual confirmation
-                        scoreButtons.querySelectorAll('button').forEach(btn => btn.disabled = true);
-                        scoreButtons.classList.add('scored');
-
-                        e.target.classList.add('selected');  // 👈 Add highlight class here
-
-                        // ✅ Jump to questionnaire if score is 10
-                    }).catch(err => {
-                        console.error('Error submitting score:', err);
-                    });
-                  //  scoreContainer.appendChild()
+                fetch('/message_scoring/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': getCSRFToken(),
+                    },
+                    body: JSON.stringify({ msg_uuid: msgId, score: score })
+                }).then(response => {
+                    if (!response.ok) throw new Error('Failed to submit score');
+                    scoreButtons.querySelectorAll('button').forEach(btn => btn.disabled = true);
+                    scoreButtons.classList.add('scored');
+                    e.target.classList.add('selected');
                     if (score === 10) {
                         let usr_uuid = localStorage.getItem('anon_id');
-                        window.open('/questionnaire/?uuid='+usr_uuid, '_blank');
+                        window.open('/questionnaire/?uuid=' + usr_uuid, '_blank');
                     }
-
-                    // ✅ Enable input after scoring
                     setInputDisabled(false);
                     document.querySelector('#chat-message-input').focus();
-                }
-            });
+                }).catch(err => {
+                    console.error('Error submitting score:', err);
+                });
+            }
+        });
+    }
+
+    chatLog.appendChild(messageWrapper);
+    chatLog.scrollTop = chatLog.scrollHeight;
+
+    if (message.user_uuid === 'GPT' && enableColorize) {
+        try {
+            const segments = JSON.parse(message.message_with_scores);
+            const scores = segments.map(s => s.sentiment_score);
+            renderSentimentDistributionChart(scores);
+            renderSentimentPolarityBar(scores);
+            renderSentimentBarChart(scores);
+            window.__activeSentimentMessage = bubble;
+        } catch (err) {
+            console.error('📊 Failed to render sentiment chart:', err);
         }
 
-        setTimeout(() => {
-            const segments = bubble.querySelectorAll('.sentiment-segment');
-            segments.forEach(seg => {
-                seg.addEventListener('mouseenter', () => {
-                    const score = parseFloat(seg.dataset.compound);
-                    highlightChartBin(score);
-                });
-                seg.addEventListener('mouseleave', () => {
-                    removeChartHighlights();
-                });
-                seg.addEventListener('dblclick', (e) => {
-                    const popup = document.getElementById('refine-popup');
-                    const rect = seg.getBoundingClientRect();
-
-                    // Position the popup slightly above the clicked span
-                    popup.style.top = `${window.scrollY + rect.top - 40}px`;
-                    popup.style.left = `${window.scrollX + rect.left}px`;
-                    popup.style.display = 'flex';
-                    popup.dataset.originalText = seg.textContent;
-                    popup.__sourceBubble = bubble;
-                });
-            });
-
-        }, 0);
+        autoCheckLatestTwoGPT();
     }
 }
 
+// ==== Chart Comparison Handling ====
+function updateComparisonCharts() {
+    Object.values(chartRefs).forEach(chart => chart.destroy?.());
 
+    const messageEntries = Object.entries(comparedMessages);
+    if (messageEntries.length === 0) return;
+
+    const datasetsCurve = [];
+    const datasetsBar = [];
+    const datasetsPolarity = [];
+    const colors = generateColorPalette(messageEntries.length);
+
+    messageEntries.forEach(([msgId, messageWithScores], index) => {
+        try {
+            const segments = JSON.parse(messageWithScores);
+            const scores = segments.map(s => s.sentiment_score);
+            const { labels, normalized } = getCompoundBins(scores, 20);
+
+            datasetsCurve.push({
+                label: msgId,
+                data: normalized,
+                borderColor: colors[index],
+                backgroundColor: colors[index],
+                fill: false,
+                tension: 0.4,
+                pointRadius: 2
+            });
+
+            datasetsBar.push({
+                label: msgId,
+                data: normalized,
+                backgroundColor: colors[index],
+                borderColor: colors[index],
+                borderWidth: 1
+            });
+
+            let posSum = 0, negSum = 0;
+            normalized.forEach((val, i) => {
+                const score = parseFloat(labels[i]);
+                if (score > 0) posSum += val;
+                if (score < 0) negSum += val;
+            });
+            datasetsPolarity.push({
+                label: msgId + " (Pos)",
+                data: [posSum],
+                backgroundColor: colors[index]
+            });
+            datasetsPolarity.push({
+                label: msgId + " (Neg)",
+                data: [-negSum],
+                backgroundColor: lightenColor(colors[index], 0.5)
+            });
+        } catch (err) {
+            console.error('❌ Failed to parse sentiment data:', err);
+        }
+    });
+
+    renderMultiSentimentDistributionChart(datasetsCurve);
+    renderMultiSentimentBarChart(datasetsBar);
+    renderMultiSentimentPolarityChart(datasetsPolarity);
+}
+
+function autoCheckLatestTwoGPT() {
+    // 1. Uncheck all compare checkboxes first
+    const allCompareBoxes = Array.from(document.querySelectorAll('.compare-checkbox'));
+    allCompareBoxes.forEach(box => box.checked = false);
+    comparedMessages = {}; // 🧹 Clear current compared messages
+
+    // 2. Find GPT message checkboxes
+    const gptBoxes = allCompareBoxes.filter(box => {
+        const wrapper = box.closest('.message-wrapper');
+        return wrapper?.querySelector('.sender-name')?.textContent === 'GPT';
+    });
+
+    // 3. Auto-check the latest two GPT messages
+    if (gptBoxes.length >= 2) {
+        const lastTwo = gptBoxes.slice(-2);
+        lastTwo.forEach(box => {
+            box.checked = true;
+            const msgId = box.dataset.msgId;
+            const bubble = document.querySelector(`[data-id="${msgId}"]`);
+            if (bubble && bubble.__messageWithScores) {
+                comparedMessages[msgId] = bubble.__messageWithScores;
+            }
+        });
+    } else if (gptBoxes.length === 1) {
+        const box = gptBoxes[0];
+        box.checked = true;
+        const msgId = box.dataset.msgId;
+        const bubble = document.querySelector(`[data-id="${msgId}"]`);
+        if (bubble && bubble.__messageWithScores) {
+            comparedMessages[msgId] = bubble.__messageWithScores;
+        }
+    }
+
+    // 4. After updating comparedMessages, refresh charts
+    updateComparisonCharts();
+}
+
+
+// ==== Helpers ====
+function updateStatus(text) {
+    const bar = document.getElementById('status-bar');
+    bar.textContent = text;
+}
+
+function getCSRFToken() {
+    const name = 'csrftoken';
+    const cookies = document.cookie.split(';');
+    for (let c of cookies) {
+        const trimmed = c.trim();
+        if (trimmed.startsWith(name + '=')) {
+            return decodeURIComponent(trimmed.slice(name.length + 1));
+        }
+    }
+    return '';
+}
+
+function refreshImageById(messageId) {
+    const img = document.getElementById('visbias-image');
+    if (img) {
+        const timestamp = new Date().getTime();
+        img.src = `/static/chatmain/${messageId}.jpg?t=${timestamp}`;
+    }
+}
