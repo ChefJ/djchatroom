@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Consent Form</title>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <style>
+        html, body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            font-family: sans-serif;
+            background-color: #f9f9f9;
+        }
+
+        .container {
+            max-width: 90%;
+            width: 900px;
+            height: 90vh;
+            margin: 5vh auto;
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            display: flex;
+            flex-direction: column;
+        }
+
+        h2 {
+            margin-top: 0;
+            font-size: 22px;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        #consent-text-wrapper {
+            flex: 1;
+            overflow-y: auto;
+            padding: 10px;
+            border: 1px solid #ccc;
+            background: #fdfdfd;
+            border-radius: 4px;
+            margin-bottom: 20px;
+        }
+
+        #consent-text {
+            line-height: 1.6;
+        }
+
+        .button-row {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+        }
+
+        #consent-agree-btn,
+        #consent-decline-btn {
+            padding: 10px 20px;
+            font-size: 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        #consent-agree-btn {
+            background-color: #007bff;
+            color: white;
+        }
+
+        #consent-agree-btn:hover {
+            background-color: #0056b3;
+        }
+
+        #consent-decline-btn {
+            background-color: #ccc;
+            color: black;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>Consent Form<br>for Online Surveys Involving Personal Data</h2>
+    <div id="consent-text-wrapper">
+        <div id="consent-text"></div>
+    </div>
+    <div class="button-row">
+        <button id="consent-decline-btn">Decline</button>
+        <button id="consent-agree-btn">I Agree</button>
+    </div>
+</div>
+
+<script>
+    const rawConsentText = `{{ consent_text|escapejs }}`;
+    const uuid = localStorage.getItem("anon_id") || "";
+
+    document.getElementById('consent-text').innerHTML = marked.parse(rawConsentText);
+
+    document.getElementById("consent-agree-btn").addEventListener("click", () => {
+        if (!uuid) {
+            alert("User ID not found.");
+            return;
+        }
+
+        fetch("/next_experiment/", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "X-CSRFToken": "{{ csrf_token }}"
+            },
+            body: JSON.stringify({ uuid: uuid })
+        })
+            .then(response => response.text())
+            .then(nextUrl => {
+                if (nextUrl && nextUrl.startsWith("/")) {
+                    window.location.href = nextUrl;
+                } else {
+                    alert("Invalid redirect URL received.");
+                }
+            })
+            .catch(err => {
+                console.error("Failed to load next step:", err);
+                alert("Something went wrong.");
+            });
+    });
+
+    document.getElementById("consent-decline-btn").addEventListener("click", () => {
+        alert("You declined consent. This application will now close.");
+        window.close();
+        setTimeout(() => {
+            window.location.href = "about:blank";
+        }, 500);
+    });
+</script>
+
+</body>
+</html>

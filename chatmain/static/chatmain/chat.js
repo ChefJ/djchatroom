@@ -206,6 +206,20 @@ function initChatroom(){
     checkAlive();
     connectWebSocket();
     add_dbclick_refinement();
+
+    document.addEventListener('click', (e) => {
+        const isSegment = e.target.classList.contains('sentiment-segment');
+        const isInPopup = document.getElementById('refine-popup')?.contains(e.target);
+
+        if (!isSegment && !isInPopup) {
+            // Remove highlight
+            document.querySelectorAll('.sentiment-segment.selected-sentence')
+                .forEach(el => el.classList.remove('selected-sentence'));
+
+            // Hide popup
+            document.getElementById('refine-popup').style.display = 'none';
+        }
+    });
 }
 
 initChatroom();

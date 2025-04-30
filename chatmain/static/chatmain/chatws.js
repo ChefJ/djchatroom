@@ -93,15 +93,31 @@ function handleIncomingMessage(message) {
 
             // ✅ Double-click to open refine popup
             seg.addEventListener('dblclick', (e) => {
+                // Remove previous highlights
+                document.querySelectorAll('.sentiment-segment.selected-sentence')
+                    .forEach(el => el.classList.remove('selected-sentence'));
+
+                // Highlight this one
+                seg.classList.add('selected-sentence');
+
+                // Prevent native text selection (hard cancel)
+                if (window.getSelection) {
+                    const sel = window.getSelection();
+                    if (sel && sel.type !== "None") {
+                        sel.removeAllRanges();
+                    }
+                }
+                document.activeElement?.blur(); // Extra protection
+
+                // Show popup above this segment
                 const popup = document.getElementById('refine-popup');
                 const rect = seg.getBoundingClientRect();
 
-                // Position popup near clicked text
                 popup.style.top = `${window.scrollY + rect.top - 40}px`;
                 popup.style.left = `${window.scrollX + rect.left}px`;
                 popup.style.display = 'flex';
                 popup.dataset.originalText = seg.textContent;
-                popup.__sourceBubble = bubble;
+                popup.__sourceBubble = seg.closest('.chat-message');
             });
         });
     }, 0);

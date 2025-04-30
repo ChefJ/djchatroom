@@ -411,3 +411,12 @@ body::before {
     align-items: center;
     justify-content: center;
 }
+
+.sentiment-segment.selected-sentence {
+    outline: 2px solid black;
+    background-color: rgba(0, 0, 0, 0.05);
+}
+
+.sentiment-segment {
+    user-select: none; /* 👈 this prevents text selection */
+}
