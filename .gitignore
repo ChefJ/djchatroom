@@ -38,6 +38,7 @@ media
 
 # File-based project format
 *.iws
+*.jpg
 
 # IntelliJ
 out/
