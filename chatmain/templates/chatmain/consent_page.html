@@ -93,14 +93,16 @@
 <script>
     const rawConsentText = `{{ consent_text|escapejs }}`;
     const uuid = localStorage.getItem("anon_id") || "";
-
+    function initUsrId(){
+        if (!anon_id) {
+            anon_id = generateCleanUUID();
+            localStorage.setItem('anon_id', anon_id);
+        }
+    }
     document.getElementById('consent-text').innerHTML = marked.parse(rawConsentText);
 
     document.getElementById("consent-agree-btn").addEventListener("click", () => {
-        if (!uuid) {
-            alert("User ID not found.");
-            return;
-        }
+        initUsrId()
 
         fetch("/next_experiment/", {
             method: "POST",
