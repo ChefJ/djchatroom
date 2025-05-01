@@ -125,6 +125,7 @@ def next_experiment(request):
 
 
 def room(request, room_name):
+    get_or_create_room(room_name)
     return render(request, "chatmain/room.html", {"room_name": room_name})
 
 
