@@ -94,7 +94,12 @@
     const rawConsentText = `{{ consent_text|escapejs }}`;
     const uuid = localStorage.getItem("anon_id") || "";
     let anon_id = localStorage.getItem('anon_id');
-
+    function generateCleanUUID() {
+        return 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx'.replace(/[x]/g, function () {
+            const r = Math.random() * 16 | 0;
+            return r.toString(16);
+        });
+    }
     function initUsrId(){
         if (!anon_id) {
             anon_id = generateCleanUUID();
