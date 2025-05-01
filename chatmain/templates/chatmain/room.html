@@ -39,8 +39,12 @@
 <!--                <canvas id="sum-bar" height="40" style="margin-bottom: 30px;"></canvas>-->
             </div>
 
+<!--
             <img src="{% static 'chatmain/1.jpg' %}" alt="Sentiment Visualization" id="visbias-image">
+-->
+<!--
             <label>Sentiment Analysis</label>
+-->
         </div>
     </div>
 </div>
@@ -50,7 +54,9 @@
         <input id="chat-message-input" type="text" placeholder="Type your message here..." class="typing-cursor">
         <div id="input-overlay" class="input-overlay"></div>
     </div>   <input id="chat-message-submit" type="button" value="Send">
+<!--
     <label><input type="checkbox" id="toggle-colorize" checked> Colorize Sentiment</label>
+-->
 </div>
 <div id="refine-popup" class="refine-popup" style="display:none; position:absolute;">
     <button data-dir="positive">More Positive</button>
@@ -66,6 +72,16 @@
         <div style="display: flex; gap: 10px; justify-content: flex-end;">
             <button id="consent-decline-btn" style="background-color: #ccc; color: #000;">Decline</button>
             <button id="consent-agree-btn">I Agree</button>
+        </div>
+    </div>
+</div>
+
+<div id="topic-modal" class="modal" style="display:none;">
+    <div class="modal-content" style="max-width: 600px;">
+        <h3 id="topic-modal-title"></h3>
+        <textarea id="topic-input" rows="3" placeholder="Type your topic here..." style="width: 100%; margin-top: 10px;"></textarea>
+        <div style="display: flex; justify-content: flex-end; margin-top: 10px;">
+            <button id="topic-submit-btn">Submit</button>
         </div>
     </div>
 </div>

@@ -49,24 +49,34 @@ function handleIncomingMessage(message) {
     bubble.__messageWithScores = message.message_with_scores;
 
     let messageHtml = '';
-    if (enableColorize && message.user_uuid === 'GPT') {
+    if ( message.user_uuid === 'GPT') {
         try {
             const segments = JSON.parse(message.message_with_scores);
             segments.forEach(seg => {
-                const text = marked.parseInline(seg.content);
+                const text = seg.content;
                 const compound = seg.sentiment_score.compound;
                 let bgColor = '';
-                const alpha = Math.min(Math.abs(compound), 1).toFixed(2);
+                let textColor = glbTextColor;
 
-                if (compound > 0) {
-                    bgColor = `rgba(0, 255, 153, ${alpha})`;
-                } else if (compound < 0) {
-                    bgColor = `rgba(255, 80, 80, ${alpha})`;
+                const alpha = Math.min(Math.abs(compound), 1).toFixed(2);
+                if (enableColorize) {
+                    if (compound > 0) {
+                        bgColor = `rgba(0, 255, 153, ${alpha})`;
+                    } else if (compound < 0) {
+                        bgColor = `rgba(255, 80, 80, ${alpha})`;
+                    }
                 }
+
+                const formatted = marked.parseInline(text);
                 const tooltip = `neg: ${seg.sentiment_score.neg.toFixed(2)}, neu: ${seg.sentiment_score.neu.toFixed(2)}, pos: ${seg.sentiment_score.pos.toFixed(2)}, compound: ${compound.toFixed(2)}`;
 
-                messageHtml += `<span class="sentiment-segment" data-compound="${compound}" title="${tooltip}" style="background-color: ${bgColor}; border-radius: 6px; padding: 2px 4px; margin: 2px; display: inline;">${text}</span> `;
-
+                messageHtml += `<span 
+                class="sentiment-segment" 
+                title="${tooltip}" 
+                data-compound="${compound}" 
+                style="border-radius: 6px; padding: 2px 4px; margin: 2px; display: inline; ${bgColor ? `background-color: ${bgColor};` : ''}">
+                ${formatted}
+            </span> `;
             });
         } catch (err) {
             console.error('Failed to parse message_with_scores:', err);
@@ -131,7 +141,7 @@ function handleIncomingMessage(message) {
         messageWrapper.classList.add('other-wrapper');
         bubble.classList.add('other-message');
 
-        refreshImageById(message.msg_uuid);
+        // refreshImageById(message.msg_uuid);
 
 /*        bubble.ondblclick = () => {
             refreshImageById(message.msg_uuid);
@@ -163,6 +173,12 @@ function handleIncomingMessage(message) {
             <input type="checkbox" class="compare-checkbox" data-msg-id="${message.msg_uuid}">
             <span style="font-size: 12px;">Compare</span>
         `;
+        if (roomConfig.experiment_type != 'all'){
+            compareLabel.innerHTML = `
+            <input type="checkbox" class="compare-checkbox" style="display: none" data-msg-id="${message.msg_uuid}">
+            <span style="font-size: 12px;display: none">Compare</span>
+        `;
+        }
         compareLabel.querySelector('input').addEventListener('change', (e) => {
             const msgId = e.target.dataset.msgId;
             if (e.target.checked) {
@@ -186,7 +202,7 @@ function handleIncomingMessage(message) {
             const btn = document.createElement('button');
             btn.className = 'score-btn';
             btn.dataset.score = i;
-            btn.textContent = i;
+            btn.textContent = i === 10 ? 'Satisfied' : i;  // 👈 Change '10' to 'Satisfied'
             scoreButtons.appendChild(btn);
         }
 
@@ -207,15 +223,36 @@ function handleIncomingMessage(message) {
                     body: JSON.stringify({ msg_uuid: msgId, score: score })
                 }).then(response => {
                     if (!response.ok) throw new Error('Failed to submit score');
+
+                    // Visual feedback
                     scoreButtons.querySelectorAll('button').forEach(btn => btn.disabled = true);
                     scoreButtons.classList.add('scored');
                     e.target.classList.add('selected');
+
+                    // ✅ If score is 10, chain to /next_experiment/
                     if (score === 10) {
-                        let usr_uuid = localStorage.getItem('anon_id');
-                        window.open('/questionnaire/?uuid=' + usr_uuid, '_blank');
+                        const uuid = localStorage.getItem('anon_id') || '';
+                        fetch('/next_experiment/', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'X-CSRFToken': getCSRFToken(),
+                            },
+                            body: JSON.stringify({ uuid: uuid })
+                        })
+                            .then(res => res.text())
+                            .then(url => {
+                                // ✅ just navigate to it
+                                window.location.href = url;
+                            })
+                            .catch(err => {
+                                console.error("Redirect failed:", err);
+                            });
+                    } else {
+                        // ✅ Re-enable input if not satisfied
+                        setInputDisabled(false);
+                        document.querySelector('#chat-message-input').focus();
                     }
-                    setInputDisabled(false);
-                    document.querySelector('#chat-message-input').focus();
                 }).catch(err => {
                     console.error('Error submitting score:', err);
                 });

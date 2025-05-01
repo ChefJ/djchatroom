@@ -1,6 +1,7 @@
 import uuid
 from random import random, randrange
 
+from django.forms import model_to_dict
 from django.http import HttpResponse, JsonResponse, HttpResponseRedirect
 import json
 # chat/views.py
@@ -105,11 +106,15 @@ def next_experiment(request):
 
     if tgt_experiment.experiment_finished:
         final_url = gen_questionnaire_link(user_uuid)
-        return HttpResponseRedirect("/thankyou/")
+        return HttpResponse(final_url)
 
     unfinished_rooms = ChatRoom.objects.filter(related_experiment=tgt_experiment,
                                                experiment_finished=False)
+    print("experiment:"+str(tgt_experiment.id)+" has "+str(unfinished_rooms.count()) +" unfinished conversations(rooms).")
 
+    print("IDs:")
+    for rms in unfinished_rooms:
+        print(rms.room_name)
     if unfinished_rooms.count() > 0:
         next_room = unfinished_rooms[0]
         return HttpResponse("/chat/"+next_room.room_name)
@@ -123,8 +128,32 @@ def room(request, room_name):
     return render(request, "chatmain/room.html", {"room_name": room_name})
 
 
+def get_room_config(request, room_name):
+    instance = ChatRoom.objects.get(room_name=room_name)
+
+    data = model_to_dict(instance)
+    return JsonResponse(data)
 def thankyou(request):
     return HttpResponse("Thank you so much for your participation.")
+
+
+def update_experiment_progress(chat_room_obj):
+    print('updating status of room:'+ chat_room_obj.room_name)
+    chat_room_obj.experiment_finished = True
+    chat_room_obj.save()
+    experiment = chat_room_obj.related_experiment
+    finished = ChatRoom.objects.filter(experiment_finished=True,
+                                       related_experiment=experiment)
+    on_going = ChatRoom.objects.filter(experiment_finished=False,
+                                       related_experiment=experiment)
+    all_rooms = ChatRoom.objects.filter(related_experiment=experiment)
+    progress_str = str(finished.count())+ "/" + str(all_rooms.count())
+    experiment.experiment_progress = progress_str
+    experiment.save()
+
+    if on_going.count() == 0:
+        experiment.experiment_finished = True
+        experiment.save()
 
 
 def message_scoring(request):
@@ -134,6 +163,8 @@ def message_scoring(request):
         tgt_msg = ChatMessage.objects.get(msg_uuid=p_data['msg_uuid'])
         tgt_msg.user_rated_score = p_data["score"]
         tgt_msg.save()
+        if str(p_data["score"]) == "10":
+            update_experiment_progress(tgt_msg.chat_room)
     except Exception as e:
         print(str(e))
         return HttpResponse("Failed to save score")

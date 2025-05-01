@@ -112,11 +112,7 @@
         })
             .then(response => response.text())
             .then(nextUrl => {
-                if (nextUrl && nextUrl.startsWith("/")) {
                     window.location.href = nextUrl;
-                } else {
-                    alert("Invalid redirect URL received.");
-                }
             })
             .catch(err => {
                 console.error("Failed to load next step:", err);

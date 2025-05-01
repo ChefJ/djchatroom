@@ -3,6 +3,7 @@ let chatSocket;
 
 const chartRefs = {};
 
+let roomConfig = {};
 
 let reconnectAttempts = 0;
 const maxReconnect = 5;
@@ -23,16 +24,16 @@ glbGridColor = getCSSVar('--border-color') || '#444';
 
 
 function ultRoomSettings(){
-    document.getElementById('toggle-colorize').addEventListener('change', function () {
+/*    document.getElementById('toggle-colorize').addEventListener('change', function () {
         enableColorize = this.checked;
-    });
+    });*/
 
 }
-function refreshImageById(messageId) {
+/*function refreshImageById(messageId) {
     const img = document.getElementById("visbias-image");
     const timestamp = new Date().getTime();
     img.src = `/static/chatmain/${messageId}.jpg?t=${timestamp}`;
-}
+}*/
 function initUsrId(){
     if (!anon_id) {
         anon_id = generateCleanUUID();
@@ -97,19 +98,60 @@ function ultUX(){
 
     });
 }
+function promptForTopic() {
+    if(roomConfig.is_experiment===false)
+        return;
+    const modal = document.getElementById('topic-modal');
+    const title = document.getElementById('topic-modal-title');
+    const input = document.getElementById('topic-input');
+    const submitBtn = document.getElementById('topic-submit-btn');
+
+    const tendency = roomConfig.user_tendency || 'Neutral';
+
+    title.textContent = tendency === 'Positive'
+        ? "Choose a topic you feel like writing positively about:"
+        : "Choose a topic you feel like criticizing or expressing negatively:";
+
+    modal.style.display = 'flex';
+
+    submitBtn.onclick = () => {
+        const topic = input.value.trim();
+        if (topic !== '') {
+            modal.style.display = 'none';
+
+            // Send topic as message (custom msg_uuid)
+            const customId = generateCleanUUID();
+            lastSentMessageId = customId;
+
+            const systemPrompt = `Write me a paragraph about ${topic}`;
+
+            chatSocket.send(JSON.stringify({
+                message: systemPrompt,
+                msg_uuid: customId,
+                user_uuid: anon_id
+            }));
+
+            setInputDisabled(true);
+        }
+    };
+}
 
 function getHistory(){
     fetch(historyUrl)
         .then(response => response.json())
         .then(data => {
-            data.forEach(message => {
-                handleIncomingMessage({
-                    user_uuid: message.user_uuid,
-                    message: message.message,
-                    msg_uuid: message.msg_uuid,
-                    message_with_scores: message.message_with_scores
+            if (data.length === 0) {
+                promptForTopic();  // 👈 show modal
+            } else{
+                    data.forEach(message => {
+                    handleIncomingMessage({
+                        user_uuid: message.user_uuid,
+                        message: message.message,
+                        msg_uuid: message.msg_uuid,
+                        message_with_scores: message.message_with_scores
+                    });
                 });
-            });
+            }
         })
         .catch(error => {
             console.error('❌ 加载历史消息失败:', error);
@@ -197,7 +239,88 @@ function checkUserConsent() {
     }
     return true;  // 👈 Consent already given
 }
+
+
+function fetchRoomConfig() {
+    const configUrl = `${window.location.pathname.replace(/\/$/, '')}/config`;
+
+    fetch(configUrl)
+        .then(response => response.json())
+        .then(data => {
+            roomConfig = data;
+            console.log("Room config loaded:", roomConfig);
+
+            // Apply experiment settings
+            switch (roomConfig.experiment_type) {
+                case "novis":
+                    document.querySelector('.image-box').style.display = 'none';
+                    break;
+                case "novisnocolor":
+                    document.querySelector('.image-box').style.display = 'none';
+                    enableColorize = false;
+                    break;
+                case "all":
+                default:
+                    break;
+            }
+
+            // ✅ Inject experiment info markdown panel if needed
+            if (roomConfig.is_experiment) {
+                const instructionText = `
+### Introduction:
+
+1. Four sessions in total.  
+2. For each response, click the score of satisfactory below to continue.  
+3. Click on 'satisfied' will transfer you to the next round. **PLEASE click it only when you are really satisfied with the answer.**
+`;
+
+                const tips = {
+                    "novisnocolor": `
+### The UI/UX:
+
+1. Double click a sentence to tune its tone easily.
+`,
+                    "novis": `
+### The UI/UX:
+
+1. Double click a sentence to tune its tone easily.
+2. The colorization of the sentences is done by detecting their tone.  
+   - Positive → green  
+   - Negative → red  
+   - Stronger tone = deeper color.  
+`,
+                    "all": `
+### The UI/UX:
+1. Double click a sentence to tune its tone easily.
+2. The colorization of the sentences is done by detecting their tone.  
+   - Positive → green  
+   - Negative → red  
+   - Stronger tone = deeper color.  
+3. The graph on the right shows the distribution of the sentiment grade of the sentences.
+`
+                };
+
+                const wrapper = document.createElement('div');
+                wrapper.className = 'experiment-wrapper';
+
+                wrapper.innerHTML = `
+    <div class="experiment-heading">Experiment Info</div>
+    <div class="experiment-panel">
+        <div class="experiment-column" id="experiment-instruction">${marked.parse(instructionText)}</div>
+        <div class="experiment-column" id="experiment-uiux">${marked.parse(tips[roomConfig.experiment_type] || '')}</div>
+    </div>
+`;
+
+                document.body.prepend(wrapper);
+            }
+        })
+        .catch(err => {
+            console.error('❌ Failed to load room config:', err);
+        });
+}
+
 function initChatroom(){
+    fetchRoomConfig();
     checkUserConsent();
     initUsrId();
     ultUX();
