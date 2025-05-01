@@ -224,7 +224,7 @@ function checkUserConsent() {
         document.getElementById('consent-modal').style.display = 'none';
     });
 
-    const consentGiven = localStorage.getItem('user-consented');
+/*    const consentGiven = localStorage.getItem('user-consented');
     if (!consentGiven) {
         fetch('/static/chatmain/consent.txt')
             .then(response => response.text())
@@ -236,7 +236,7 @@ function checkUserConsent() {
                 console.error('Failed to load consent form:', err);
             });
         return false;  // 👈 Consent not yet given
-    }
+    }*/
     return true;  // 👈 Consent already given
 }
 
