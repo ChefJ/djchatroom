@@ -93,10 +93,13 @@
 <script>
     const rawConsentText = `{{ consent_text|escapejs }}`;
     const uuid = localStorage.getItem("anon_id") || "";
+    let anon_id = localStorage.getItem('anon_id');
+
     function initUsrId(){
         if (!anon_id) {
             anon_id = generateCleanUUID();
             localStorage.setItem('anon_id', anon_id);
+            localStorage.setItem('chat-theme', 'modern');
         }
     }
     initUsrId();
@@ -111,7 +114,7 @@
                 "Content-Type": "application/json",
                 "X-CSRFToken": "{{ csrf_token }}"
             },
-            body: JSON.stringify({ uuid: uuid })
+            body: JSON.stringify({ uuid: anon_id })
         })
             .then(response => response.text())
             .then(nextUrl => {
