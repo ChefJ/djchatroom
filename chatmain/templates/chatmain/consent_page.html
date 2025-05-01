@@ -99,10 +99,11 @@
             localStorage.setItem('anon_id', anon_id);
         }
     }
+    initUsrId();
     document.getElementById('consent-text').innerHTML = marked.parse(rawConsentText);
 
     document.getElementById("consent-agree-btn").addEventListener("click", () => {
-        initUsrId()
+
 
         fetch("/next_experiment/", {
             method: "POST",
