@@ -16,7 +16,7 @@ from djchatroom import settings
 
 
 def init_experiment(user_uuid, experiment_type=None):
-    tmp_type_list = ["all","no_vis", "novis_nocolor"]
+    tmp_type_list = ["all","novis", "novisnocolor"]
     if experiment_type is None:
         experiment_type = tmp_type_list[randrange(0, 3)]
     tmp_participant = AnonymousParticipant.objects.create(user_uuid=user_uuid)
