@@ -67,11 +67,11 @@ class ChatConsumer(AsyncWebsocketConsumer):
         gpt_rsp = ask_gpt(previous_messages_list)
         msg_id= str(uuid.uuid4()).replace("-","")
         neg_scores, neu_scores, pos_scores, compound_scores, sentence_with_scores = text_to_score(gpt_rsp)
-        generate_sentiment_graph(
-            neg_scores, neu_scores, pos_scores, compound_scores,
-            str(settings.BASE_DIR) + "/chatmain/static/chatmain/",
-            msg_id+".jpg"
-        )
+        # generate_sentiment_graph(
+        #     neg_scores, neu_scores, pos_scores, compound_scores,
+        #     str(settings.BASE_DIR) + "/chatmain/static/chatmain/",
+        #     msg_id+".jpg"
+        # )
 
         response_payload = {
             "msg_uuid": msg_id,

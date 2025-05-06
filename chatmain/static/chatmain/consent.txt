@@ -56,7 +56,7 @@ We will only collect your data if you provide **informed consent**.
 
 You may withdraw at any time without giving a reason.
 - During the survey: You can simply stop and close the browser.
-- After completing the survey: Contact us at **[email]** if you want your data removed.
+- After completing the survey: Contact us at **[h.liu10@students.uu.nl]** if you want your data removed.
 - Please note:
   - If your data is **not anonymised**, it can be deleted upon request up until the study results are published.
   - If your data is **fully anonymised**, it cannot be traced back to you and therefore cannot be deleted.
