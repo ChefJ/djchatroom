@@ -313,9 +313,7 @@ function fetchRoomConfig() {
                 wrapper.innerHTML = `
     <div class="experiment-heading">Experiment Info</div>
     <div id="experiment-wrapper" class="experiment-wrapper">
-    <button id="experiment-toggle-btn" style="position: absolute; top: 5px; right: 10px; z-index: 1;">
-        ⬆️
-    </button>
+
     <div class="experiment-panel">
         <div class="experiment-column" id="experiment-instruction">${marked.parse(instructionText)}</div>
 <div class="experiment-column" id="experiment-uiux">

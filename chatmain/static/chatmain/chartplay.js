@@ -39,7 +39,7 @@ function renderSentimentPolarityBar(scores) {
                     max: 100,
                     title: {display: true, text: 'Percentage of Sentiment Area (%)', color: glbTextColor},
                     ticks: {color: glbTextColor},
-                    grid: {color: glbGridColor}
+                    grid: {color: glbGridColor, display:false}
                 },
                 y: {
                     stacked: true,
@@ -127,8 +127,9 @@ function renderSentimentCharts(scores) {
                 scales: {
                     x: {
                         beginAtZero: true,
+                        max: 100,
                         ticks: {color: 'rgba(128,128,128,0.7)'},
-                        grid: {display: 'rgba(128,128,128,0.7)'}
+                        grid: {display: 'rgba(128,128,128,0.7)',display:false}
                     },
                     y: {
                         ticks: {color: 'rgba(128,128,128,0.7)'},
@@ -256,13 +257,14 @@ function renderSentimentDistributionChart(scores, canvasId = 'compound-curve-cha
                 x: {
                     title: {display: true, text: 'Compound Sentiment Score'},
                     ticks: {color: glbTextColor},
-                    grid: {color: glbGridColor},
+                    grid: {color: glbGridColor,display:false},
                 },
                 y: {
                     beginAtZero: true,
-                    title: {display: true, text: 'Percentage (%)'},
+                    max: 100,
+                    title: {display: false, text: 'Percentage (%)'},
                     ticks: {color: glbTextColor},
-                    grid: {color: glbGridColor}
+                    grid: {color: glbGridColor,display:false}
                 }
             },
             plugins: {
@@ -334,7 +336,8 @@ function renderSentimentBarChart(scores, canvasId = 'compound-bar-chart', binCou
                 },
                 y: {
                     beginAtZero: true,
-                    title: {display: true, text: 'Percentage (%)'},
+                    max: 100,
+                    title: {display: false, text: 'Percentage (%)'},
                     ticks: {color: glbTextColor},
                     grid: {color: glbGridColor}
                 }
@@ -430,8 +433,8 @@ function renderMultiSentimentDistributionChart(datasets, canvasId = 'compound-cu
                 }
             },
             scales: {
-                x: { title: { display: true, text: 'Compound Score' }, ticks: { color: glbTextColor }, grid: { color: glbGridColor } },
-                y: { title: { display: true, text: 'Percentage (%)' }, beginAtZero: true, ticks: { color: glbTextColor }, grid: { color: glbGridColor } }
+                x: { title: { display: true, text: 'Compound Score' }, ticks: { color: glbTextColor }, grid: { color: '#aaa',display:false } },
+                y: { title: { display: false, text: 'Percentage (%)' }, beginAtZero: true, max: 100,ticks: { color: '#aaa'}, grid: { color: '#aaa' } }
             },
             plugins: {
                 legend: { labels: { color: glbTextColor } }
@@ -468,8 +471,8 @@ function renderMultiSentimentBarChart(datasets, canvasId = 'compound-bar-chart')
                 }
             },
             scales: {
-                x: { title: { display: true, text: 'Compound Score' }, ticks: { color: glbTextColor, autoSkip: false }, grid: { color: glbGridColor } },
-                y: { title: { display: true, text: 'Percentage (%)' }, beginAtZero: true, ticks: { color: glbTextColor }, grid: { color: glbGridColor } }
+                x: { title: { display: true, text: 'Compound Score' }, ticks: { color: glbTextColor, autoSkip: false },  grid: { color: '#aaa',display:false } },
+                y: { title: { display: false, text: 'Percentage (%)' }, beginAtZero: true,max: 100, ticks: { color: '#aaa' }, grid: { color: '#aaa' } }
             },
             plugins: {
                 legend: { labels: { color: glbTextColor } }
@@ -497,6 +500,7 @@ function renderMultiSentimentPolarityChart(datasets, canvasId = 'polarity-bar-ch
                 x: {
                     title: { display: true, text: 'Percentage (%)' },
                     beginAtZero: true,
+                    max: 100,
                     ticks: { color: glbTextColor },
                     grid: { color: glbGridColor }
                 },
