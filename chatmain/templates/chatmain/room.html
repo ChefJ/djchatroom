@@ -21,43 +21,48 @@
 </label>
 <div class="container">
     <div class="main-content">
-        <div class="chat-box">
-            <div id="chat-log" class="chat-log"></div>
-        </div>
-
-        <div class="image-box">
-            <div id="chart-container" style="width: 100%; margin-bottom: 20px;">
-<!--                <canvas id="neg-chart"></canvas>-->
-<!--                <canvas id="neu-chart"></canvas>-->
-<!--                <canvas id="pos-chart"></canvas>-->
-                <canvas id="compound-bar-chart"></canvas>
-
-                <canvas id="compound-curve-chart" ></canvas>
-                <canvas id="polarity-bar-chart" ></canvas>
-
-                <!--                <canvas id="ratio-bar" height="40" style="margin-top: 10px;"></canvas>-->
-<!--                <canvas id="sum-bar" height="40" style="margin-bottom: 30px;"></canvas>-->
+        <div  class="chat-image-wrapper">
+            <div class="chat-box">
+                <div class="chat-log-title-container">
+                    <h4 class="chat-log-title">Chat with AI Agent</h4>
+                </div>
+                <div id="chat-log" class="chat-log"></div>
             </div>
 
-<!--
-            <img src="{% static 'chatmain/1.jpg' %}" alt="Sentiment Visualization" id="visbias-image">
--->
-<!--
-            <label>Sentiment Analysis</label>
--->
+            <div class="image-box">
+                <div class="image-box-title-container">
+                    <h4 class="image-box-title">Sentiment Distribution of Selected Message</h4>
+                </div>
+                <div id="chart-container" style="width: 100%; margin-bottom: 20px;">
+                    <!--                <canvas id="neg-chart"></canvas>-->
+                    <!--                <canvas id="neu-chart"></canvas>-->
+                    <!--                <canvas id="pos-chart"></canvas>-->
+                    <canvas id="compound-bar-chart"></canvas>
+
+                    <canvas id="compound-curve-chart" ></canvas>
+                    <canvas id="polarity-bar-chart" ></canvas>
+
+                    <!--                <canvas id="ratio-bar" height="40" style="margin-top: 10px;"></canvas>-->
+                    <!--                <canvas id="sum-bar" height="40" style="margin-bottom: 30px;"></canvas>-->
+                </div>
+
+
+            </div>
+
+        </div>
+
+        <div class="input-row">
+            <div id="chat-input-wrapper" class="input-wrapper">
+                <input id="chat-message-input" type="text" placeholder="Type your message here..." class="typing-cursor">
+                <div id="input-overlay" class="input-overlay"></div>
+            </div>   <input id="chat-message-submit" type="button" value="Send">
+
         </div>
     </div>
+
 </div>
 
-<div class="input-row">
-    <div id="chat-input-wrapper" class="input-wrapper">
-        <input id="chat-message-input" type="text" placeholder="Type your message here..." class="typing-cursor">
-        <div id="input-overlay" class="input-overlay"></div>
-    </div>   <input id="chat-message-submit" type="button" value="Send">
-<!--
-    <label><input type="checkbox" id="toggle-colorize" checked> Colorize Sentiment</label>
--->
-</div>
+
 <div id="refine-popup" class="refine-popup" style="display:none; position:absolute;">
     <button data-dir="positive">More Positive</button>
     <button data-dir="negative">More Negative</button>
@@ -78,6 +83,8 @@
 
 <div id="topic-modal" class="modal" style="display:none;">
     <div class="modal-content" style="max-width: 600px;">
+        <h3 id="topic-modal-progress"></h3>
+
         <h3 id="topic-modal-title"></h3>
         <textarea id="topic-input" rows="3" placeholder="Type your topic here..." style="width: 100%; margin-top: 10px;"></textarea>
         <div style="display: flex; justify-content: flex-end; margin-top: 10px;">

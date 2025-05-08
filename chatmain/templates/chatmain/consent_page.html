@@ -75,23 +75,67 @@
             background-color: #ccc;
             color: black;
         }
+        #info-page, #consent-page {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+        #next-to-consent-btn {
+            padding: 10px 20px;
+            font-size: 15px;
+            border-radius: 4px;
+            cursor: pointer;
+            background-color: #007bff;
+            color:white;
+
+        }
+
+        #back-to-info-btn{
+            padding: 10px 20px;
+            font-size: 15px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <h2>Consent Form<br>for Online Surveys Involving Personal Data</h2>
-    <div id="consent-text-wrapper">
-        <div id="consent-text"></div>
+
+    <!-- Step 1: Info Page -->
+    <div id="info-page">
+        <h2>Welcome to the Experiment</h2>
+        <div id = "info-text" style="flex: 1; overflow-y: auto; padding: 10px; border: 1px solid #ccc; background: #fdfdfd; border-radius: 4px; margin-bottom: 20px;">
+            <p>This experiment is about ...</p>
+            <p>You will be asked to ...</p>
+            <p>Your data will be handled according to GDPR ...</p>
+            <!-- Add more informative instructions as needed -->
+        </div>
+        <div class="button-row" style="justify-content: center;">
+            <button id="next-to-consent-btn">Next</button>
+        </div>
     </div>
-    <div class="button-row">
-        <button id="consent-decline-btn">Decline</button>
-        <button id="consent-agree-btn">I Agree</button>
+
+    <!-- Step 2: Consent Page -->
+    <div id="consent-page" style="display: none;">
+        <h2>Consent Form<br>for Online Surveys Involving Personal Data</h2>
+        <div id="consent-text-wrapper">
+            <div id="consent-text"></div>
+        </div>
+        <div class="button-row" style="justify-content: space-between;">
+            <button id="back-to-info-btn">← Back</button>
+            <div>
+                <button id="consent-decline-btn">Decline</button>
+                <button id="consent-agree-btn">I Agree</button>
+            </div>
+        </div>
     </div>
+
 </div>
 
 <script>
     const rawConsentText = `{{ consent_text|escapejs }}`;
+    const rawInfoText = `{{ info_text|escapejs }}`;
     const uuid = localStorage.getItem("anon_id") || "";
     let anon_id = localStorage.getItem('anon_id');
     function generateCleanUUID() {
@@ -108,7 +152,19 @@
         }
     }
     initUsrId();
+
+    document.getElementById('next-to-consent-btn').addEventListener('click', () => {
+        document.getElementById('info-page').style.display = 'none';
+        document.getElementById('consent-page').style.display = 'flex';
+    });
+
+    document.getElementById('back-to-info-btn').addEventListener('click', () => {
+        document.getElementById('consent-page').style.display = 'none';
+        document.getElementById('info-page').style.display = 'flex';
+    });
+
     document.getElementById('consent-text').innerHTML = marked.parse(rawConsentText);
+    document.getElementById('info-text').innerHTML = marked.parse(rawInfoText);
 
     document.getElementById("consent-agree-btn").addEventListener("click", () => {
 

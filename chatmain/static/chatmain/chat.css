@@ -32,7 +32,7 @@ html, body {
     margin: 0;
     padding: 0;
     font-family: 'Courier Prime', monospace;
-    background-color: var(--bg-color);
+    background-color: #f4f4f5;
     color: var(--text-color);
 }
 
@@ -54,25 +54,48 @@ body {
 
 .container {
     display: flex;
-    flex: 1;
-    gap: 20px;
-    padding: 20px;
+    flex-direction: column;
+    height: 100%;
+    padding: 0 20px;
     box-sizing: border-box;
-    overflow: hidden;
+}
+
+@media (max-width: 800px) {
+    .main-content {
+        flex-direction: column;
+    }
+    .chat-box,
+    .image-box {
+        width: 100%;
+        max-width: 100%;
+    }
 }
 
 .main-content {
     display: flex;
+    justify-content: center;  /* Center horizontally */
+    flex-direction: column; /* stack vertically */
+
+    align-items: center;      /* Center vertically */
+    gap: 20px;                /* Space between chat and image */
+    height: 100%;
+    margin: auto;
+}
+.chat-image-wrapper {
+    display: flex;
     flex: 1;
     gap: 20px;
-    height: 100%;
+    overflow: hidden;
 }
-
 .chat-box {
     flex: 2;
     display: flex;
     flex-direction: column;
     height: 100%;
+    max-width: 1000px;
+    font-family: Arial, sans-serif;
+    margin: 0 auto;
+
 }
 
 .chat-log {
@@ -81,12 +104,12 @@ body {
     font-size: 14px;
     line-height: 1.5;
     border: 2px solid var(--border-color);
-    border-radius: 8px;
     background-color: var(--bg-color) 0;
     color: var(--text-color);
     overflow-y: auto;
     display: flex;
     flex-direction: column;
+
     gap: 8px;
     box-shadow: 0 0 10px var(--shadow-color);
 }
@@ -135,15 +158,17 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    padding: 10px 20px;
-    border-top: 1px solid var(--border-color);
+    padding: 10px 0;
     gap: 10px;
+    width: 100%;
+    border-top: 1px solid var(--border-color);
+    background-color: var(--input-bg);
 }
 
 #chat-message-input {
     padding: 8px;
     font-size: 14px;
-    width: 60%;
+    width: 100%;
     border-radius: 4px;
     border: 1px solid var(--border-color);
     background-color: var(--bg-color);
@@ -160,8 +185,6 @@ body {
     padding: 8px 20px;
     font-size: 14px;
     border-radius: 4px;
-    border: none;
-    background-color: var(--bg-color);
     color: var(--text-color);
     cursor: pointer;
     text-transform: uppercase;
@@ -175,10 +198,10 @@ body {
 .image-box {
     width: 500px;
     border: 2px solid var(--border-color);
-    padding: 10px;
     background-color: var(--bg-color);
     box-shadow: 0 0 10px var(--shadow-color);
     color: var(--text-color);
+
 }
 
 #visbias-image {
@@ -503,4 +526,81 @@ body::before {
 .experiment-heading::after {
     right: 0;
     margin-left: 10px;
+}
+
+
+.legend-bar {
+    height: 14px;
+    width: 100%;
+    background: linear-gradient(to right, rgba(255,80,80,1), rgba(255,80,80,0.3), rgba(0,255,153,0.3), rgba(0,255,153,1));
+    border-radius: 6px;
+    margin-bottom: 4px;
+}
+
+.legend-section {
+    margin-top: 12px;
+    padding-top: 8px;
+}
+
+.legend-bar-wrapper {
+    position: relative;
+    height: 14px;
+    width: 100%;
+    background: linear-gradient(to right, rgba(255,80,80,1), rgba(255,80,80,0.3), rgba(0,255,153,0.3), rgba(0,255,153,1));
+    border-radius: 6px;
+    margin-bottom: 4px;
+}
+
+#legend-indicator {
+    position: absolute;
+    top: -4px;
+    width: 2px;
+    height: 22px;
+    background: black;
+    display: none;
+    pointer-events: none;
+    z-index: 2;
+}
+
+.legend-labels {
+    display: flex;
+    justify-content: space-between;
+    font-size: 12px;
+    padding: 0 2px;
+    color: var(--text-color);
+}
+
+.image-box-title-container {
+    border-bottom: 2px solid var(--border-color);
+    padding: 8px 12px;
+    margin-bottom: 14px;
+    background-color: var(--input-bg);
+    /* remove rounding and shadow */
+    border-radius: 0;
+    box-shadow: none;
+    text-align: center;
+}
+
+.image-box-title {
+    margin: 0;
+    font-size: 14px;
+    font-weight: bold;
+    color: var(--text-color);
+}
+
+.chat-log-title-container {
+    border: 2px solid var(--border-color);
+    padding: 8px 12px;
+    background-color: var(--input-bg);
+    border-radius: 0;
+    border-bottom: 0px;
+    box-shadow: none;
+    text-align: center;
+}
+
+.chat-log-title {
+    margin: 0;
+    font-size: 14px;
+    font-weight: bold;
+    color: var(--text-color);
 }

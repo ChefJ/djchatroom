@@ -11,6 +11,10 @@ let lastMessageTime = Date.now();
 const historyUrl = window.location.pathname.endsWith('/')
     ? window.location.pathname + 'history'
     : window.location.pathname + '/history';
+
+const progressUrl = `${window.location.pathname.replace(/\/$/, '')}/progress`;
+const configUrl = `${window.location.pathname.replace(/\/$/, '')}/config`;
+
 const getCSSVar = name => getComputedStyle(document.documentElement).getPropertyValue(name).trim();
 let glbTextColor = getCSSVar('--text-color') || '#000000';
 let glbGridColor = getCSSVar('--border-color') || '#444';
@@ -99,10 +103,13 @@ function ultUX(){
     });
 }
 function promptForTopic() {
+
     if(roomConfig.is_experiment===false)
         return;
+
     const modal = document.getElementById('topic-modal');
     const title = document.getElementById('topic-modal-title');
+    const progress = document.getElementById('topic-modal-progress');
     const input = document.getElementById('topic-input');
     const submitBtn = document.getElementById('topic-submit-btn');
 
@@ -110,7 +117,18 @@ function promptForTopic() {
 
     title.textContent = tendency === 'Positive'
         ? "Choose a topic you feel like writing positively about:"
-        : "Choose a topic you feel like criticizing or expressing negatively:";
+        : "Chooooose a topic you feel like criticizing or expressing negatively:";
+
+    fetch(progressUrl)
+        .then(response => response.json())
+        .then(data => {
+            console.log(data.progress);
+            progress.textContent = "Current Progress:" + data.progress;
+
+        })
+        .catch(error => {
+            console.error('❌ 加载历史消息失败:', error);
+        });
 
     modal.style.display = 'flex';
 
@@ -242,7 +260,6 @@ function checkUserConsent() {
 
 
 function fetchRoomConfig() {
-    const configUrl = `${window.location.pathname.replace(/\/$/, '')}/config`;
 
     fetch(configUrl)
         .then(response => response.json())
@@ -278,25 +295,15 @@ function fetchRoomConfig() {
                     "novisnocolor": `
 ### The UI/UX:
 
-1. Double click a sentence to tune its tone easily.
 `,
                     "novis": `
-### The UI/UX:
+### Colorization Meter
 
-1. Double click a sentence to tune its tone easily.
-2. The colorization of the sentences is done by detecting their tone.  
-   - Positive → green  
-   - Negative → red  
-   - Stronger tone = deeper color.  
+
 `,
                     "all": `
-### The UI/UX:
-1. Double click a sentence to tune its tone easily.
-2. The colorization of the sentences is done by detecting their tone.  
-   - Positive → green  
-   - Negative → red  
-   - Stronger tone = deeper color.  
-3. The graph on the right shows the distribution of the sentiment grade of the sentences.
+### Colorization Meter
+
 `
                 };
 
@@ -305,10 +312,29 @@ function fetchRoomConfig() {
 
                 wrapper.innerHTML = `
     <div class="experiment-heading">Experiment Info</div>
+    <div id="experiment-wrapper" class="experiment-wrapper">
+    <button id="experiment-toggle-btn" style="position: absolute; top: 5px; right: 10px; z-index: 1;">
+        ⬆️
+    </button>
     <div class="experiment-panel">
         <div class="experiment-column" id="experiment-instruction">${marked.parse(instructionText)}</div>
-        <div class="experiment-column" id="experiment-uiux">${marked.parse(tips[roomConfig.experiment_type] || '')}</div>
+<div class="experiment-column" id="experiment-uiux">
+    ${marked.parse(tips[roomConfig.experiment_type] || '')}
+    ${roomConfig.experiment_type !== 'novisnocolor' ? `
+    <div class="legend-section">
+    <div class="legend-bar-wrapper">
+        <div class="legend-bar"></div>
+        <div id="legend-indicator"></div>
     </div>
+    <div class="legend-labels">
+        <span>-1</span>
+        <span>0</span>
+        <span>+1</span>
+    </div>
+</div>` : ''}
+</div>    </div>
+</div>
+
 `;
 
                 document.body.prepend(wrapper);
@@ -318,6 +344,7 @@ function fetchRoomConfig() {
             console.error('❌ Failed to load room config:', err);
         });
 }
+
 
 function initChatroom(){
     fetchRoomConfig();

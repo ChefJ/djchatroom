@@ -1,0 +1,10 @@
+This is info text. Welcome!
+
+Exp consists of 4 iterations of:
+
+	- Talk
+	- Rate
+	- Adjust
+	- Hand in
+
+Will take ~30 minutes.

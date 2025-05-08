@@ -42,6 +42,7 @@ function handleIncomingMessage(message) {
     const sender = document.createElement('div');
     sender.classList.add('sender-name');
     sender.textContent = message.user_uuid.slice(0, 4);
+    sender.style = "display:none;"
 
     const bubble = document.createElement('div');
     bubble.classList.add('chat-message');
@@ -88,9 +89,21 @@ function handleIncomingMessage(message) {
 
     bubble.innerHTML = `
         <div class="message-text">${messageHtml}</div>
-        <div class="meta">ID: ${message.msg_uuid}</div>
+
+        <div class="meta" style="display: none">ID: ${message.msg_uuid}</div>
     `;
-    setTimeout(() => {
+
+    if (message.user_uuid === 'GPT') {
+        bubble.innerHTML = `
+        <div class="message-text">${messageHtml}</div>
+        <br>
+        <div className="meta" style="color:dimgrey;font-style:italic;">* Double click on any sentence to quick adjust
+            tone*
+        </div>
+    `; }
+
+
+        setTimeout(() => {
         const segments = bubble.querySelectorAll('.sentiment-segment');
         segments.forEach(seg => {
             seg.addEventListener('mouseenter', () => {
@@ -129,7 +142,30 @@ function handleIncomingMessage(message) {
                 popup.dataset.originalText = seg.textContent;
                 popup.__sourceBubble = seg.closest('.chat-message');
             });
+
+            // ✅ Hover interaction
+            seg.addEventListener('mouseenter', () => {
+                const indicator = document.getElementById('legend-indicator');
+                if (!indicator) {
+                    return;}
+                const bar = indicator.parentElement;
+                const width = bar.offsetWidth;
+
+                // Map compound (-1 to +1) to [0, width]
+                const clamped = Math.max(-1, Math.min(1, seg.dataset.compound));
+                const pos = ((clamped + 1) / 2) * width;
+
+                indicator.style.left = `${pos}px`;
+                indicator.style.display = 'block';
+            });
+
+            seg.addEventListener('mouseleave', () => {
+                const indicator = document.getElementById('legend-indicator');
+                if (indicator) indicator.style.display = 'none';
+            });
         });
+
+
     }, 0);
     messageWrapper.appendChild(sender);
     messageWrapper.appendChild(bubble);

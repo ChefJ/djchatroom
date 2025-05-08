@@ -91,9 +91,16 @@ def gen_questionnaire_link(user_uuid):
 
 def consent_form_view(request):
     consent_path = os.path.join(settings.BASE_DIR, "chatmain", "static","chatmain", "consent.txt")
+    consent_text = "Resource loading"
+    info_text = "Resource loading"
     with open(consent_path, "r",encoding="utf8") as f:
         consent_text = f.read()
-    return render(request, "chatmain/consent_page.html", {"consent_text": consent_text})
+
+    consent_path = os.path.join(settings.BASE_DIR, "chatmain", "static","chatmain", "info_exp.txt")
+    with open(consent_path, "r",encoding="utf8") as f:
+        info_text = f.read()
+
+    return render(request, "chatmain/consent_page.html", {"consent_text": consent_text, "info_text":info_text})
 
 def next_experiment(request):
     p_data = json.loads(request.body)
@@ -134,6 +141,15 @@ def get_room_config(request, room_name):
 
     data = model_to_dict(instance)
     return JsonResponse(data)
+
+
+def get_user_progress(request, room_name):
+    chr_obj = ChatRoom.objects.get(room_name=room_name)
+    progress = chr_obj.related_experiment.experiment_progress
+    return JsonResponse({"progress": progress})
+
+
+
 def thankyou(request):
     return HttpResponse("Thank you so much for your participation.")
 
