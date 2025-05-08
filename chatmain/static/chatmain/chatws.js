@@ -73,7 +73,7 @@ function handleIncomingMessage(message) {
 
                 messageHtml += `<span 
                 class="sentiment-segment" 
-                title="${tooltip}" 
+                title="" 
                 data-compound="${compound}" 
                 style="border-radius: 6px; padding: 2px 4px; margin: 2px; display: inline; ${bgColor ? `background-color: ${bgColor};` : ''}">
                 ${formatted}

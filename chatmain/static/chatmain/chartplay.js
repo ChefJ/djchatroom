@@ -49,9 +49,7 @@ function renderSentimentPolarityBar(scores) {
             },
             plugins: {
                 tooltip: {
-                    callbacks: {
-                        label: ctx => `${ctx.dataset.label}: ${ctx.raw.toFixed(2)}%`
-                    }
+                    enabled: false
                 },
                 legend: {
                     labels: {
@@ -137,6 +135,9 @@ function renderSentimentCharts(scores) {
                     }
                 },
                 plugins: {
+                    tooltip: {
+                        enabled: false
+                    },
                     title: {
                         display: true,
                         text: label,
@@ -192,6 +193,29 @@ function highlightSentimentSegmentsByBin(binIndex, binCount = 20) {
     });
 }
 
+function highlightChartBarsByBin(binIndex, binCount = 20) {
+    ['compoundBar', 'compoundCurve'].forEach(chartKey => {
+        const chart = chartRefs[chartKey];
+        if (!chart) return;
+
+        chart.data.datasets.forEach(dataset => {
+            const originalColor = dataset.originalColor || dataset.backgroundColor || 'rgba(75,192,192,0.6)';
+            dataset.originalColor = originalColor;
+
+            dataset.backgroundColor = dataset.data.map((_, i) =>
+                i === binIndex ? originalColor : originalColor.replace(/[\d.]+\)$/g, '0.1)')
+            );
+
+            if (chart.config.type === 'line') {
+                dataset.borderColor = dataset.data.map((_, i) =>
+                    i === binIndex ? originalColor : originalColor.replace(/[\d.]+\)$/g, '0.1)')
+                );
+            }
+        });
+
+        chart.update();
+    });
+}
 
 function removeSegmentHighlights() {
     const comparedIds = Object.keys(comparedMessages);
@@ -203,6 +227,35 @@ function removeSegmentHighlights() {
         spans.forEach(span => {
             span.classList.remove('highlight-segment');
         });
+    });
+}
+
+function removeBarHighlights() {
+    // 🌐 Text span cleanup
+    const comparedIds = Object.keys(comparedMessages);
+    comparedIds.forEach(msgId => {
+        const bubble = document.querySelector(`[data-id="${msgId}"]`);
+        if (!bubble) return;
+
+        const spans = bubble.querySelectorAll('.sentiment-segment.highlight-segment');
+        spans.forEach(span => span.classList.remove('highlight-segment'));
+    });
+
+    // 📊 Chart visual reset
+    ['compoundCurve', 'compoundBar'].forEach(chartKey => {
+        const chart = chartRefs[chartKey];
+        if (!chart) return;
+
+        chart.data.datasets.forEach(dataset => {
+            const originalColor = dataset.originalColor || 'rgba(75,192,192,0.6)';
+            dataset.backgroundColor = dataset.data.map(() => originalColor);
+
+            if (chart.config.type === 'line') {
+                dataset.borderColor = originalColor;
+            }
+        });
+
+        chart.update();
     });
 }
 
@@ -248,9 +301,11 @@ function renderSentimentDistributionChart(scores, canvasId = 'compound-curve-cha
         onHover: (event, elements) => {
             if (elements.length > 0) {
                 const index = elements[0].index;
+                highlightChartBarsByBin(index);
                 highlightSentimentSegmentsByBin(index);
             } else {
                 removeSegmentHighlights();
+                removeBarHighlights();
             }
         },
             scales: {
@@ -269,9 +324,7 @@ function renderSentimentDistributionChart(scores, canvasId = 'compound-curve-cha
             },
             plugins: {
                 tooltip: {
-                    callbacks: {
-                        label: ctx => `${ctx.raw.toFixed(2)}%`
-                    }
+                    enabled: false
                 },
                 legend: {
                     labels: {
@@ -322,9 +375,11 @@ function renderSentimentBarChart(scores, canvasId = 'compound-bar-chart', binCou
             onHover: (event, elements) => {
                 if (elements.length > 0) {
                     const index = elements[0].index;
+                    highlightChartBarsByBin(index);
                     highlightSentimentSegmentsByBin(index);
                 } else {
                     removeSegmentHighlights();
+                    removeBarHighlights();
                 }
             },
             scales: {
@@ -344,9 +399,7 @@ function renderSentimentBarChart(scores, canvasId = 'compound-bar-chart', binCou
             },
             plugins: {
                 tooltip: {
-                    callbacks: {
-                        label: ctx => `${ctx.raw.toFixed(2)}%`
-                    }
+                    enabled: false
                 },
                 legend: {
                     labels: {
@@ -368,18 +421,16 @@ function highlightChartBin(score, binCount = 20) {
         if (chart) {
             chart.data.datasets.forEach((dataset, datasetIndex) => {
                 const originalColor = dataset.originalColor || 'rgba(75,192,192,0.6)';
+                const fadedColor = originalColor.replace(/[\d.]+\)$/g, '0.1)'); // reduces opacity
 
                 dataset.backgroundColor = dataset.data.map((_, i) => {
-                    if (i === index) {
-                        return 'rgba(255, 205, 86, 0.8)'; // 🔥 Highlight color
-                    } else {
-                        return originalColor;
-                    }
+                    return i === index ? originalColor : fadedColor;
                 });
 
-                // For curves (lines), also fix borderColor
                 if (chart.config.type === 'line') {
-                    dataset.borderColor = dataset.backgroundColor;
+                    dataset.borderColor = dataset.data.map((_, i) =>
+                        i === index ? originalColor : fadedColor
+                    );
                 }
             });
             chart.update();
@@ -394,7 +445,6 @@ function removeChartHighlights() {
                 const originalColor = dataset.originalColor || 'rgba(75,192,192,0.6)';
                 dataset.backgroundColor = dataset.data.map(() => originalColor);
 
-                // Also reset curves borderColor properly
                 if (chart.config.type === 'line') {
                     dataset.borderColor = originalColor;
                 }
@@ -427,9 +477,11 @@ function renderMultiSentimentDistributionChart(datasets, canvasId = 'compound-cu
             onHover: (event, elements) => {
                 if (elements.length > 0) {
                     const index = elements[0].index;
+                    highlightChartBarsByBin(index);
                     highlightSentimentSegmentsByBin(index);
                 } else {
                     removeSegmentHighlights();
+                    removeBarHighlights();
                 }
             },
             scales: {
@@ -437,6 +489,9 @@ function renderMultiSentimentDistributionChart(datasets, canvasId = 'compound-cu
                 y: { title: { display: false, text: 'Percentage (%)' }, beginAtZero: true, max: 100,ticks: { color: '#aaa'}, grid: { color: '#aaa' } }
             },
             plugins: {
+                tooltip: {
+                    enabled: false
+                },
                 legend: { labels: { color: glbTextColor } }
             }
         }
@@ -465,9 +520,11 @@ function renderMultiSentimentBarChart(datasets, canvasId = 'compound-bar-chart')
             onHover: (event, elements) => {
                 if (elements.length > 0) {
                     const index = elements[0].index;
+                    highlightChartBarsByBin(index);
                     highlightSentimentSegmentsByBin(index);
                 } else {
                     removeSegmentHighlights();
+                    removeBarHighlights();
                 }
             },
             scales: {
@@ -475,6 +532,9 @@ function renderMultiSentimentBarChart(datasets, canvasId = 'compound-bar-chart')
                 y: { title: { display: false, text: 'Percentage (%)' }, beginAtZero: true,max: 100, ticks: { color: '#aaa' }, grid: { color: '#aaa' } }
             },
             plugins: {
+                tooltip: {
+                    enabled: false
+                },
                 legend: { labels: { color: glbTextColor } }
             }
         }
