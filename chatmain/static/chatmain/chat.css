@@ -93,6 +93,7 @@ body {
     flex-direction: column;
     height: 100%;
     max-width: 1000px;
+    min-width: 600px;
     font-family: Arial, sans-serif;
     margin: 0 auto;
 
