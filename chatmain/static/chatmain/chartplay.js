@@ -52,6 +52,7 @@ function renderSentimentPolarityBar(scores) {
                     enabled: false
                 },
                 legend: {
+                    display: false,
                     labels: {
                         color: glbTextColor
                     }
@@ -327,6 +328,7 @@ function renderSentimentDistributionChart(scores, canvasId = 'compound-curve-cha
                     enabled: false
                 },
                 legend: {
+                    display: false,
                     labels: {
                         color: glbTextColor
                     }
@@ -402,6 +404,7 @@ function renderSentimentBarChart(scores, canvasId = 'compound-bar-chart', binCou
                     enabled: false
                 },
                 legend: {
+                    display: false,
                     labels: {
                         color: glbTextColor
                     }
@@ -492,7 +495,8 @@ function renderMultiSentimentDistributionChart(datasets, canvasId = 'compound-cu
                 tooltip: {
                     enabled: false
                 },
-                legend: { labels: { color: glbTextColor } }
+                legend: { display: false,
+                    labels: { color: glbTextColor } }
             }
         }
     });
@@ -535,7 +539,8 @@ function renderMultiSentimentBarChart(datasets, canvasId = 'compound-bar-chart')
                 tooltip: {
                     enabled: false
                 },
-                legend: { labels: { color: glbTextColor } }
+                legend: {display: false,
+                    labels: { color: glbTextColor } }
             }
         }
     });
@@ -570,7 +575,8 @@ function renderMultiSentimentPolarityChart(datasets, canvasId = 'polarity-bar-ch
                 }
             },
             plugins: {
-                legend: { labels: { color: glbTextColor } }
+                legend: {display: false,
+                    labels: { color: glbTextColor } }
             }
         }
     });
