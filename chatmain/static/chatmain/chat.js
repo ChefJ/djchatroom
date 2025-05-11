@@ -31,7 +31,7 @@ function ultRoomSettings(){
 /*    document.getElementById('toggle-colorize').addEventListener('change', function () {
         enableColorize = this.checked;
     });*/
-
+    document.body.setAttribute('data-theme', 'modern');
 }
 /*function refreshImageById(messageId) {
     const img = document.getElementById("visbias-image");
