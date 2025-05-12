@@ -4,6 +4,7 @@ const roomName = JSON.parse(document.getElementById('room-name').textContent);
 document.getElementById('room-display').textContent = roomName;
 document.getElementById('server-ip').textContent = window.location.hostname;
 
+const globalBinAmount = 7;
 let comparedMessages = {}; // <-- NEW: Track compared messages
 function connectWebSocket() {
     updateStatus(`[CONNECTING] :: SERVER: ${window.location.hostname} :: ROOM: ${roomName}`);
@@ -315,9 +316,9 @@ function handleIncomingMessage(message) {
         try {
             const segments = JSON.parse(message.message_with_scores);
             const scores = segments.map(s => s.sentiment_score);
-            renderSentimentDistributionChart(scores);
+            renderSentimentDistributionChart(scores, 'compound-curve-chart', globalBinAmount);
             renderSentimentPolarityBar(scores);
-            renderSentimentBarChart(scores);
+            renderSentimentBarChart(scores, 'compound-bar-chart', globalBinAmount);
             window.__activeSentimentMessage = bubble;
         } catch (err) {
             console.error('📊 Failed to render sentiment chart:', err);
@@ -343,7 +344,7 @@ function updateComparisonCharts() {
         try {
             const segments = JSON.parse(messageWithScores);
             const scores = segments.map(s => s.sentiment_score);
-            const { labels, normalized } = getCompoundBins(scores, 20);
+            const { labels, normalized } = getCompoundBins(scores, globalBinAmount);
 
             datasetsCurve.push({
                 label: msgId,

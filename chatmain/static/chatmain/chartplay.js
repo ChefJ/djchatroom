@@ -1,5 +1,5 @@
 function renderSentimentPolarityBar(scores) {
-    const {labels, normalized} = getCompoundBins(scores, 20);
+    const {labels, normalized} = getCompoundBins(scores, globalBinAmount);
 
     let posSum = 0, negSum = 0;
     normalized.forEach((val, i) => {
@@ -68,7 +68,7 @@ function renderSentimentPolarityBar(scores) {
     });
 }
 
-function getCompoundBins(scores, binCount = 20) {
+function getCompoundBins(scores, binCount = globalBinAmount) {
     const binWidth = 2 / binCount; // from -1 to 1
     const bins = Array(binCount).fill(0);
     const total = scores.length;
@@ -173,7 +173,7 @@ function renderSentimentCharts(scores) {
 
 }
 
-function highlightSentimentSegmentsByBin(binIndex, binCount = 20) {
+function highlightSentimentSegmentsByBin(binIndex, binCount = globalBinAmount) {
     const binWidth = 2 / binCount;
     const binStart = -1 + binIndex * binWidth;
     const binEnd = binStart + binWidth;
@@ -194,7 +194,7 @@ function highlightSentimentSegmentsByBin(binIndex, binCount = 20) {
     });
 }
 
-function highlightChartBarsByBin(binIndex, binCount = 20) {
+function highlightChartBarsByBin(binIndex, binCount = globalBinAmount) {
     ['compoundBar', 'compoundCurve'].forEach(chartKey => {
         const chart = chartRefs[chartKey];
         if (!chart) return;
@@ -415,7 +415,7 @@ function renderSentimentBarChart(scores, canvasId = 'compound-bar-chart', binCou
     });
 }
 
-function highlightChartBin(score, binCount = 20) {
+function highlightChartBin(score, binCount = globalBinAmount) {
     const binWidth = 2 / binCount;
     const index = Math.min(Math.floor((score + 1) / binWidth), binCount - 1);
 
@@ -459,7 +459,7 @@ function removeChartHighlights() {
 
 
 function renderMultiSentimentDistributionChart(datasets, canvasId = 'compound-curve-chart') {
-    const labels = Array.from({length: 20}, (_, i) => (-(1 - (1/20)/2) + i * (2/20)).toFixed(2));
+    const labels = Array.from({length: globalBinAmount}, (_, i) => (-(1 - (1/globalBinAmount)/2) + i * (2/globalBinAmount)).toFixed(2));
     const ctx = document.getElementById(canvasId).getContext('2d');
 
     if (chartRefs['compoundCurve']) chartRefs['compoundCurve'].destroy?.();
@@ -503,7 +503,7 @@ function renderMultiSentimentDistributionChart(datasets, canvasId = 'compound-cu
 }
 
 function renderMultiSentimentBarChart(datasets, canvasId = 'compound-bar-chart') {
-    const labels = Array.from({length: 20}, (_, i) => (-(1 - (1/20)/2) + i * (2/20)).toFixed(2));
+    const labels = Array.from({length: globalBinAmount}, (_, i) => (-(1 - (1/globalBinAmount)/2) + i * (2/globalBinAmount)).toFixed(2));
     const ctx = document.getElementById(canvasId).getContext('2d');
 
     if (chartRefs['compoundBar']) chartRefs['compoundBar'].destroy?.();

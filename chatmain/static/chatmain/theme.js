@@ -26,9 +26,9 @@ toggle.addEventListener('change', () => {
                 const scores = segments.map(s => s.sentiment_score);
                 Object.values(chartRefs).forEach(chart => chart.destroy());
 //         renderSentimentCharts(scores);
-                renderSentimentDistributionChart(scores);
+                renderSentimentDistributionChart(scores, 'compound-curve-chart', globalBinAmount);
                 renderSentimentPolarityBar(scores);
-                renderSentimentBarChart(scores);
+                renderSentimentBarChart(scores, 'compound-bar-chart', globalBinAmount);
 
 
             } catch (err) {
