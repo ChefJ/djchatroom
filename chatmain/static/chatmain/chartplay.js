@@ -1,3 +1,5 @@
+const qualitativeLabels = ['Very Negative', 'Negative', 'Bit Negative', 'Neutral', 'Bit Positive', 'Positive', 'Very Positive'];
+
 function renderSentimentPolarityBar(scores) {
     const {labels, normalized} = getCompoundBins(scores, globalBinAmount);
 
@@ -87,91 +89,6 @@ function getCompoundBins(scores, binCount = globalBinAmount) {
     return {labels, normalized};
 }
 
-function renderSentimentCharts(scores) {
-    const bins = Array(10).fill(0).map((_, i) => `${(i / 10).toFixed(1)}–${((i + 1) / 10).toFixed(1)}`);
-    const negCounts = Array(10).fill(0);
-    const neuCounts = Array(10).fill(0);
-    const posCounts = Array(10).fill(0);
-    let posCount = 0, negCount = 0, posSum = 0, negSum = 0;
-
-    scores.forEach(s => {
-        const getBin = v => Math.min(9, Math.floor(v * 10));
-        if (s.neg > 0) negCounts[getBin(s.neg)]++;
-        if (s.neu > 0) neuCounts[getBin(s.neu)]++;
-        if (s.pos > 0) posCounts[getBin(s.pos)]++;
-
-        if (s.pos > 0) {
-            posCount++;
-            posSum += s.pos;
-        }
-        if (s.neg > 0) {
-            negCount++;
-            negSum += s.neg;
-        }
-    });
-
-
-    function createChart(canvasId, label, data, color, chartKey, isHorizontal = false) {
-        const ctx = document.getElementById(canvasId).getContext('2d');
-
-// Destroy existing chart before creating a new one
-        if (chartRefs[chartKey]) {
-            chartRefs[chartKey].destroy();
-        }
-
-        const baseOptions = {
-            type: 'bar',
-            options: {
-                indexAxis: isHorizontal ? 'y' : 'x',
-                scales: {
-                    x: {
-                        beginAtZero: true,
-                        max: 100,
-                        ticks: {color: 'rgba(128,128,128,0.7)'},
-                        grid: {display: 'rgba(128,128,128,0.7)',display:false}
-                    },
-                    y: {
-                        ticks: {color: 'rgba(128,128,128,0.7)'},
-                        grid: {display: false}
-                    }
-                },
-                plugins: {
-                    tooltip: {
-                        enabled: false
-                    },
-                    title: {
-                        display: true,
-                        text: label,
-                        color: 'rgba(128,128,128,0.7)',
-                        font: {size: 14, weight: 'bold'},
-                        padding: {top: 10, bottom: 10}
-                    },
-                    legend: {
-                        display: false
-                    }
-                }
-            },
-            data: {
-                labels: isHorizontal ? [''] : bins,
-                datasets: [{
-                    label,
-                    data,
-                    backgroundColor: color
-                }]
-            }
-        };
-
-        chartRefs[chartKey] = new Chart(ctx, baseOptions);
-    }
-
-
-    createChart('neg-chart', 'Negative', negCounts, 'rgba(255,80,80,0.7)', 'neg');
-    createChart('neu-chart', 'Neutral', neuCounts, 'rgba(128,128,128,0.7)', 'neu');
-    createChart('pos-chart', 'Positive', posCounts, 'rgba(0,255,153,0.7)', 'pos');
-// createChart('ratio-bar', 'Sentence Count: Negative vs Positive', [negCount, posCount], ['rgba(255,80,80,0.7)', 'rgba(0,255,153,0.7)'], 'ratio', true);
-// createChart('sum-bar', 'Sum of Sentiment Scores', [negSum.toFixed(2), posSum.toFixed(2)], ['rgba(255,80,80,0.7)', 'rgba(0,255,153,0.7)'], 'sum', true);
-
-}
 
 function highlightSentimentSegmentsByBin(binIndex, binCount = globalBinAmount) {
     const binWidth = 2 / binCount;
@@ -312,7 +229,9 @@ function renderSentimentDistributionChart(scores, canvasId = 'compound-curve-cha
             scales: {
                 x: {
                     title: {display: true, text: 'Compound Sentiment Score'},
-                    ticks: {color: glbTextColor},
+                    ticks: {color: glbTextColor,callback: function(value, index) {
+                            return qualitativeLabels[index] || '';
+                        }},
                     grid: {color: glbGridColor,display:false},
                 },
                 y: {
@@ -388,6 +307,9 @@ function renderSentimentBarChart(scores, canvasId = 'compound-bar-chart', binCou
                 x: {
                     title: {display: true, text: 'Compound Sentiment Score'},
                     ticks: {color: glbTextColor,
+                        callback: function(value, index) {
+                            return qualitativeLabels[index] || '';
+                        },
                         autoSkip: false},
                     grid: {color: glbGridColor}
                 },
@@ -488,7 +410,9 @@ function renderMultiSentimentDistributionChart(datasets, canvasId = 'compound-cu
                 }
             },
             scales: {
-                x: { title: { display: true, text: 'Compound Score' }, ticks: { color: glbTextColor }, grid: { color: '#aaa',display:false } },
+                x: { title: { display: true, text: 'Compound Score' }, ticks: { color: '#000',callback: function(value, index) {
+                            return qualitativeLabels[index] || '';
+                        } }, grid: { color: '#aaa',display:false } },
                 y: { title: { display: false, text: 'Percentage (%)' }, beginAtZero: true, max: 100,ticks: { color: '#aaa'}, grid: { color: '#aaa' } }
             },
             plugins: {
@@ -532,7 +456,9 @@ function renderMultiSentimentBarChart(datasets, canvasId = 'compound-bar-chart')
                 }
             },
             scales: {
-                x: { title: { display: true, text: 'Compound Score' }, ticks: { color: glbTextColor, autoSkip: false },  grid: { color: '#aaa',display:false } },
+                x: { title: { display: true, text: 'Compound Score' }, ticks: { color: '#000', autoSkip: false,callback: function(value, index) {
+                            return qualitativeLabels[index] || '';
+                        } },  grid: { color: '#aaa',display:false } },
                 y: { title: { display: false, text: 'Percentage (%)' }, beginAtZero: true,max: 100, ticks: { color: '#aaa' }, grid: { color: '#aaa' } }
             },
             plugins: {
