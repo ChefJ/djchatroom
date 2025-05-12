@@ -38,6 +38,7 @@ function renderSentimentPolarityBar(scores) {
             scales: {
                 x: {
                     stacked: true,
+                    min: -100,
                     max: 100,
                     title: {display: true, text: 'Percentage of Sentiment Area (%)', color: glbTextColor},
                     ticks: {color: glbTextColor},
@@ -491,6 +492,7 @@ function renderMultiSentimentPolarityChart(datasets, canvasId = 'polarity-bar-ch
                 x: {
                     title: { display: true, text: 'Percentage (%)' },
                     beginAtZero: true,
+                    min: -100,
                     max: 100,
                     ticks: { color: glbTextColor },
                     grid: { color: glbGridColor }
