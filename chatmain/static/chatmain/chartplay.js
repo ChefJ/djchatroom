@@ -584,13 +584,17 @@ function renderMultiSentimentPolarityChart(datasets, canvasId = 'polarity-bar-ch
 
 function generateColorPalette(n) {
     const baseColors = [
+/*
         'rgba(255, 99, 132, 0.8)',   // Red
+*/
         'rgba(54, 162, 235, 0.8)',   // Blue
         'rgba(255, 206, 86, 0.8)',   // Yellow
         'rgba(75, 192, 192, 0.8)',   // Teal
         'rgba(153, 102, 255, 0.8)',  // Purple
         'rgba(255, 159, 64, 0.8)',   // Orange
+/*
         'rgba(100, 255, 100, 0.8)',  // Light Green
+*/
         'rgba(255, 100, 255, 0.8)',  // Pink
         'rgba(200, 200, 0, 0.8)',    // Olive
         'rgba(0, 200, 200, 0.8)'     // Aqua

@@ -633,3 +633,8 @@ body::before {
     font-weight: bold;
     color: var(--text-color);
 }
+
+.chat-message.compared {
+    border-right: 6px solid var(--accent-color);
+    padding-right: 6px; /* optional for spacing */
+}

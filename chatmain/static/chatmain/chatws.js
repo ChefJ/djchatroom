@@ -217,11 +217,16 @@ function handleIncomingMessage(message) {
         }
         compareLabel.querySelector('input').addEventListener('change', (e) => {
             const msgId = e.target.dataset.msgId;
+            const bubble = document.querySelector(`[data-id="${msgId}"]`);
+
             if (e.target.checked) {
                 comparedMessages[msgId] = message.message_with_scores;
+                bubble?.classList.add('compared');
             } else {
                 delete comparedMessages[msgId];
+                bubble?.classList.remove('compared');
             }
+
             updateComparisonCharts();
         });
         messageWrapper.appendChild(compareLabel);
@@ -367,6 +372,14 @@ function updateComparisonCharts() {
                 data: [-negSum],
                 backgroundColor: lightenColor(colors[index], 0.5)
             });
+
+            const color = colors[index];
+            const bubble = document.querySelector(`[data-id="${msgId}"]`);
+            if (bubble) {
+                bubble.classList.add('compared');
+                bubble.style.borderRight = `6px solid ${color}`;
+            }
+
         } catch (err) {
             console.error('❌ Failed to parse sentiment data:', err);
         }
@@ -375,6 +388,14 @@ function updateComparisonCharts() {
     renderMultiSentimentDistributionChart(datasetsCurve);
     renderMultiSentimentBarChart(datasetsBar);
     renderMultiSentimentPolarityChart(datasetsPolarity);
+
+    document.querySelectorAll('.chat-message').forEach(bubble => {
+        const msgId = bubble.dataset.id;
+        if (!(msgId in comparedMessages)) {
+            bubble.classList.remove('compared');
+            bubble.style.borderRight = '';
+        }
+    });
 }
 
 function autoCheckLatestTwoGPT() {
