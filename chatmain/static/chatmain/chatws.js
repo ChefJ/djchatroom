@@ -207,12 +207,12 @@ function handleIncomingMessage(message) {
         compareLabel.style.marginTop = '4px';
         compareLabel.innerHTML = `
             <input type="checkbox" class="compare-checkbox" data-msg-id="${message.msg_uuid}">
-            <span style="font-size: 12px;">Compare</span>
+            <span style="font-size: 12px;">Add to Graph</span>
         `;
         if (roomConfig.experiment_type != 'all'){
             compareLabel.innerHTML = `
             <input type="checkbox" class="compare-checkbox" style="display: none" data-msg-id="${message.msg_uuid}">
-            <span style="font-size: 12px;display: none">Compare</span>
+            <span style="font-size: 12px;display: none">Add to Graph</span>
         `;
         }
         compareLabel.querySelector('input').addEventListener('change', (e) => {
@@ -220,11 +220,18 @@ function handleIncomingMessage(message) {
             const bubble = document.querySelector(`[data-id="${msgId}"]`);
 
             if (e.target.checked) {
+                if (Object.keys(comparedMessages).length >= 3) {
+                    alert("You can compare up to 3 messages at a time.");
+                    e.target.checked = false;
+                    return;
+                }
+
                 comparedMessages[msgId] = message.message_with_scores;
                 bubble?.classList.add('compared');
             } else {
                 delete comparedMessages[msgId];
                 bubble?.classList.remove('compared');
+                bubble.style.borderRight = '';
             }
 
             updateComparisonCharts();
