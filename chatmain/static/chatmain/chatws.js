@@ -332,13 +332,16 @@ function handleIncomingMessage(message) {
 function updateComparisonCharts() {
     Object.values(chartRefs).forEach(chart => chart.destroy?.());
 
-    const messageEntries = Object.entries(comparedMessages);
-    if (messageEntries.length === 0) return;
+    const sortedMsgIds = Array.from(document.querySelectorAll('.chat-message'))
+        .filter(el => comparedMessages.hasOwnProperty(el.dataset.id))
+        .map(el => el.dataset.id);
+
+    const messageEntries = sortedMsgIds.map(msgId => [msgId, comparedMessages[msgId]]);    if (messageEntries.length === 0) return;
 
     const datasetsCurve = [];
     const datasetsBar = [];
     const datasetsPolarity = [];
-    const colors = generateColorPalette(messageEntries.length);
+    const colors = generateColorPalette(messageEntries.length).reverse();
 
     messageEntries.forEach(([msgId, messageWithScores], index) => {
         try {

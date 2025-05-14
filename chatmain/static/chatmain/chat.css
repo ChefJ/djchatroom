@@ -493,8 +493,10 @@ body::before {
 
 .experiment-panel {
     display: flex;
-    flex-direction: row; /* 👈 ensure horizontal layout */
+    flex-direction:column; /* 👈 ensure horizontal layout */
+    /*
     height: 18vh;
+    */
     padding: 10px 20px;
     background-color: var(--chat-bg);
     border-bottom: 1px solid var(--border-color);
@@ -638,3 +640,20 @@ body::before {
     border-right: 6px solid var(--accent-color);
     padding-right: 6px; /* optional for spacing */
 }
+
+/*
+.legend-float-box {
+    position: absolute;
+    left: 10px;
+    top: 50%;
+    transform: translateY(-30%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 60px;
+    z-index: 10;
+}
+.legend-section{
+    width: 150px;
+    height: 30px;
+}*/

@@ -298,13 +298,8 @@ function fetchRoomConfig() {
 
 `,
                     "novis": `
-### Colorization Meter
-
-
 `,
                     "all": `
-### Colorization Meter
-
 `
                 };
 
@@ -317,21 +312,7 @@ function fetchRoomConfig() {
 
     <div class="experiment-panel">
         <div class="experiment-column" id="experiment-instruction">${marked.parse(instructionText)}</div>
-<div class="experiment-column" id="experiment-uiux">
-    ${marked.parse(tips[roomConfig.experiment_type] || '')}
-    ${roomConfig.experiment_type !== 'novisnocolor' ? `
-    <div class="legend-section">
-    <div class="legend-bar-wrapper">
-        <div class="legend-bar"></div>
-        <div id="legend-indicator"></div>
     </div>
-    <div class="legend-labels">
-        <span>-1</span>
-        <span>0</span>
-        <span>+1</span>
-    </div>
-</div>` : ''}
-</div>    </div>
 </div>
 
 `;

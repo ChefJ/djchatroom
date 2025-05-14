@@ -1,4 +1,18 @@
-const qualitativeLabels = ['Very Negative', 'Negative', 'Bit Negative', 'Neutral', 'Bit Positive', 'Positive', 'Very Positive'];
+const qualitativeLabels = [['Very', 'Negative'], 'Negative', ['Somewhat', 'Negative'], 'Neutral', ['Somewhat', 'Positive'], 'Positive', ['Very', 'Positive']];
+
+Chart.register({
+    id: 'backgroundTitle',
+    beforeDraw(chart, args, options) {
+        const { ctx, width, height } = chart;
+        ctx.save();
+        ctx.font = options.font || 'bold 28px sans-serif';
+        ctx.fillStyle = options.color || 'rgba(0,0,0,0.05)';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillText(options.text || '', width / 2 + 20, height / 2 - 10    );
+        ctx.restore();
+    }
+});
 
 function renderSentimentPolarityBar(scores) {
     const {labels, normalized} = getCompoundBins(scores, globalBinAmount);
@@ -411,12 +425,17 @@ function renderMultiSentimentDistributionChart(datasets, canvasId = 'compound-cu
                 }
             },
             scales: {
-                x: { title: { display: true, text: 'Compound Score' }, ticks: { color: '#000',callback: function(value, index) {
+                x: { title: { display: false, text: 'Compound Score' }, ticks: { color: '#000',callback: function(value, index) {
                             return qualitativeLabels[index] || '';
                         } }, grid: { color: '#aaa',display:false } },
-                y: { title: { display: false, text: 'Percentage (%)' }, beginAtZero: true, max: 100,ticks: { color: '#aaa'}, grid: { color: '#aaa' } }
+                y: { title: { display: false, text: 'Percentage (%)' }, beginAtZero: true, max: 100,ticks: { color: '#aaa',callback: value => `${value}%`}, grid: { color: '#aaa' } }
             },
             plugins: {
+                backgroundTitle: {
+                    text: 'Sentiment Curve',
+                    font: 'bold 28px Courier Prime',
+                    color: '#aaa'
+                },
                 tooltip: {
                     enabled: false
                 },
@@ -457,12 +476,17 @@ function renderMultiSentimentBarChart(datasets, canvasId = 'compound-bar-chart')
                 }
             },
             scales: {
-                x: { title: { display: true, text: 'Compound Score' }, ticks: { color: '#000', autoSkip: false,callback: function(value, index) {
+                x: { title: { display: false, text: 'Compound Score' }, ticks: { color: '#000', autoSkip: false,callback: function(value, index) {
                             return qualitativeLabels[index] || '';
                         } },  grid: { color: '#aaa',display:false } },
-                y: { title: { display: false, text: 'Percentage (%)' }, beginAtZero: true,max: 100, ticks: { color: '#aaa' }, grid: { color: '#aaa' } }
+                y: { title: { display: false, text: 'Percentage (%)' }, beginAtZero: true,max: 100, ticks: { color: '#aaa' ,callback: value => `${value}%`}, grid: { color: '#aaa' } }
             },
             plugins: {
+                backgroundTitle: {
+                    text: 'Sentiment Bar',
+                    font: 'bold 28px Courier Prime',
+                    color: '#aaa'
+                },
                 tooltip: {
                     enabled: false
                 },
@@ -490,7 +514,7 @@ function renderMultiSentimentPolarityChart(datasets, canvasId = 'polarity-bar-ch
             indexAxis: 'y',
             scales: {
                 x: {
-                    title: { display: true, text: 'Percentage (%)' },
+                    title: { display: false, text: 'Compound Polarity' },
                     beginAtZero: true,
                     min: -100,
                     max: 100,
@@ -503,6 +527,11 @@ function renderMultiSentimentPolarityChart(datasets, canvasId = 'polarity-bar-ch
                 }
             },
             plugins: {
+                backgroundTitle: {
+                    text: 'Polarity Bar',
+                    font: 'bold 28px Courier Prime',
+                    color: '#aaa'
+                },
                 legend: {display: false,
                     labels: { color: glbTextColor } }
             }
