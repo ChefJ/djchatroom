@@ -33,7 +33,7 @@ class ChatRoom(models.Model):
                                            default=None,
                                            null=True,
                                            on_delete=models.DO_NOTHING)
-    
+
     @property
     def experiment_type(self):
         return self.related_experiment.experiment_type if self.related_experiment else ""

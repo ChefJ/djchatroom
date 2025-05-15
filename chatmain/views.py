@@ -140,6 +140,7 @@ def get_room_config(request, room_name):
     instance = ChatRoom.objects.get(room_name=room_name)
 
     data = model_to_dict(instance)
+    data['experiment_type'] = instance.experiment_type
     return JsonResponse(data)
 
 
