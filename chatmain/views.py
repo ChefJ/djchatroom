@@ -132,6 +132,14 @@ def room(request, room_name):
     return render(request, "chatmain/room.html", {"room_name": room_name})
 
 
+def topic_update(request, room_name):
+    p_data = json.loads(request.body)
+    topic = p_data['topic']
+    tmp_room_obj = get_or_create_room(room_name)
+    tmp_room_obj.notes = topic
+    tmp_room_obj.save()
+    return JsonResponse({"status": "OK"})
+
 def get_room_config(request, room_name):
     instance = ChatRoom.objects.get(room_name=room_name)
 

@@ -14,6 +14,8 @@ const historyUrl = window.location.pathname.endsWith('/')
 
 const progressUrl = `${window.location.pathname.replace(/\/$/, '')}/progress`;
 const configUrl = `${window.location.pathname.replace(/\/$/, '')}/config`;
+const updateTopicUrl = `${window.location.pathname.replace(/\/$/, '')}/topic_update`;
+const topic_list = ['Politics', 'Animals', 'Environments', 'Education', 'Netherlands', 'Other']
 
 const getCSSVar = name => getComputedStyle(document.documentElement).getPropertyValue(name).trim();
 let glbTextColor = getCSSVar('--text-color') || '#000000';
@@ -25,7 +27,7 @@ let anon_id = localStorage.getItem('anon_id');
 
 glbTextColor = getCSSVar('--text-color') || '#000000';
 glbGridColor = getCSSVar('--border-color') || '#444';
-
+let selectedChoiceIndex = null;
 
 function ultRoomSettings(){
 /*    document.getElementById('toggle-colorize').addEventListener('change', function () {
@@ -103,6 +105,30 @@ function ultUX(){
 
     });
 }
+
+function setupChoiceSquares() {
+    const row = document.getElementById('topic-choice-row');
+    row.innerHTML = ''; // Clear existing
+    for (let i = 0; i < 6; i++) {
+        const square = document.createElement('div');
+        square.classList.add('choice-square');
+        square.dataset.choiceIndex = i;
+        square.textContent = topic_list[i];
+        square.onclick = () => {
+            // Remove highlight from all
+            document.querySelectorAll('.choice-square').forEach(el => el.classList.remove('active'));
+            // Add to this
+            square.classList.add('active');
+            // Optionally store the selected index/value somewhere
+            selectedChoiceIndex = i;
+        };
+
+        row.appendChild(square);
+    }
+
+}
+
+
 function promptForTopic() {
 
     if(roomConfig.is_experiment===false)
@@ -130,11 +156,22 @@ function promptForTopic() {
         .catch(error => {
             console.error('❌ 加载历史消息失败:', error);
         });
+    setupChoiceSquares();
 
     modal.style.display = 'flex';
 
     submitBtn.onclick = () => {
+        const selectedSquare = document.querySelector('.choice-square.active');
+
+        if (!selectedSquare) {
+            alert("Please select a topic.");
+            return;
+        }
+
+        const selectedTopic = selectedSquare.textContent.trim();
         const topic = input.value.trim();
+        const genreAndTopic = selectedTopic + " - " + topic;
+
         if (topic !== '') {
             modal.style.display = 'none';
 
@@ -151,6 +188,26 @@ function promptForTopic() {
             }));
 
             setInputDisabled(true);
+
+            fetch(updateTopicUrl, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': getCSRFToken()  // you'll need to include this
+                },
+                body: JSON.stringify({ topic: genreAndTopic })
+            })
+                .then(response => {
+                    if (!response.ok) throw new Error("Network response was not ok.");
+                    return response.json();
+                })
+                .then(data => {
+                    console.log("✅ Topic updated:", data);
+                })
+                .catch(error => {
+                    console.error("❌ Failed to update topic:", error);
+                });
+
         }
     };
 }
@@ -259,6 +316,18 @@ function checkUserConsent() {
     return true;  // 👈 Consent already given
 }
 
+function highlightScoringInstruction() {
+    const instruction = document.getElementById('score-instruction');
+    if (!instruction) return;
+
+    instruction.classList.add('barber-highlight');
+
+    // Optionally remove it after a few seconds
+    setTimeout(() => {
+        instruction.classList.remove('barber-highlight');
+    }, 5000); // 5 seconds
+}
+
 
 function fetchRoomConfig() {
 
@@ -287,21 +356,11 @@ function fetchRoomConfig() {
                 const instructionText = `
 ### Introduction:
 
-1. Four sessions in total.  
-2. For each response, score it on how well it represents your attitude(positively or negatively), using the row of buttons below the message.  
+1. For tuning the output, please focusing on the tone instead of the content.  
+2. <span id="score-highlight-target">Score it on **how well it represents your expected tone (positively or negatively)** using the row of buttons below the message.</span>  
 3. Click on 'satisfied' will transfer you to the next round. **PLEASE click it only when you are really satisfied with the answer.**
 `;
 
-                const tips = {
-                    "novisnocolor": `
-### The UI/UX:
-
-`,
-                    "novis": `
-`,
-                    "all": `
-`
-                };
 
                 const wrapper = document.createElement('div');
                 wrapper.className = 'experiment-wrapper';

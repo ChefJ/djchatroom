@@ -8,4 +8,5 @@ urlpatterns = [
     path("<str:room_name>/history", views.room_chat_history, name="room_history"),
     path("<str:room_name>/config", views.get_room_config, name="get_room_config"),
     path("<str:room_name>/progress", views.get_user_progress, name="get_room_progress"),
+    path("<str:room_name>/topic_update", views.topic_update, name="topic_update"),
 ]

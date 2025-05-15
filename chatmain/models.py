@@ -23,6 +23,7 @@ class ChatRoom(models.Model):
     save_message = models.BooleanField(default=True)
     room_name = models.CharField(max_length=200)
     current_pwd = models.TextField()
+    notes = models.TextField(default="-")
     created_date = models.DateTimeField(auto_now=True)
     is_experiment = models.BooleanField(default=False)
     bias_tendency = models.CharField(max_length=200, default="Please be neutral.")

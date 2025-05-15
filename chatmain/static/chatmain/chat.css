@@ -688,3 +688,62 @@ body.colorblind .legend-bar {
     rgba(0, 120, 255, 0.7)    /* +1 blue */
     );
 }
+
+#score-highlight-target.barber-highlight {
+    background: repeating-linear-gradient(
+            45deg,
+            #ffd700,
+            #ffd700 10px,
+            #ffffff 10px,
+            #ffffff 20px
+    );
+    background-size: 200% 200%;
+    animation: barberMove 1s linear infinite;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-weight: bold;
+}
+
+@keyframes barberMove {
+    0% {
+        background-position: 0 0;
+    }
+    100% {
+        background-position: 40px 40px;
+    }
+}
+
+.choice-row {
+    display: flex;
+    gap: 10px;
+    margin-top: 10px;
+    justify-content: center;
+}
+
+#topic-choice-row {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.choice-square {
+    display: inline-block;              /* allows content-based sizing */
+    padding: 10px 16px;                 /* add more padding */
+    margin: 6px;
+    border: 2px solid var(--border-color, #888);
+    border-radius: 8px;
+    cursor: pointer;
+    background-color: #f0f0f0;
+    font-size: 14px;
+    white-space: nowrap;               /* prevent line-breaks */
+    text-align: center;
+    transition: all 0.3s ease;
+    user-select: none;
+}
+
+.choice-square.active {
+    border-color: #00ff99; /* or any highlight color */
+    background-color: #e0ffe0;
+}
