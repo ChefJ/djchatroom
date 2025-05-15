@@ -86,6 +86,7 @@ body {
     flex: 1;
     gap: 20px;
     overflow: hidden;
+    padding-top: 20px;
 }
 .chat-box {
     flex: 2;

@@ -1,10 +1,32 @@
-This is info text. Welcome!
 
-Exp consists of 4 iterations of:
 
-	- Talk
-	- Rate
-	- Adjust
-	- Hand in
+Thank you for participating. This experiment involves **4 short chat rounds** with an AI agent. and takes around 30 minutes. Please read the instructions below carefully.
 
-Will take ~30 minutes.
+---
+
+### What to Expect
+
+1. **Consent & Introduction**  
+   You will first review a consent form before entering the chat environment.
+
+2. **Topic Selection**  
+   You will choose a topic you feel **positively** or **negatively** about. This step will repeat once for each — resulting in **4 total rounds**.
+
+3. **Chat with AI Agent**  
+   In each round, you will interact with an AI agent by sending a message. For every response you receive, please rate how well it aligns with your expectations:
+   - **Scores 1–9**: Ranges from poor to strong alignment
+   - **Score 10 (Satisfied)**: You are satisfied with the answer, and the round will automatically proceed to the next
+
+4. **Final Step**  
+   After completing all 4 rounds, you will be asked to complete a short questionnaire about your experience.
+
+---
+
+### Notes
+
+- Please rate each response thoughtfully — your feedback is important.
+- You can only proceed to the next round after marking one response as **Satisfied (10)**.
+
+---
+
+When you're ready, click **Next** to begin.

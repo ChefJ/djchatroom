@@ -83,9 +83,9 @@ def already_have_experiment(user_uuid):
 def gen_questionnaire_link(user_uuid):
     print("收到的 UUID：", user_uuid)
 
-    base_url = "https://docs.google.com/forms/d/e/1FAIpQLSczzhR1rVeDgkujaK7EmgBV9KVlzp9zCUTYOWrbiEEuEWtzHg/viewform"
-    entry_id = "entry.559352220"
-    final_url = f"{base_url}?usp=pp_url&{entry_id}={user_uuid}"
+    base_url = "https://forms.office.com/Pages/ResponsePage.aspx?id=oFgn10akD06gqkv5WkoQ50buHDTNqrBJhG49efO9psFUMUhXVEdEUlhUWEdVRUVPME5RRkVIWFQ1OC4u&r6b75ad6099d94a839d75403eb06e39d0="
+    # entry_id = "entry.559352220"
+    final_url = f"{base_url}{user_uuid}"
     return final_url
 
 

@@ -1,6 +1,5 @@
 # Information Sheet and Consent Form
 
-**Study title:** *[Insert study title here]*
 
 ---
 
@@ -10,43 +9,40 @@ You are being invited to take part in a scientific research study. Your particip
 ---
 
 ## 2. What is the background and purpose of this study?
-This research aims to *[insert a short, clear explanation of your study goals and purpose in plain language]*.
-*[If applicable, mention external funding source and its potential influence on the research]*.
-
+This research aims to examine the human computer experience with LLMs. More details will being uncovered in the post-experiment questionnaire.
 ---
 
 ## 3. Who will carry out the study?
-This study is conducted by **[Your Name]** (<[your email]>), *[your role, e.g. master's student]*, under the supervision of **[Supervisor's Name]** (<[supervisor email]>), *[Supervisor’s role, e.g. assistant professor]*.
+This study is conducted by **Hairuo Liu** (<[h.liu10@students.uu.nl]>), *[Master student]*, under the supervision of **[Jeroen Ooge]** (<[j.ooge@uu.nl]>), *[Universitair docent]*.
 
 ---
 
 ## 4. How will the study be carried out?
-You will be asked to complete an online questionnaire that includes questions about *[insert topic, e.g. your experiences with online education]* and basic demographic information.
-The survey will take approximately **[XX] minutes** to complete.
-*[Optional: As a token of appreciation, you will receive a **[voucher/reward]** upon completion, sent to your email address]*.
+You will be asked to complete an online questionnaire that includes questions about your age. Other questions are about your user experiences of the upcoming experiment.
+The survey will take approximately 30 to complete.
+*[As a token of appreciation, you can obtain a further access to the webservice provided through 2003.io, including the free using of LLM interactions and other experimental functions.]*.
 
 ---
 
 ## 5. What will we do with your data?
 We will collect the following personal data:
 - Demographic data (e.g., age, gender, education level)
-- Personal opinions and experiences related to *[insert topic]*
+- Personal opinions and experiences related to the implementations provided through 2003.io.
 
 To protect your privacy:
-- Survey responses will be **de-identified (pseudonymised)** shortly after completion.
+- Survey responses **pseudonymised** shortly after completion.
 - Your contact information (e.g., email address) will be stored **separately** and will only be used for sending rewards or contacting you for follow-up (if applicable).
 - Data will be stored securely and accessible only by the research team.
 - Pseudonymisation (also called "coding") means your identity will be replaced with a code, and the key linking your identity to this code will be stored separately.
-- Data will be retained for **10 years** on Yoda, Utrecht University’s secure data archive.
+- Data will be retained up to **12 months** on Microsoft Survey server.
 - Your contact details will be deleted once the results are published.
 
-*[If applicable: De-identified data may be shared with other researchers upon request. No personal data that can identify you will be shared.]*
+*[De-identified data may be shared with other researchers upon request. No personal data that can identify you will be shared.]*
 
 ---
 
 ## 6. What are the possible risks and benefits?
-This study *[does/does not]* involve foreseeable risks.
-*[Example: You may benefit by contributing to research on … or by receiving a small reward. If sensitive topics are involved, mention support options and freedom to pause/stop]*.
+This study *does not* involve foreseeable risks.However, you always have the right and freedom to pause/stop at any time you want.
 
 ---
 
@@ -75,13 +71,12 @@ This study has been **[approved by the Science-Geo Ethics Review Board (ETC-BETA
 
 ## 9. More information about this study?
 If you have questions or concerns, please contact:
-- **[Your Name]** – [your email]
-- **[Supervisor Name]** – [supervisor email]
+- **Hairuo Liu** – [h.liu10@gmail.com]
+- **Dr. Jeroen Ooge** – [j.ooge@uu.nl]
 
 ---
 
 ## 10. Do you consent to participate in the study?
 
-☐ Yes, I have read and understood the information provided above and I consent to my answers being used for the purposes of scientific research as described above.
+Clicking the 'I Agree' means you have read and understood the information provided above and consent to your answers being used for the purposes of scientific research as described above.
 
-*You must tick this box to continue to the survey.*
