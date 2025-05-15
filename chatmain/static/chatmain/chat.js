@@ -340,7 +340,8 @@ function fetchRoomConfig() {
             // Apply experiment settings
             switch (roomConfig.experiment_type) {
                 case "novis":
-                    document.querySelector('.image-box').style.display = 'none';
+                    document.getElementById('chart-container').style.setProperty('display', 'none', 'important');
+
                     break;
                 case "novisnocolor":
                     document.querySelector('.image-box').style.display = 'none';
@@ -354,11 +355,12 @@ function fetchRoomConfig() {
             // ✅ Inject experiment info markdown panel if needed
             if (roomConfig.is_experiment) {
                 const instructionText = `
-### Introduction:
 
-1. For tuning the output, please focusing on the tone instead of the content.  
-2. <span id="score-highlight-target">Score it on **how well it represents your expected tone (positively or negatively)** using the row of buttons below the message.</span>  
-3. Click on 'satisfied' will transfer you to the next round. **PLEASE click it only when you are really satisfied with the answer.**
+1. **Goal**: Tune the output, until it's tone meets your expectation.  
+2. **What to do**: For each message you receive, <span id="score-highlight-target"> Score it on **how well it's tone(positively/negatively)** meets your expectation. </span>  
+2. **When to end**: Keep the iteration before you score a response with **'Satisfied'** button. 
+
+**PLEASE click 'Satisfied' only when you are really satisfied with the answer.**
 `;
 
 
