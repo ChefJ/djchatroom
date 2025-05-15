@@ -288,7 +288,7 @@ function fetchRoomConfig() {
 ### Introduction:
 
 1. Four sessions in total.  
-2. For each response, click the score of satisfactory below to continue.  
+2. For each response, score it on how well it represents your attitude(positively or negatively), using the row of buttons below the message.  
 3. Click on 'satisfied' will transfer you to the next round. **PLEASE click it only when you are really satisfied with the answer.**
 `;
 
