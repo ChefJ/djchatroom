@@ -330,6 +330,7 @@ function handleIncomingMessage(message) {
 
 // ==== Chart Comparison Handling ====
 function updateComparisonCharts() {
+    if(roomConfig.experiment_type != 'all') return;
     Object.values(chartRefs).forEach(chart => chart.destroy?.());
 
     const sortedMsgIds = Array.from(document.querySelectorAll('.chat-message'))
@@ -410,6 +411,8 @@ function updateComparisonCharts() {
 }
 
 function autoCheckLatestTwoGPT() {
+    if(roomConfig.experiment_type != 'all') return;
+
     // 1. Uncheck all compare checkboxes first
     const allCompareBoxes = Array.from(document.querySelectorAll('.compare-checkbox'));
     allCompareBoxes.forEach(box => box.checked = false);
