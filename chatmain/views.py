@@ -155,9 +155,14 @@ def update_experiment_progress(chat_room_obj):
     experiment = chat_room_obj.related_experiment
     finished = ChatRoom.objects.filter(experiment_finished=True,
                                        related_experiment=experiment)
+    print("finished:" + str(finished.count()))
     on_going = ChatRoom.objects.filter(experiment_finished=False,
                                        related_experiment=experiment)
+    print("ongoing:" + str(finished.count()))
+
     all_rooms = ChatRoom.objects.filter(related_experiment=experiment)
+    print("all rooms:" + str(finished.count()))
+
     progress_str = str(finished.count())+ "/" + str(all_rooms.count())
     experiment.experiment_progress = progress_str
     experiment.save()
