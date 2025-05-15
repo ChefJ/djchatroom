@@ -63,8 +63,8 @@ class ChatConsumer(AsyncWebsocketConsumer):
                 previous_messages_list.append({"role":"system", "content": an_obj.message})
             else:
                 previous_messages_list.append({"role":"user", "content": an_obj.message})
-
-        gpt_rsp = ask_gpt(previous_messages_list)
+        room_obj = ChatRoom.objects.get(room_name=self.room_name)
+        gpt_rsp = ask_gpt(previous_messages_list, "Please be "+room_obj.bias_tendency)
         msg_id= str(uuid.uuid4()).replace("-","")
         neg_scores, neu_scores, pos_scores, compound_scores, sentence_with_scores = text_to_score(gpt_rsp)
         # generate_sentiment_graph(
