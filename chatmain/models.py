@@ -28,11 +28,15 @@ class ChatRoom(models.Model):
     bias_tendency = models.CharField(max_length=200, default="Please be neutral.")
     user_tendency = models.CharField(max_length=200, default="Please pick a topic that you would describe positively.")
     experiment_finished = models.BooleanField(default=False)
-    experiment_type = models.CharField(default="", max_length=200)
+    #experiment_type = models.CharField(default="", max_length=200)
     related_experiment = models.ForeignKey(OneExperiment,
                                            default=None,
                                            null=True,
                                            on_delete=models.DO_NOTHING)
+    
+    @property
+    def experiment_type(self):
+        return self.related_experiment.experiment_type if self.related_experiment else ""
 
 
 class ChatMessage(models.Model):
