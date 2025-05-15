@@ -63,9 +63,9 @@ function handleIncomingMessage(message) {
                 const alpha = Math.min(Math.abs(compound), 1).toFixed(2);
                 if (enableColorize) {
                     if (compound > 0) {
-                        bgColor = `rgba(0, 255, 153, ${alpha})`;
+                        bgColor = rgbaFromVar('--positive-color', alpha);
                     } else if (compound < 0) {
-                        bgColor = `rgba(255, 80, 80, ${alpha})`;
+                        bgColor = rgbaFromVar('--negative-color', alpha);
                     }
                 }
 

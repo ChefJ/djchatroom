@@ -578,7 +578,6 @@ body::before {
     position: relative;
     height: 14px;
     width: 100%;
-    background: linear-gradient(to right, rgba(255,80,80,1), rgba(255,80,80,0.3), rgba(0,255,153,0.3), rgba(0,255,153,1));
     border-radius: 6px;
     margin-bottom: 4px;
 }
@@ -658,3 +657,34 @@ body::before {
     width: 150px;
     height: 30px;
 }*/
+
+:root {
+    --positive-color: 0, 255, 153; /* default green */
+    --negative-color: 255, 80, 80; /* default red */
+}
+
+body.colorblind {
+    --positive-color: 128, 0, 255; /* alt blue */
+    --negative-color: 255, 165, 0; /* alt orange */
+}
+
+.legend-bar {
+    height: 10px;
+    width: 100%;
+    border-radius: 5px;
+    background: linear-gradient(to right,
+    rgba(255, 80, 80, 0.7),  /* -1 red */
+    rgba(255, 255, 255, 0.3), /* 0 */
+    rgba(0, 255, 153, 0.7)   /* +1 green */
+    );
+    position: relative;
+}
+
+/* Color-blind mode (amber to blue) */
+body.colorblind .legend-bar {
+    background: linear-gradient(to right,
+    rgba(255, 190, 0, 0.7),   /* -1 amber */
+    rgba(255, 255, 255, 0.3), /* 0 */
+    rgba(0, 120, 255, 0.7)    /* +1 blue */
+    );
+}

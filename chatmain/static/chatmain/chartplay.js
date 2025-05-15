@@ -540,26 +540,40 @@ function renderMultiSentimentPolarityChart(datasets, canvasId = 'polarity-bar-ch
 }
 
 function generateColorPalette(n) {
-    const baseColors = [
-/*
-        'rgba(255, 99, 132, 0.8)',   // Red
-*/
+    const defaultPalette = [
         'rgba(54, 162, 235, 0.8)',   // Blue
         'rgba(255, 206, 86, 0.8)',   // Yellow
         'rgba(75, 192, 192, 0.8)',   // Teal
         'rgba(153, 102, 255, 0.8)',  // Purple
         'rgba(255, 159, 64, 0.8)',   // Orange
-/*
-        'rgba(100, 255, 100, 0.8)',  // Light Green
-*/
         'rgba(255, 100, 255, 0.8)',  // Pink
         'rgba(200, 200, 0, 0.8)',    // Olive
         'rgba(0, 200, 200, 0.8)'     // Aqua
     ];
-    while (baseColors.length < n) {
-        baseColors.push(`rgba(${Math.floor(Math.random()*255)},${Math.floor(Math.random()*255)},${Math.floor(Math.random()*255)},0.8)`);
+
+    const colorBlindPalette = [
+/*        'rgba(0, 0, 255, 0.8)',      // Blue
+        'rgba(255, 165, 0, 0.8)',    // Orange*/
+        'rgba(0, 128, 128, 0.8)',    // Teal
+/*
+        'rgba(128, 0, 128, 0.8)',    // Purple
+*/
+        'rgba(100, 100, 0, 0.8)',    // Olive green
+        'rgba(0, 100, 255, 0.8)',    // Strong blue
+        'rgba(255, 200, 0, 0.8)',    // Gold
+        'rgba(128, 128, 0, 0.8)'     // Mustard
+    ];
+
+    const palette = document.body.classList.contains('colorblind')
+        ? colorBlindPalette
+        : defaultPalette;
+
+    // Repeat or trim if needed
+    while (palette.length < n) {
+        palette.push(palette[palette.length % defaultPalette.length]);
     }
-    return baseColors.slice(0, n);
+
+    return palette.slice(0, n);
 }
 function lightenColor(color, factor) {
     // Simple lighten: reduce alpha
@@ -567,3 +581,42 @@ function lightenColor(color, factor) {
         return `rgba(${r},${g},${b},${parseFloat(a) * factor})`;
     });
 }
+
+function rgbaFromVar(cssVarName, alpha) {
+    const rgb = getComputedStyle(document.querySelector('body')).getPropertyValue(cssVarName).trim();
+    return `rgba(${rgb}, ${alpha})`;
+}
+
+function rerenderActiveSentiment() {
+    const bubble = window.__activeSentimentMessage;
+    if (!bubble || !bubble.__messageWithScores) return;
+
+    try {
+        const segments = document.querySelectorAll('.sentiment-segment');
+
+        segments.forEach(seg => {
+            const compound = parseFloat(seg.dataset.compound);
+            const alpha = Math.min(Math.abs(compound), 1).toFixed(2);
+
+            let bgColor = '';
+            if (compound > 0) {
+                bgColor = rgbaFromVar('--positive-color', alpha);
+            } else if (compound < 0) {
+                bgColor = rgbaFromVar('--negative-color', alpha);
+            }
+
+            seg.style.backgroundColor = bgColor;
+        });
+    } catch (err) {
+        console.warn('🧠 Failed to re-render sentiment:', err);
+    }
+}
+
+function toggleColorBlindMode() {
+    const isEnabled = document.getElementById('colorblind-toggle').checked;
+    document.body.classList.toggle('colorblind', isEnabled);
+    updateComparisonCharts();
+    rerenderActiveSentiment();
+}
+
+document.getElementById('colorblind-toggle').addEventListener('change', toggleColorBlindMode);
