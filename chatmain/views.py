@@ -35,26 +35,22 @@ def init_experiment(user_uuid, experiment_type=None):
                                                    bias_tendency="Positive",
                                                    user_tendency="Positive",
                                                    is_experiment=True,
-                                                   related_experiment=tmp_experiment,
-                                                   experiment_type=experiment_type)
+                                                   related_experiment=tmp_experiment)
     tmp_chatroom_pos_neg = ChatRoom.objects.create(room_name=room_pos_neg_id,
                                                    bias_tendency="Positive",
                                                    user_tendency="Negative",
                                                    is_experiment=True,
-                                                   experiment_type=experiment_type,
-                                                   related_experiment=tmp_experiment)
+                                                   experiment_type=experiment_type)
     tmp_chatroom_neg_pos = ChatRoom.objects.create(room_name=room_neg_pos_id,
                                                    bias_tendency="Negative",
                                                    user_tendency="Positive",
                                                    is_experiment=True,
-                                                   experiment_type=experiment_type,
-                                                   related_experiment=tmp_experiment)
+                                                   experiment_type=experiment_type)
     tmp_chatroom_neg_neg = ChatRoom.objects.create(room_name=room_neg_neg_id,
                                                    bias_tendency="Negative",
                                                    user_tendency="Negative",
                                                    is_experiment=True,
-                                                   experiment_type=experiment_type,
-                                                   related_experiment=tmp_experiment)
+                                                   experiment_type=experiment_type)
 
     tmp_chatroom_neg_neg.save()
     tmp_chatroom_pos_neg.save()
