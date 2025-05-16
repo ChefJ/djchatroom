@@ -79,6 +79,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
             "user_uuid":"GPT",
             "message": gpt_rsp,
             "message_with_scores": json.dumps(sentence_with_scores),
+            "user_rated_score": "-1",#default:-1
             "timestamp": now().isoformat(),  # Optional
         }
 

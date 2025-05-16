@@ -143,9 +143,10 @@ function promptForTopic() {
 
     const tendency = roomConfig.user_tendency || 'Neutral';
 
-    title.textContent = tendency === 'Positive'
-        ? "Imagine you are writing a post on social media. Choose a topic you would like to write POSITIVELY about, as if you want to promote/praise. Please focus on this topic during this conversation."
-        : "Imagine you are writing a post on social media. Choose a topic you would like to write NEGATIVELY about, as if you want to criticize. Please focus on this topic during this conversation."
+
+    title.innerHTML  = tendency === 'Positive'
+        ? "Imagine you are writing a post on social media. <br><br>Choose a topic you would like to write <span  class='rainbow-word' style='color: green;font-weight: bold;'>POSITIVELY</span> about, as if you want to promote/praise. <br></br> Please focus on this topic during this conversation."
+        : "Imagine you are writing a post on social media. <br><br>Choose a topic you would like to write <span class='rainbow-word' style='color: red;font-weight: bold;'>NEGATIVELY</span> about, as if you want to criticize. <br></br> Please try to focus on this topic during this conversation."
 
     fetch(progressUrl)
         .then(response => response.json())
@@ -157,14 +158,16 @@ function promptForTopic() {
         .catch(error => {
             console.error('❌ 加载历史消息失败:', error);
         });
-    setupChoiceSquares();
+    // setupChoiceSquares();
 
     modal.style.display = 'flex';
 
     submitBtn.onclick = () => {
+/*
         const genreInput = document.getElementById('topic-genre-input');
+*/
 
-        const selectedTopicText = genreInput.value.trim();
+/*        const selectedTopicText = genreInput.value.trim();
 
         if (selectedTopicText === '') {
             alert("Please enter or select a topic tag.");
@@ -174,7 +177,8 @@ function promptForTopic() {
 
         const selectedTopic =selectedTopicText;
         const topic = input.value.trim();
-        const genreAndTopic = selectedTopic + " - " + topic;
+        const genreAndTopic = selectedTopic + " - " + topic;*/
+        const topic = input.value.trim();
 
         if (topic !== '') {
             modal.style.display = 'none';
@@ -199,7 +203,7 @@ function promptForTopic() {
                     'Content-Type': 'application/json',
                     'X-CSRFToken': getCSRFToken()  // you'll need to include this
                 },
-                body: JSON.stringify({ topic: genreAndTopic })
+                body: JSON.stringify({ topic: topic })
             })
                 .then(response => {
                     if (!response.ok) throw new Error("Network response was not ok.");
@@ -228,7 +232,8 @@ function getHistory(){
                         user_uuid: message.user_uuid,
                         message: message.message,
                         msg_uuid: message.msg_uuid,
-                        message_with_scores: message.message_with_scores
+                        message_with_scores:message.message_with_scores,
+                        user_rated_score: message.user_rated_score
                     });
                 });
             }
@@ -260,7 +265,7 @@ function add_dbclick_refinement(){
             const bubble = popup.__sourceBubble;
             const scored = bubble?.closest('.message-wrapper')?.querySelector('.score-buttons.scored');
             if (!scored) {
-                alert("Please score the message before refining.");
+                alert("Please rate the message before using the double click tuning.");
                 return;
             }
 
@@ -368,8 +373,8 @@ function fetchRoomConfig() {
                 wrapper.className = 'experiment-wrapper';
 
                 wrapper.innerHTML = `
-    <div class="experiment-heading">Experiment Info</div>
-    <div id="experiment-wrapper" class="experiment-wrapper">
+    <div class="experiment-heading"  style="display: none">Experiment Info</div>
+    <div id="experiment-wrapper" class="experiment-wrapper"  style="display: none">
 
     <div class="experiment-panel">
         <div class="experiment-column" id="experiment-instruction">${marked.parse(instructionText)}</div>

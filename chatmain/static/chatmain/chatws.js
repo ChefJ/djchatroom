@@ -257,7 +257,8 @@ function handleIncomingMessage(message) {
         const btn0 = document.createElement('button');
         btn0.className = 'score-btn zero-btn';
         btn0.dataset.score = 0;
-        btn0.textContent = 'Unsatisfied with the content';
+        btn0.textContent = 'Answer off-topic';
+
         zeroLine.appendChild(btn0);
 
 // Vertical bar separator
@@ -275,7 +276,7 @@ function handleIncomingMessage(message) {
         restLine.style.flexDirection = 'column';
 
         const hint = document.createElement('span');
-        hint.textContent = 'How it aligns with your expected tone:';
+        hint.textContent = 'If answer not off-topic, How it\'s tone aligns with your expectation?';
         hint.style.marginBottom = '4px';
         restLine.appendChild(hint);
 
@@ -292,8 +293,8 @@ function handleIncomingMessage(message) {
                 case 1:  btn.textContent = 'Very off'; break;
                 case 2:  btn.textContent = 'Slightly Off'; break;
                 case 3:  btn.textContent = 'Neutral'; break;
-                case 4:  btn.textContent = 'Mostly Aligned'; break;
-                case 5:  btn.textContent = 'Perfectly Aligned'; break;
+                case 4:  btn.textContent = 'Slightly Aligned'; break;
+                case 5:  btn.textContent = 'Aligned'; break;
             }
 
             scoreBtnRow.appendChild(btn);
@@ -306,7 +307,12 @@ function handleIncomingMessage(message) {
         scoreButtons.appendChild(separator);
         scoreButtons.appendChild(restLine);
         scoreContainer.appendChild(scoreButtons);
-        messageWrapper.appendChild(scoreContainer);
+        if(message.user_rated_score==='-1'){
+            messageWrapper.appendChild(scoreContainer);
+            setInputDisabled(true);
+        }
+        console.log(message)
+
 
         scoreButtons.addEventListener('click', (e) => {
             if (e.target.classList.contains('score-btn')) {

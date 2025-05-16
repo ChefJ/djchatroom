@@ -58,7 +58,7 @@ body {
     flex-direction: column;
     padding: 0 20px;
     box-sizing: border-box;
-    height: 90%;
+    height: 100%;
 }
 
 @media (max-width: 800px) {
@@ -323,6 +323,10 @@ body::before {
 
 .score-buttons.scored {
     opacity: 0.8;
+}
+
+div.score-buttons-wrapper:has([class*="scored"]) {
+    display: none;
 }
 
 @keyframes blink {
@@ -752,6 +756,7 @@ body.colorblind .legend-bar {
     gap: 2px;
     margin-bottom: 6px;
     flex-wrap: wrap;
+
 }
 
 .score-rest-line span {
@@ -796,4 +801,37 @@ body.colorblind .legend-bar {
 }
 .zero-btn{
     font-size: 13px;
+}
+
+.rainbow-word {
+    font-weight: bold;
+    animation: rainbow-text 2s linear infinite;
+    background-clip: text;
+    -webkit-background-clip: text;
+    color: transparent;
+    background-image: linear-gradient(
+            90deg,
+            red,
+            orange,
+            yellow,
+            green,
+            cyan,
+            blue,
+            violet,
+            red
+    );
+    background-size: 400%;
+}
+
+@keyframes rainbow-text {
+    0% {
+        background-position: 0% 50%;
+    }
+    100% {
+        background-position: 100% 50%;
+    }
+}
+
+.zero-btn{
+    height: 100%;
 }
