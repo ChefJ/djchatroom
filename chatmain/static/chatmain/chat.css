@@ -93,6 +93,7 @@ body {
     display: flex;
     flex-direction: column;
     height: 100%;
+    width: 70%;
     max-width: 1000px;
     min-width: 600px;
     font-family: Arial, sans-serif;
@@ -198,7 +199,7 @@ body {
 }
 
 .image-box {
-    width: 500px;
+    width: 30%;
     max-height: 100%;
     overflow-y: auto; /* ✅ Enable vertical scroll */
     border: 2px solid var(--border-color);
