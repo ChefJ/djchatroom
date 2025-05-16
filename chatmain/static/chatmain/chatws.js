@@ -240,21 +240,64 @@ function handleIncomingMessage(message) {
         messageWrapper.appendChild(compareLabel);
 
         // Score buttons
+// Score buttons
         const scoreContainer = document.createElement('div');
         scoreContainer.className = 'score-buttons-wrapper';
         scoreContainer.dataset.msgId = message.msg_uuid;
 
         const scoreButtons = document.createElement('div');
         scoreButtons.className = 'score-buttons';
+        scoreButtons.style.display = 'flex';
+        scoreButtons.style.alignItems = 'flex-start';
+        scoreButtons.style.gap = '0px';
 
-        for (let i = 0; i <= 10; i++) {
+// Line for 0 score
+        const zeroLine = document.createElement('div');
+        zeroLine.className = 'score-zero-line';
+        const btn0 = document.createElement('button');
+        btn0.className = 'score-btn';
+        btn0.dataset.score = 0;
+        btn0.textContent = 'Unsatisfied with the content';
+        zeroLine.appendChild(btn0);
+
+// Vertical bar separator
+        const separator = document.createElement('div');
+        separator.className = 'score-separator';
+        separator.textContent = '｜'; // fullwidth vertical bar
+        separator.style.fontSize = '24px';
+        separator.style.lineHeight = '32px';
+        separator.style.margin = '0 8px';
+
+// Line for 1-10 scores
+        const restLine = document.createElement('div');
+        restLine.className = 'score-rest-line';
+        restLine.style.display = 'flex';
+        restLine.style.flexDirection = 'column';
+
+        const hint = document.createElement('span');
+        hint.textContent = 'SatisfactionOnTone:';
+        hint.style.marginBottom = '4px';
+        restLine.appendChild(hint);
+
+        const scoreBtnRow = document.createElement('div');
+        scoreBtnRow.style.display = 'flex';
+        scoreBtnRow.style.flexWrap = 'wrap';
+        scoreBtnRow.style.gap = '0px';
+
+        for (let i = 1; i <= 10; i++) {
             const btn = document.createElement('button');
             btn.className = 'score-btn';
             btn.dataset.score = i;
-            btn.textContent = i === 10 ? 'Satisfied' : i;  // 👈 Change '10' to 'Satisfied'
-            scoreButtons.appendChild(btn);
+            btn.textContent = i === 10 ? 'Satisfied' : i;
+            scoreBtnRow.appendChild(btn);
         }
 
+        restLine.appendChild(scoreBtnRow);
+
+// Combine into main
+        scoreButtons.appendChild(zeroLine);
+        scoreButtons.appendChild(separator);
+        scoreButtons.appendChild(restLine);
         scoreContainer.appendChild(scoreButtons);
         messageWrapper.appendChild(scoreContainer);
 

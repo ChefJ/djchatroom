@@ -356,11 +356,9 @@ function fetchRoomConfig() {
             if (roomConfig.is_experiment) {
                 const instructionText = `
 
-1. **Goal**: Tune the output, until it's tone meets your expectation.  
-2. **What to do**: For each message you receive, <span id="score-highlight-target"> Score it on **how well it's tone(positively/negatively)** meets your expectation. </span>  
-2. **When to end**: Keep the iteration before you score a response with **'Satisfied'** button. 
+**Goal**: Tune the output on the tone instead of the content, until it's tone meets your expectation.  
 
-**PLEASE click 'Satisfied' only when you are really satisfied with the answer.**
+**PLEASE click 'Satisfied' only when you are really satisfied with the TONE of that response.**
 `;
 
 
