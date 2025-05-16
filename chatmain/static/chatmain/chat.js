@@ -144,8 +144,8 @@ function promptForTopic() {
     const tendency = roomConfig.user_tendency || 'Neutral';
 
     title.textContent = tendency === 'Positive'
-        ? "Imagine you are writing a post on social media. Choose a topic you would like to write POSITIVELY about, as if you want to promote/praise."
-        : "Imagine you are writing a post on social media. Choose a topic you would like to write NEGATIVELY about, as if you want to criticize."
+        ? "Imagine you are writing a post on social media. Choose a topic you would like to write POSITIVELY about, as if you want to promote/praise. Please focus on this topic during this conversation."
+        : "Imagine you are writing a post on social media. Choose a topic you would like to write NEGATIVELY about, as if you want to criticize. Please focus on this topic during this conversation."
 
     fetch(progressUrl)
         .then(response => response.json())

@@ -42,6 +42,7 @@ body {
 }
 
 .status-bar {
+    display: none;
     background-color: var(--input-bg);
     color: var(--text-color);
     border-bottom: 1px solid var(--border-color);
@@ -508,6 +509,7 @@ body::before {
     flex: 1;
     overflow-y: auto;
     border-right: 1px solid var(--border-color);
+    text-align: center;
 }
 
 .experiment-column:last-child {

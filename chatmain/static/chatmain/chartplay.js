@@ -518,20 +518,19 @@ function renderMultiSentimentPolarityChart(datasets, canvasId = 'polarity-bar-ch
                     beginAtZero: true,
                     min: -100,
                     max: 100,
-                    ticks: { color: glbTextColor },
-                    grid: { color: glbGridColor }
+                    ticks: { color: '#000' },
+                    grid: { color: '#aaa' }
                 },
                 y: {
-                    ticks: { color: glbTextColor },
-                    grid: { color: glbGridColor }
+                    ticks: { color: '#aaa' },
+                    grid: { color: '#aaa' }
                 }
             },
             plugins: {
                 backgroundTitle: {
                     text: 'Polarity Bar',
                     font: 'bold 28px Courier Prime',
-                    color: '#aaa'
-                },
+                    color: '#aaa'                },
                 legend: {display: false,
                     labels: { color: glbTextColor } }
             }
