@@ -432,8 +432,8 @@ function renderMultiSentimentDistributionChart(datasets, canvasId = 'compound-cu
             },
             plugins: {
                 backgroundTitle: {
-                    text: 'Sentiment Curve',
-                    font: 'bold 28px Courier Prime',
+                    text: 'Sentiment Distribution Curve',
+                    font: 'bold 18px Courier Prime',
                     color: '#aaa'
                 },
                 tooltip: {
@@ -528,8 +528,8 @@ function renderMultiSentimentPolarityChart(datasets, canvasId = 'polarity-bar-ch
             },
             plugins: {
                 backgroundTitle: {
-                    text: 'Polarity Bar',
-                    font: 'bold 28px Courier Prime',
+                    text: 'Sentiment Polarity',
+                    font: 'bold 18px Courier Prime',
                     color: '#aaa'                },
                 legend: {display: false,
                     labels: { color: glbTextColor } }
