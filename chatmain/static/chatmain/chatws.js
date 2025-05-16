@@ -329,7 +329,7 @@ function handleIncomingMessage(message) {
                     e.target.classList.add('selected');
 
                     // ✅ If score is 10, chain to /next_experiment/
-                    if (score === 10) {
+                    if (score === 5) {
                         const uuid = localStorage.getItem('anon_id') || '';
                         fetch('/next_experiment/', {
                             method: 'POST',
