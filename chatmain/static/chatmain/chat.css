@@ -58,7 +58,7 @@ body {
     flex-direction: column;
     padding: 0 20px;
     box-sizing: border-box;
-    height: 70%;
+    height: 90%;
 }
 
 @media (max-width: 800px) {
