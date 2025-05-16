@@ -496,9 +496,8 @@ body::before {
 .experiment-panel {
     display: flex;
     flex-direction:column; /* 👈 ensure horizontal layout */
-    /*
-    height: 18vh;
-    */
+    height: 13vh;
+    font-size: 12px;
     padding: 10px 20px;
     background-color: var(--chat-bg);
     border-bottom: 1px solid var(--border-color);
