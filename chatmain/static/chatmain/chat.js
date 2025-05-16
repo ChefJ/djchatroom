@@ -108,26 +108,27 @@ function ultUX(){
 
 function setupChoiceSquares() {
     const row = document.getElementById('topic-choice-row');
+    const topicInput = document.getElementById('topic-genre-input');
     row.innerHTML = ''; // Clear existing
-    for (let i = 0; i < 6; i++) {
+
+    topic_list.forEach((label, i) => {
         const square = document.createElement('div');
         square.classList.add('choice-square');
         square.dataset.choiceIndex = i;
-        square.textContent = topic_list[i];
+        square.textContent = label;
+
         square.onclick = () => {
-            // Remove highlight from all
             document.querySelectorAll('.choice-square').forEach(el => el.classList.remove('active'));
-            // Add to this
             square.classList.add('active');
-            // Optionally store the selected index/value somewhere
-            selectedChoiceIndex = i;
+            topicInput.value = label; // 🧠 Update the input field too
+            if (label==="Other"){
+                topicInput.value="";
+            }
         };
 
         row.appendChild(square);
-    }
-
+    });
 }
-
 
 function promptForTopic() {
 
@@ -143,8 +144,8 @@ function promptForTopic() {
     const tendency = roomConfig.user_tendency || 'Neutral';
 
     title.textContent = tendency === 'Positive'
-        ? "Choose a topic you feel like to praise about:"
-        : "Choose a topic you feel like criticizing or expressing negatively:";
+        ? "Imagine you are writing a post on social media. Choose a topic you would like to write POSITIVELY about, as if you want to promote/praise."
+        : "Imagine you are writing a post on social media. Choose a topic you would like to write NEGATIVELY about, as if you want to criticize."
 
     fetch(progressUrl)
         .then(response => response.json())
@@ -161,14 +162,17 @@ function promptForTopic() {
     modal.style.display = 'flex';
 
     submitBtn.onclick = () => {
-        const selectedSquare = document.querySelector('.choice-square.active');
+        const genreInput = document.getElementById('topic-genre-input');
 
-        if (!selectedSquare) {
-            alert("Please select a topic.");
+        const selectedTopicText = genreInput.value.trim();
+
+        if (selectedTopicText === '') {
+            alert("Please enter or select a topic tag.");
             return;
         }
 
-        const selectedTopic = selectedSquare.textContent.trim();
+
+        const selectedTopic =selectedTopicText;
         const topic = input.value.trim();
         const genreAndTopic = selectedTopic + " - " + topic;
 
@@ -356,9 +360,7 @@ function fetchRoomConfig() {
             if (roomConfig.is_experiment) {
                 const instructionText = `
 
-**Goal**: Tune the output on the tone instead of the content, until it's tone meets your expectation.  
-
-**PLEASE click 'Satisfied' only when you are really satisfied with the TONE of that response.**
+**Goal**: Tune the output on the tone instead of the content, until it's tone aligns your expectation.  
 `;
 
 

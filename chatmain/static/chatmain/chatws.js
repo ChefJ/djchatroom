@@ -255,7 +255,7 @@ function handleIncomingMessage(message) {
         const zeroLine = document.createElement('div');
         zeroLine.className = 'score-zero-line';
         const btn0 = document.createElement('button');
-        btn0.className = 'score-btn';
+        btn0.className = 'score-btn zero-btn';
         btn0.dataset.score = 0;
         btn0.textContent = 'Unsatisfied with the content';
         zeroLine.appendChild(btn0);
@@ -275,7 +275,7 @@ function handleIncomingMessage(message) {
         restLine.style.flexDirection = 'column';
 
         const hint = document.createElement('span');
-        hint.textContent = 'SatisfactionOnTone:';
+        hint.textContent = 'How it aligns with your expected tone:';
         hint.style.marginBottom = '4px';
         restLine.appendChild(hint);
 
@@ -284,11 +284,18 @@ function handleIncomingMessage(message) {
         scoreBtnRow.style.flexWrap = 'wrap';
         scoreBtnRow.style.gap = '0px';
 
-        for (let i = 1; i <= 10; i++) {
+        for (let i = 1; i <= 5 ; i++) {
             const btn = document.createElement('button');
             btn.className = 'score-btn';
             btn.dataset.score = i;
-            btn.textContent = i === 10 ? 'Satisfied' : i;
+            switch (parseInt(btn.dataset.score)) {
+                case 1:  btn.textContent = 'Very off'; break;
+                case 2:  btn.textContent = 'Slightly Off'; break;
+                case 3:  btn.textContent = 'Neutral'; break;
+                case 4:  btn.textContent = 'Mostly Aligned'; break;
+                case 5:  btn.textContent = 'Perfectly Aligned'; break;
+            }
+
             scoreBtnRow.appendChild(btn);
         }
 
