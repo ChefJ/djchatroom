@@ -190,7 +190,7 @@ def message_scoring(request):
         tgt_msg = ChatMessage.objects.get(msg_uuid=p_data['msg_uuid'])
         tgt_msg.user_rated_score = p_data["score"]
         tgt_msg.save()
-        if str(p_data["score"]) == "10":
+        if str(p_data["score"]) == "5":
             update_experiment_progress(tgt_msg.chat_room)
     except Exception as e:
         print(str(e))
