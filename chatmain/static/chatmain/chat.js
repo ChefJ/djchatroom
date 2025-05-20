@@ -340,7 +340,7 @@ function highlightScoringInstruction() {
 
 function fetchRoomConfig() {
 
-    fetch(configUrl)
+    return fetch(configUrl)
         .then(response => response.json())
         .then(data => {
             roomConfig = data;
@@ -393,15 +393,17 @@ function fetchRoomConfig() {
 
 
 function initChatroom(){
-    fetchRoomConfig();
-    checkUserConsent();
-    initUsrId();
-    ultUX();
-    ultRoomSettings();
-    getHistory();
-    checkAlive();
-    connectWebSocket();
-    add_dbclick_refinement();
+    fetchRoomConfig().then(() => {
+        checkUserConsent();
+        initUsrId();
+        ultUX();
+        ultRoomSettings();
+        getHistory();
+        checkAlive();
+        connectWebSocket();
+        add_dbclick_refinement();
+    });
+
 
     document.addEventListener('click', (e) => {
         const isSegment = e.target.classList.contains('sentiment-segment');

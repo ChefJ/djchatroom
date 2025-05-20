@@ -33,8 +33,299 @@ function connectWebSocket() {
     };
 }
 
+function genScoreButtonContainer(message) {
+    const scoreContainer = document.createElement('div');
+    scoreContainer.className = 'score-buttons-wrapper';
+    scoreContainer.dataset.msgId = message.msg_uuid;
+
+    const scoreButtons = document.createElement('div');
+    scoreButtons.className = 'score-buttons';
+    scoreButtons.style.display = 'flex';
+    scoreButtons.style.alignItems = 'flex-start';
+    scoreButtons.style.gap = '0px';
+
+// Line for 0 score
+    const zeroLine = document.createElement('div');
+    zeroLine.className = 'score-zero-line';
+    const btn0 = document.createElement('button');
+    btn0.className = 'score-btn zero-btn';
+    btn0.dataset.score = 0;
+    btn0.textContent = 'Answer off-topic';
+
+    zeroLine.appendChild(btn0);
+
+// Vertical bar separator
+    const separator = document.createElement('div');
+    separator.className = 'score-separator';
+    separator.textContent = '｜'; // fullwidth vertical bar
+    separator.style.fontSize = '24px';
+    separator.style.lineHeight = '32px';
+    separator.style.margin = '0 8px';
+
+// Line for 1-10 scores
+    const restLine = document.createElement('div');
+    restLine.className = 'score-rest-line';
+    restLine.style.display = 'flex';
+    restLine.style.flexDirection = 'column';
+
+    const hint = document.createElement('span');
+    hint.textContent = 'If answer not off-topic, How it\'s tone aligns with your expectation?';
+    hint.style.marginBottom = '4px';
+    restLine.appendChild(hint);
+
+    const scoreBtnRow = document.createElement('div');
+    scoreBtnRow.style.display = 'flex';
+    scoreBtnRow.style.flexWrap = 'wrap';
+    scoreBtnRow.style.gap = '0px';
+
+    for (let i = 1; i <= 5; i++) {
+        const btn = document.createElement('button');
+        btn.className = 'score-btn';
+        btn.dataset.score = i;
+        switch (parseInt(btn.dataset.score)) {
+            case 1:
+                btn.textContent = 'Very off';
+                break;
+            case 2:
+                btn.textContent = 'Slightly Off';
+                break;
+            case 3:
+                btn.textContent = 'Neutral';
+                break;
+            case 4:
+                btn.textContent = 'Slightly Aligned';
+                break;
+            case 5:
+                btn.textContent = 'Aligned';
+                break;
+        }
+
+        scoreBtnRow.appendChild(btn);
+    }
+
+    restLine.appendChild(scoreBtnRow);
+
+// Combine into main
+    scoreButtons.appendChild(zeroLine);
+    scoreButtons.appendChild(separator);
+    scoreButtons.appendChild(restLine);
+    scoreContainer.appendChild(scoreButtons);
+
+    scoreButtons.addEventListener('click', (e) => {
+        if (e.target.classList.contains('score-btn')) {
+            const score = parseInt(e.target.dataset.score);
+            const msgId = scoreContainer.dataset.msgId;
+
+            fetch('/message_scoring/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': getCSRFToken(),
+                },
+                body: JSON.stringify({msg_uuid: msgId, score: score})
+            }).then(response => {
+                if (!response.ok) throw new Error('Failed to submit score');
+
+                // Visual feedback
+                scoreButtons.querySelectorAll('button').forEach(btn => btn.disabled = true);
+                scoreButtons.classList.add('scored');
+                e.target.classList.add('selected');
+
+                // ✅ If score is 10, chain to /next_experiment/
+                if (score === 5) {
+                    const uuid = localStorage.getItem('anon_id') || '';
+                    fetch('/next_experiment/', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRFToken': getCSRFToken(),
+                        },
+                        body: JSON.stringify({uuid: uuid})
+                    })
+                        .then(res => res.text())
+                        .then(url => {
+                            // ✅ just navigate to it
+                            window.location.href = url;
+                        })
+                        .catch(err => {
+                            console.error("Redirect failed:", err);
+                        });
+                } else {
+                    // ✅ Re-enable input if not satisfied
+                    setInputDisabled(false);
+                    document.querySelector('#chat-message-input').focus();
+                }
+            }).catch(err => {
+                console.error('Error submitting score:', err);
+            });
+        }
+    });
+
+    return scoreContainer;
+}
+
+
+function genComepareLabel(message) {
+    const compareLabel = document.createElement('label');
+    compareLabel.classList.add('compare-checkbox-wrapper');
+    compareLabel.style.display = 'inline-flex';
+    compareLabel.style.alignItems = 'center';
+    compareLabel.style.gap = '6px';
+    compareLabel.style.marginTop = '4px';
+    compareLabel.innerHTML = `
+            <input type="checkbox" class="compare-checkbox" data-msg-id="${message.msg_uuid}">
+            <span style="font-size: 12px;">Add to Graph</span>
+        `;
+    if (roomConfig.experiment_type != 'all') {
+        compareLabel.innerHTML = `
+            <input type="checkbox" class="compare-checkbox" style="display: none" data-msg-id="${message.msg_uuid}">
+            <span style="font-size: 12px;display: none">Add to Graph</span>
+        `;
+    }
+    compareLabel.querySelector('input').addEventListener('change', (e) => {
+        const msgId = e.target.dataset.msgId;
+        const bubble = document.querySelector(`[data-id="${msgId}"]`);
+
+        if (e.target.checked) {
+            if (Object.keys(comparedMessages).length >= 3) {
+                alert("You can compare up to 3 messages at a time.");
+                e.target.checked = false;
+                return;
+            }
+
+            comparedMessages[msgId] = message.message_with_scores;
+            bubble?.classList.add('compared');
+        } else {
+            delete comparedMessages[msgId];
+            bubble?.classList.remove('compared');
+            bubble.style.borderRight = '';
+        }
+
+        updateComparisonCharts();
+    });
+    return compareLabel;
+}
+
+function colorizeMessage(segments) {
+    let messageHtml = '';
+    segments.forEach(seg => {
+        const text = seg.content;
+        const compound = seg.sentiment_score.compound;
+        let bgColor = '';
+        let textColor = glbTextColor;
+
+        const alpha = Math.min(Math.abs(compound), 1).toFixed(2);
+        if (enableColorize) {
+            if (compound > 0) {
+                bgColor = rgbaFromVar('--positive-color', alpha);
+            } else if (compound < 0) {
+                bgColor = rgbaFromVar('--negative-color', alpha);
+            }
+        }
+
+        const formatted = marked.parseInline(text);
+        const tooltip = `neg: ${seg.sentiment_score.neg.toFixed(2)}, neu: ${seg.sentiment_score.neu.toFixed(2)}, pos: ${seg.sentiment_score.pos.toFixed(2)}, compound: ${compound.toFixed(2)}`;
+
+        messageHtml += `<span 
+                class="sentiment-segment" 
+                title="" 
+                data-compound="${compound}" 
+                style="border-radius: 6px; padding: 2px 4px; margin: 2px; display: inline; ${bgColor ? `background-color: ${bgColor};` : ''}">
+                ${formatted}
+            </span> `;
+    });
+    return messageHtml;
+}
+
+function addEventsForBubble(bubble) {
+    const segments = bubble.querySelectorAll('.sentiment-segment');
+    segments.forEach(seg => {
+        seg.addEventListener('mouseenter', () => {
+            const score = parseFloat(seg.dataset.compound);
+            highlightChartBin(score);
+        });
+        seg.addEventListener('mouseleave', () => {
+            removeChartHighlights();
+        });
+
+        // ✅ Double-click to open refine popup
+        seg.addEventListener('dblclick', (e) => {
+            // Remove previous highlights
+            document.querySelectorAll('.sentiment-segment.selected-sentence')
+                .forEach(el => el.classList.remove('selected-sentence'));
+
+            // Highlight this one
+            seg.classList.add('selected-sentence');
+
+            // Prevent native text selection (hard cancel)
+            if (window.getSelection) {
+                const sel = window.getSelection();
+                if (sel && sel.type !== "None") {
+                    sel.removeAllRanges();
+                }
+            }
+            document.activeElement?.blur(); // Extra protection
+
+            // Show popup above this segment
+            const popup = document.getElementById('refine-popup');
+            const rect = seg.getBoundingClientRect();
+
+            popup.style.top = `${window.scrollY + rect.top - 40}px`;
+            popup.style.left = `${window.scrollX + rect.left}px`;
+            popup.style.display = 'flex';
+            popup.dataset.originalText = seg.textContent;
+            popup.__sourceBubble = seg.closest('.chat-message');
+        });
+
+        // ✅ Hover interaction
+        seg.addEventListener('mouseenter', () => {
+            const indicator = document.getElementById('legend-indicator');
+            if (!indicator) {
+                return;
+            }
+            const bar = indicator.parentElement;
+            const width = bar.offsetWidth;
+
+            // Map compound (-1 to +1) to [0, width]
+            const clamped = Math.max(-1, Math.min(1, seg.dataset.compound));
+            const pos = ((clamped + 1) / 2) * width;
+
+            indicator.style.left = `${pos}px`;
+            indicator.style.display = 'block';
+        });
+
+        seg.addEventListener('mouseleave', () => {
+            const indicator = document.getElementById('legend-indicator');
+            if (indicator) indicator.style.display = 'none';
+        });
+
+        // Highlight for legend
+        const totalBins = 7;
+
+        seg.addEventListener('mouseenter', () => {
+            const compound = parseFloat(seg.dataset.compound);
+            const binIndex = Math.min(
+                Math.floor(((compound + 1) / 2) * totalBins),
+                totalBins - 1
+            );
+
+            const boxes = document.querySelectorAll('.tone-square');
+            boxes.forEach((box, i) => {
+                box.classList.toggle('glow', i === binIndex);
+            });
+        });
+
+        seg.addEventListener('mouseleave', () => {
+            document.querySelectorAll('.tone-square').forEach(box => box.classList.remove('glow'));
+        });
+    });
+}
+
 // ==== Handle Incoming Messages ====
 function handleIncomingMessage(message) {
+    console.log(`📨 handleIncomingMessage called for: ${message.msg_uuid}`);
+    console.log(`📨 handleIncomingMessage called for: ${roomConfig}`);
+
     if (typeof message !== 'object' || message === null) return;
 
     const messageWrapper = document.createElement('div');
@@ -51,35 +342,16 @@ function handleIncomingMessage(message) {
     bubble.__messageWithScores = message.message_with_scores;
 
     let messageHtml = '';
-    if ( message.user_uuid === 'GPT') {
+    if (message.user_uuid === 'GPT') {
+        const segments = JSON.parse(message.message_with_scores);
+        const scores = segments.map(s => s.sentiment_score);
+
         try {
-            const segments = JSON.parse(message.message_with_scores);
-            segments.forEach(seg => {
-                const text = seg.content;
-                const compound = seg.sentiment_score.compound;
-                let bgColor = '';
-                let textColor = glbTextColor;
+            renderSentimentDistributionChart(scores, 'compound-curve-chart', globalBinAmount);
+            renderSentimentPolarityBar(scores);
+            window.__activeSentimentMessage = bubble;
 
-                const alpha = Math.min(Math.abs(compound), 1).toFixed(2);
-                if (enableColorize) {
-                    if (compound > 0) {
-                        bgColor = rgbaFromVar('--positive-color', alpha);
-                    } else if (compound < 0) {
-                        bgColor = rgbaFromVar('--negative-color', alpha);
-                    }
-                }
-
-                const formatted = marked.parseInline(text);
-                const tooltip = `neg: ${seg.sentiment_score.neg.toFixed(2)}, neu: ${seg.sentiment_score.neu.toFixed(2)}, pos: ${seg.sentiment_score.pos.toFixed(2)}, compound: ${compound.toFixed(2)}`;
-
-                messageHtml += `<span 
-                class="sentiment-segment" 
-                title="" 
-                data-compound="${compound}" 
-                style="border-radius: 6px; padding: 2px 4px; margin: 2px; display: inline; ${bgColor ? `background-color: ${bgColor};` : ''}">
-                ${formatted}
-            </span> `;
-            });
+            messageHtml = colorizeMessage(segments);
         } catch (err) {
             console.error('Failed to parse message_with_scores:', err);
             messageHtml = marked.parse(message.message);
@@ -101,92 +373,13 @@ function handleIncomingMessage(message) {
         <div className="meta" style="color:dimgrey;font-style:italic;">* Double click on any sentence to quick adjust
             tone*
         </div>
-    `; }
+    `;
+    }
 
 
-        requestAnimationFrame(() => {
-        const segments = bubble.querySelectorAll('.sentiment-segment');
-        segments.forEach(seg => {
-            seg.addEventListener('mouseenter', () => {
-                const score = parseFloat(seg.dataset.compound);
-                highlightChartBin(score);
-            });
-            seg.addEventListener('mouseleave', () => {
-                removeChartHighlights();
-            });
-
-            // ✅ Double-click to open refine popup
-            seg.addEventListener('dblclick', (e) => {
-                // Remove previous highlights
-                document.querySelectorAll('.sentiment-segment.selected-sentence')
-                    .forEach(el => el.classList.remove('selected-sentence'));
-
-                // Highlight this one
-                seg.classList.add('selected-sentence');
-
-                // Prevent native text selection (hard cancel)
-                if (window.getSelection) {
-                    const sel = window.getSelection();
-                    if (sel && sel.type !== "None") {
-                        sel.removeAllRanges();
-                    }
-                }
-                document.activeElement?.blur(); // Extra protection
-
-                // Show popup above this segment
-                const popup = document.getElementById('refine-popup');
-                const rect = seg.getBoundingClientRect();
-
-                popup.style.top = `${window.scrollY + rect.top - 40}px`;
-                popup.style.left = `${window.scrollX + rect.left}px`;
-                popup.style.display = 'flex';
-                popup.dataset.originalText = seg.textContent;
-                popup.__sourceBubble = seg.closest('.chat-message');
-            });
-
-            // ✅ Hover interaction
-            seg.addEventListener('mouseenter', () => {
-                const indicator = document.getElementById('legend-indicator');
-                if (!indicator) {
-                    return;}
-                const bar = indicator.parentElement;
-                const width = bar.offsetWidth;
-
-                // Map compound (-1 to +1) to [0, width]
-                const clamped = Math.max(-1, Math.min(1, seg.dataset.compound));
-                const pos = ((clamped + 1) / 2) * width;
-
-                indicator.style.left = `${pos}px`;
-                indicator.style.display = 'block';
-            });
-
-            seg.addEventListener('mouseleave', () => {
-                const indicator = document.getElementById('legend-indicator');
-                if (indicator) indicator.style.display = 'none';
-            });
-
-            const totalBins = 7;
-
-            seg.addEventListener('mouseenter', () => {
-                const compound = parseFloat(seg.dataset.compound);
-                const binIndex = Math.min(
-                    Math.floor(((compound + 1) / 2) * totalBins),
-                    totalBins - 1
-                );
-
-                const boxes = document.querySelectorAll('.tone-square');
-                boxes.forEach((box, i) => {
-                    box.classList.toggle('glow', i === binIndex);
-                });
-            });
-
-            seg.addEventListener('mouseleave', () => {
-                document.querySelectorAll('.tone-square').forEach(box => box.classList.remove('glow'));
-            });
-        });
+    addEventsForBubble(bubble);
 
 
-    });
     messageWrapper.appendChild(sender);
     messageWrapper.appendChild(bubble);
 
@@ -196,223 +389,43 @@ function handleIncomingMessage(message) {
     } else {
         messageWrapper.classList.add('other-wrapper');
         bubble.classList.add('other-message');
-
-        // refreshImageById(message.msg_uuid);
-
-/*        bubble.ondblclick = () => {
-            refreshImageById(message.msg_uuid);
-            if (message.user_uuid === 'GPT' && enableColorize) {
-                try {
-                    const segments = JSON.parse(message.message_with_scores);
-                    const scores = segments.map(s => s.sentiment_score);
-                    renderSentimentDistributionChart(scores);
-                    renderSentimentPolarityBar(scores);
-                    renderSentimentBarChart(scores);
-                    window.__activeSentimentMessage = bubble;
-                } catch (err) {
-                    console.error('📊 Failed to update sentiment chart on double-click:', err);
-                }
-            }
-        };*/
     }
 
     // ==== NEW: Add Compare Checkbox + Scoring Buttons for GPT ====
     if (message.user_uuid === 'GPT') {
         // Compare checkbox
-        const compareLabel = document.createElement('label');
-        compareLabel.classList.add('compare-checkbox-wrapper');
-        compareLabel.style.display = 'inline-flex';
-        compareLabel.style.alignItems = 'center';
-        compareLabel.style.gap = '6px';
-        compareLabel.style.marginTop = '4px';
-        compareLabel.innerHTML = `
-            <input type="checkbox" class="compare-checkbox" data-msg-id="${message.msg_uuid}">
-            <span style="font-size: 12px;">Add to Graph</span>
-        `;
-        if (roomConfig.experiment_type != 'all'){
-            compareLabel.innerHTML = `
-            <input type="checkbox" class="compare-checkbox" style="display: none" data-msg-id="${message.msg_uuid}">
-            <span style="font-size: 12px;display: none">Add to Graph</span>
-        `;
-        }
-        compareLabel.querySelector('input').addEventListener('change', (e) => {
-            const msgId = e.target.dataset.msgId;
-            const bubble = document.querySelector(`[data-id="${msgId}"]`);
-
-            if (e.target.checked) {
-                if (Object.keys(comparedMessages).length >= 3) {
-                    alert("You can compare up to 3 messages at a time.");
-                    e.target.checked = false;
-                    return;
-                }
-
-                comparedMessages[msgId] = message.message_with_scores;
-                bubble?.classList.add('compared');
-            } else {
-                delete comparedMessages[msgId];
-                bubble?.classList.remove('compared');
-                bubble.style.borderRight = '';
-            }
-
-            updateComparisonCharts();
-        });
+        const compareLabel = genComepareLabel(message);
         messageWrapper.appendChild(compareLabel);
 
-        // Score buttons
-// Score buttons
-        const scoreContainer = document.createElement('div');
-        scoreContainer.className = 'score-buttons-wrapper';
-        scoreContainer.dataset.msgId = message.msg_uuid;
 
-        const scoreButtons = document.createElement('div');
-        scoreButtons.className = 'score-buttons';
-        scoreButtons.style.display = 'flex';
-        scoreButtons.style.alignItems = 'flex-start';
-        scoreButtons.style.gap = '0px';
-
-// Line for 0 score
-        const zeroLine = document.createElement('div');
-        zeroLine.className = 'score-zero-line';
-        const btn0 = document.createElement('button');
-        btn0.className = 'score-btn zero-btn';
-        btn0.dataset.score = 0;
-        btn0.textContent = 'Answer off-topic';
-
-        zeroLine.appendChild(btn0);
-
-// Vertical bar separator
-        const separator = document.createElement('div');
-        separator.className = 'score-separator';
-        separator.textContent = '｜'; // fullwidth vertical bar
-        separator.style.fontSize = '24px';
-        separator.style.lineHeight = '32px';
-        separator.style.margin = '0 8px';
-
-// Line for 1-10 scores
-        const restLine = document.createElement('div');
-        restLine.className = 'score-rest-line';
-        restLine.style.display = 'flex';
-        restLine.style.flexDirection = 'column';
-
-        const hint = document.createElement('span');
-        hint.textContent = 'If answer not off-topic, How it\'s tone aligns with your expectation?';
-        hint.style.marginBottom = '4px';
-        restLine.appendChild(hint);
-
-        const scoreBtnRow = document.createElement('div');
-        scoreBtnRow.style.display = 'flex';
-        scoreBtnRow.style.flexWrap = 'wrap';
-        scoreBtnRow.style.gap = '0px';
-
-        for (let i = 1; i <= 5 ; i++) {
-            const btn = document.createElement('button');
-            btn.className = 'score-btn';
-            btn.dataset.score = i;
-            switch (parseInt(btn.dataset.score)) {
-                case 1:  btn.textContent = 'Very off'; break;
-                case 2:  btn.textContent = 'Slightly Off'; break;
-                case 3:  btn.textContent = 'Neutral'; break;
-                case 4:  btn.textContent = 'Slightly Aligned'; break;
-                case 5:  btn.textContent = 'Aligned'; break;
-            }
-
-            scoreBtnRow.appendChild(btn);
-        }
-
-        restLine.appendChild(scoreBtnRow);
-
-// Combine into main
-        scoreButtons.appendChild(zeroLine);
-        scoreButtons.appendChild(separator);
-        scoreButtons.appendChild(restLine);
-        scoreContainer.appendChild(scoreButtons);
-        if(message.user_rated_score==='-1'){
+        const scoreContainer = genScoreButtonContainer(message);
+        if (message.user_rated_score === '-1') {
             messageWrapper.appendChild(scoreContainer);
             setInputDisabled(true);
         }
         console.log(message)
 
 
-        scoreButtons.addEventListener('click', (e) => {
-            if (e.target.classList.contains('score-btn')) {
-                const score = parseInt(e.target.dataset.score);
-                const msgId = scoreContainer.dataset.msgId;
-
-                fetch('/message_scoring/', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-CSRFToken': getCSRFToken(),
-                    },
-                    body: JSON.stringify({ msg_uuid: msgId, score: score })
-                }).then(response => {
-                    if (!response.ok) throw new Error('Failed to submit score');
-
-                    // Visual feedback
-                    scoreButtons.querySelectorAll('button').forEach(btn => btn.disabled = true);
-                    scoreButtons.classList.add('scored');
-                    e.target.classList.add('selected');
-
-                    // ✅ If score is 10, chain to /next_experiment/
-                    if (score === 5) {
-                        const uuid = localStorage.getItem('anon_id') || '';
-                        fetch('/next_experiment/', {
-                            method: 'POST',
-                            headers: {
-                                'Content-Type': 'application/json',
-                                'X-CSRFToken': getCSRFToken(),
-                            },
-                            body: JSON.stringify({ uuid: uuid })
-                        })
-                            .then(res => res.text())
-                            .then(url => {
-                                // ✅ just navigate to it
-                                window.location.href = url;
-                            })
-                            .catch(err => {
-                                console.error("Redirect failed:", err);
-                            });
-                    } else {
-                        // ✅ Re-enable input if not satisfied
-                        setInputDisabled(false);
-                        document.querySelector('#chat-message-input').focus();
-                    }
-                }).catch(err => {
-                    console.error('Error submitting score:', err);
-                });
-            }
-        });
     }
 
     chatLog.appendChild(messageWrapper);
     chatLog.scrollTop = chatLog.scrollHeight;
 
-    if (message.user_uuid === 'GPT' && enableColorize) {
-        try {
-            const segments = JSON.parse(message.message_with_scores);
-            const scores = segments.map(s => s.sentiment_score);
-            renderSentimentDistributionChart(scores, 'compound-curve-chart', globalBinAmount);
-            renderSentimentPolarityBar(scores);
-            renderSentimentBarChart(scores, 'compound-bar-chart', globalBinAmount);
-            window.__activeSentimentMessage = bubble;
-        } catch (err) {
-            console.error('📊 Failed to render sentiment chart:', err);
-        }
+    autoCheckLatestTwoGPT();
 
-        autoCheckLatestTwoGPT();
-    }
 }
 
 // ==== Chart Comparison Handling ====
 function updateComparisonCharts() {
-    if(roomConfig.experiment_type != 'all') return;
+    if (roomConfig.experiment_type != 'all') return;
     Object.values(chartRefs).forEach(chart => chart.destroy?.());
 
     const sortedMsgIds = Array.from(document.querySelectorAll('.chat-message'))
         .filter(el => comparedMessages.hasOwnProperty(el.dataset.id))
         .map(el => el.dataset.id);
 
-    const messageEntries = sortedMsgIds.map(msgId => [msgId, comparedMessages[msgId]]);    if (messageEntries.length === 0) return;
+    const messageEntries = sortedMsgIds.map(msgId => [msgId, comparedMessages[msgId]]);
+    if (messageEntries.length === 0) return;
 
     const datasetsCurve = [];
     const datasetsBar = [];
@@ -423,7 +436,7 @@ function updateComparisonCharts() {
         try {
             const segments = JSON.parse(messageWithScores);
             const scores = segments.map(s => s.sentiment_score);
-            const { labels, normalized } = getCompoundBins(scores, globalBinAmount);
+            const {labels, normalized} = getCompoundBins(scores, globalBinAmount);
 
             datasetsCurve.push({
                 label: msgId,
@@ -486,7 +499,7 @@ function updateComparisonCharts() {
 }
 
 function autoCheckLatestTwoGPT() {
-    if(roomConfig.experiment_type != 'all') return;
+    if (roomConfig.experiment_type != 'all') return;
 
     // 1. Uncheck all compare checkboxes first
     const allCompareBoxes = Array.from(document.querySelectorAll('.compare-checkbox'));
