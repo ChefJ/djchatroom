@@ -1,4 +1,4 @@
-:root {
+/*:root {
     --bg-color: #1a1a1a;
     --text-color: #00ff99;
     --border-color: #00ff99;
@@ -11,6 +11,20 @@
     --scroll-thumb: #00ff99;
     --scroll-track: #000;
 
+}*/
+
+:root   {
+    --bg-color: #f4f4f5;
+    --text-color: #222;
+    --border-color: #ccc;
+    --accent-color: #444;
+    --chat-bg: #fff;
+    --own-bg: #e0e0e0;
+    --shadow-color: rgba(0, 0, 0, 0.1);
+    --input-bg: #fff;
+    --input-border: #ccc;
+    --scroll-thumb: #888;
+    --scroll-track: #f0f0f0;
 }
 
 body[data-theme='modern'] {
@@ -834,4 +848,48 @@ body.colorblind .legend-bar {
 
 .zero-btn{
     height: 100%;
+}
+
+.chat-log-title-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 6px 10px;
+    margin-bottom: 4px;
+    position: relative;
+}
+.chat-log-title {
+    flex-grow: 1;
+    text-align: center;
+    font-size: 16px;
+    margin: 0;
+    color: var(--text-color);
+    white-space: nowrap;
+}
+.tone-meter-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 4px;
+    flex-shrink: 0;
+}
+
+#tone-meter {
+    display: flex;
+    gap: 4px;
+}
+
+.tone-square {
+    width: 16px;
+    height: 16px;
+    border-radius: 3px;
+    border: 1px solid var(--border-color);
+    opacity: 0.7;
+    transition: all 0.3s ease;
+}
+
+.tone-square.glow {
+    box-shadow: 0 0 8px 2px var(--accent-color);
+    opacity: 1;
+    transform: scale(1.1);
 }

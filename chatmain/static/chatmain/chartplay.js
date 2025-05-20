@@ -2,7 +2,7 @@ const qualitativeLabels = [['Very', 'Negative'], 'Negative', ['Somewhat', 'Negat
 
 Chart.register({
     id: 'backgroundTitle',
-    beforeDraw(chart, args, options) {
+/*    beforeDraw(chart, args, options) {
         const { ctx, width, height } = chart;
         ctx.save();
         ctx.font = options.font || 'bold 28px sans-serif';
@@ -11,7 +11,7 @@ Chart.register({
         ctx.textBaseline = 'middle';
         ctx.fillText(options.text || '', width / 2 + 20, height / 2 - 10    );
         ctx.restore();
-    }
+    }*/
 });
 
 function renderSentimentPolarityBar(scores) {
@@ -230,6 +230,7 @@ function renderSentimentDistributionChart(scores, canvasId = 'compound-curve-cha
             }]
         },
         options: {
+
             responsive: true,
         onHover: (event, elements) => {
             if (elements.length > 0) {
@@ -243,7 +244,19 @@ function renderSentimentDistributionChart(scores, canvasId = 'compound-curve-cha
         },
             scales: {
                 x: {
-                    title: {display: true, text: 'Compound Sentiment Score'},
+                    title: {
+                        display: true,
+                        text: 'Sentiment Distribution Curve',
+                        color: glbTextColor,
+                        font: {
+                            size: 14,
+                            weight: 'bold'
+                        },
+                        padding: {
+                            top: 20,
+                            bottom: 10
+                        }
+                    },
                     ticks: {color: glbTextColor,callback: function(value, index) {
                             return qualitativeLabels[index] || '';
                         }},
@@ -425,7 +438,19 @@ function renderMultiSentimentDistributionChart(datasets, canvasId = 'compound-cu
                 }
             },
             scales: {
-                x: { title: { display: false, text: 'Compound Score' }, ticks: { color: '#000',callback: function(value, index) {
+                x: {             title: {
+                        display: true,
+                        text: 'Sentiment Distribution Curve',
+                        color: '#000',
+                        font: {
+                            size: 14,
+                            weight: 'bold'
+                        },
+                        padding: {
+                            top: 20,
+                            bottom: 10
+                        }
+                    }, ticks: { color: '#000',callback: function(value, index) {
                             return qualitativeLabels[index] || '';
                         } }, grid: { color: '#aaa',display:false } },
                 y: { title: { display: false, text: 'Percentage (%)' }, beginAtZero: true, max: 100,ticks: { color: '#aaa',callback: value => `${value}%`}, grid: { color: '#aaa' } }
@@ -514,7 +539,7 @@ function renderMultiSentimentPolarityChart(datasets, canvasId = 'polarity-bar-ch
             indexAxis: 'y',
             scales: {
                 x: {
-                    title: { display: false, text: 'Compound Polarity' },
+                    title: { display: true  , text: 'Compound Polarity' },
                     beginAtZero: true,
                     min: -100,
                     max: 100,
@@ -619,3 +644,27 @@ function toggleColorBlindMode() {
 }
 
 document.getElementById('colorblind-toggle').addEventListener('change', toggleColorBlindMode);
+
+function setupToneMeter() {
+    const meter = document.getElementById('tone-meter');
+    meter.innerHTML = '';
+    const colors = [
+        'rgba(255,0,0,0.7)',       // Very Negative
+        'rgba(255,80,80,0.7)',     // Negative
+        'rgba(255,150,150,0.7)',   // Slightly Negative
+        'rgba(200,200,200,0.8)',   // Neutral
+        'rgba(150,255,200,0.7)',   // Slightly Positive
+        'rgba(0,255,153,0.7)',     // Positive
+        'rgba(0,200,120,0.7)'      // Very Positive
+    ];
+
+    colors.forEach((color, idx) => {
+        const box = document.createElement('div');
+        box.classList.add('tone-square');
+        box.dataset.binIndex = idx;
+        box.style.backgroundColor = color;
+        meter.appendChild(box);
+    });
+}
+
+setupToneMeter();

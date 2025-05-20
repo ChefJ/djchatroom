@@ -104,7 +104,7 @@ function handleIncomingMessage(message) {
     `; }
 
 
-        setTimeout(() => {
+        requestAnimationFrame(() => {
         const segments = bubble.querySelectorAll('.sentiment-segment');
         segments.forEach(seg => {
             seg.addEventListener('mouseenter', () => {
@@ -164,10 +164,29 @@ function handleIncomingMessage(message) {
                 const indicator = document.getElementById('legend-indicator');
                 if (indicator) indicator.style.display = 'none';
             });
+
+            const totalBins = 7;
+
+            seg.addEventListener('mouseenter', () => {
+                const compound = parseFloat(seg.dataset.compound);
+                const binIndex = Math.min(
+                    Math.floor(((compound + 1) / 2) * totalBins),
+                    totalBins - 1
+                );
+
+                const boxes = document.querySelectorAll('.tone-square');
+                boxes.forEach((box, i) => {
+                    box.classList.toggle('glow', i === binIndex);
+                });
+            });
+
+            seg.addEventListener('mouseleave', () => {
+                document.querySelectorAll('.tone-square').forEach(box => box.classList.remove('glow'));
+            });
         });
 
 
-    }, 0);
+    });
     messageWrapper.appendChild(sender);
     messageWrapper.appendChild(bubble);
 

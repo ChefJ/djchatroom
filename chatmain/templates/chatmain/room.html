@@ -26,6 +26,13 @@
             <div class="chat-box">
                 <div class="chat-log-title-container">
                     <h4 class="chat-log-title">Chat with AI Agent</h4>
+                    <div class="tone-meter-wrapper">
+                        <span class="tone-meter-label">Sentence Color Legend:</span>
+
+                        <div id="tone-meter">
+                            <!-- Will be dynamically filled with 7 squares -->
+                        </div>
+                    </div>
                 </div>
                 <div id="chat-log" class="chat-log"></div>
                 <div class="input-row">
@@ -68,6 +75,7 @@
                         <span>+1</span>
                     </div>
                 </div>
+
                 <label style="font-size: 13px;margin-top: 10px  ">
                     <input type="checkbox" id="colorblind-toggle">
                     Toggle to use none-red-green colors
