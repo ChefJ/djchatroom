@@ -38,6 +38,7 @@ function genScoreButtonContainer(message) {
     scoreContainer.className = 'score-buttons-wrapper';
     scoreContainer.dataset.msgId = message.msg_uuid;
 
+
     const scoreButtons = document.createElement('div');
     scoreButtons.className = 'score-buttons';
     scoreButtons.style.display = 'flex';
@@ -241,8 +242,9 @@ function addEventsForBubble(bubble) {
     const segments = bubble.querySelectorAll('.sentiment-segment');
     segments.forEach(seg => {
         seg.addEventListener('mouseenter', () => {
+
             const score = parseFloat(seg.dataset.compound);
-            highlightChartBin(score);
+            highlightChartBin(bubble, score);
         });
         seg.addEventListener('mouseleave', () => {
             removeChartHighlights();
@@ -347,8 +349,8 @@ function handleIncomingMessage(message) {
         const scores = segments.map(s => s.sentiment_score);
 
         try {
-            renderSentimentDistributionChart(scores, 'compound-curve-chart', globalBinAmount);
-            renderSentimentPolarityBar(scores);
+/*            renderSentimentDistributionChart(scores, 'compound-curve-chart', globalBinAmount);
+            renderSentimentPolarityBar(scores);*/
             window.__activeSentimentMessage = bubble;
 
             messageHtml = colorizeMessage(segments);
@@ -443,9 +445,10 @@ function updateComparisonCharts() {
                 data: normalized,
                 borderColor: colors[index],
                 backgroundColor: colors[index],
-                fill: false,
+                fill: true,
                 tension: 0.4,
-                pointRadius: 2
+                pointRadius: 3,
+                pointHoverRadius: 10,
             });
 
             datasetsBar.push({

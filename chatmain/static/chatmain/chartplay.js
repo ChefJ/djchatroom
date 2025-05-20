@@ -14,6 +14,7 @@ Chart.register({
     }*/
 });
 
+
 function renderSentimentPolarityBar(scores) {
     const {labels, normalized} = getCompoundBins(scores, globalBinAmount);
 
@@ -54,7 +55,7 @@ function renderSentimentPolarityBar(scores) {
                     stacked: true,
                     min: -100,
                     max: 100,
-                    title: {display: true, text: 'Percentage of Sentiment Area (%)', color: glbTextColor},
+                    title: {display: true, text: 'Percentage of Sentiment Area (%)', color: glbTextColor, },
                     ticks: {color: glbTextColor},
                     grid: {color: glbGridColor, display:false}
                 },
@@ -136,12 +137,12 @@ function highlightChartBarsByBin(binIndex, binCount = globalBinAmount) {
             dataset.originalColor = originalColor;
 
             dataset.backgroundColor = dataset.data.map((_, i) =>
-                i === binIndex ? originalColor : originalColor.replace(/[\d.]+\)$/g, '0.1)')
+                i === binIndex ? originalColor : originalColor.replace(/[\d.]+\)$/g, '0.3)')
             );
 
             if (chart.config.type === 'line') {
                 dataset.borderColor = dataset.data.map((_, i) =>
-                    i === binIndex ? originalColor : originalColor.replace(/[\d.]+\)$/g, '0.1)')
+                    i === binIndex ? originalColor : originalColor.replace(/[\d.]+\)$/g, '0.3)')
                 );
             }
         });
@@ -225,8 +226,14 @@ function renderSentimentDistributionChart(scores, canvasId = 'compound-curve-cha
                 borderWidth: 2,
                 borderColor: 'rgba(75,192,192,1)',
                 backgroundColor: 'rgba(75,192,192,0.2)',
-                pointRadius: 2,
-                pointHoverRadius: 4
+                pointRadius: (ctx) => {
+                    const ds = ctx.chart.data.datasets[ctx.datasetIndex];
+                    return ctx.dataIndex === ds.highlightedIndex ? 6 : 2;
+                },
+                pointBackgroundColor: (ctx) => {
+                    const ds = ctx.chart.data.datasets[ctx.datasetIndex];
+                    return ctx.dataIndex === ds.highlightedIndex ? 'orange' : 'rgba(75,192,192,1)';
+                }
             }]
         },
         options: {
@@ -365,45 +372,81 @@ function renderSentimentBarChart(scores, canvasId = 'compound-bar-chart', binCou
     });
 }
 
-function highlightChartBin(score, binCount = globalBinAmount) {
+function highlightChartBin(bubble, score, binCount = globalBinAmount) {
     const binWidth = 2 / binCount;
     const index = Math.min(Math.floor((score + 1) / binWidth), binCount - 1);
+    const msgId = bubble.dataset.id;
 
+    console.log('Hovering on message:'+msgId);
     ['compoundCurve', 'compoundBar'].forEach(chartKey => {
         const chart = chartRefs[chartKey];
-        if (chart) {
-            chart.data.datasets.forEach((dataset, datasetIndex) => {
-                const originalColor = dataset.originalColor || 'rgba(75,192,192,0.6)';
-                const fadedColor = originalColor.replace(/[\d.]+\)$/g, '0.1)'); // reduces opacity
+        if (!chart) return;
 
-                dataset.backgroundColor = dataset.data.map((_, i) => {
-                    return i === index ? originalColor : fadedColor;
-                });
+        chart.data.datasets.forEach((dataset, datasetIndex) => {
+            console.log('Chart label:'+dataset.label);
+            const originalColor = dataset.originalColor || 'rgba(75,192,192,0.6)';
+            const fadedColor = originalColor.replace(/[\d.]+\)$/g, '0.1)');
 
-                if (chart.config.type === 'line') {
-                    dataset.borderColor = dataset.data.map((_, i) =>
-                        i === index ? originalColor : fadedColor
-                    );
+            dataset.backgroundColor = dataset.data.map((_, i) =>{
+                    if(i === index)
+                        if(msgId===dataset.label) return originalColor;
+                        else return fadedColor;
+                    else
+                        return fadedColor;
                 }
-            });
-            chart.update();
-        }
+            );
+
+            if (chart.config.type === 'line') {
+
+                dataset.borderColor = dataset.data.map((_, i) =>{
+                        if(i === index)
+                            if(msgId===dataset.label) return originalColor;
+                            else return fadedColor;
+                        else
+                            return fadedColor;
+                    }
+                );
+
+                dataset.pointRadius =  dataset.data.map((_, i) =>{
+                        if(i === index)
+                            if(msgId===dataset.label) return 6;
+                            else return 3;
+                        else
+                            return 3;
+                    }
+                );
+                // 🔥 Set the highlighted point index (this is the new part)
+                dataset.highlightedIndex = index;
+            }
+        });
+
+        chart.update(); // no reanimation
     });
 }
 function removeChartHighlights() {
     ['compoundCurve', 'compoundBar'].forEach(chartKey => {
         const chart = chartRefs[chartKey];
-        if (chart) {
-            chart.data.datasets.forEach(dataset => {
-                const originalColor = dataset.originalColor || 'rgba(75,192,192,0.6)';
-                dataset.backgroundColor = dataset.data.map(() => originalColor);
+        if (!chart) return;
 
-                if (chart.config.type === 'line') {
-                    dataset.borderColor = originalColor;
-                }
-            });
-            chart.update();
-        }
+        chart.data.datasets.forEach(dataset => {
+            const originalColor = dataset.originalColor || 'rgba(75,192,192,0.6)';
+            dataset.backgroundColor = dataset.data.map(() => originalColor);
+
+            if (chart.config.type === 'line') {
+                dataset.borderColor = originalColor;
+
+                dataset.pointRadius =  dataset.data.map((_, i) =>{
+
+                    return 3;
+                    }
+                );
+
+                // ❌ Clear the index
+                delete dataset.highlightedIndex;
+            }
+        });
+
+        chart.update('none');
     });
 }
 
@@ -539,7 +582,11 @@ function renderMultiSentimentPolarityChart(datasets, canvasId = 'polarity-bar-ch
             indexAxis: 'y',
             scales: {
                 x: {
-                    title: { display: true  , text: 'Compound Polarity' },
+                    title: {
+                        display: true  ,
+                        text: 'Compound Polarity',
+                        color: '#000',
+                        font: {size: 14, weight: 'bold'}},
                     beginAtZero: true,
                     min: -100,
                     max: 100,
@@ -566,12 +613,13 @@ function renderMultiSentimentPolarityChart(datasets, canvasId = 'polarity-bar-ch
 function generateColorPalette(n) {
     const defaultPalette = [
         'rgba(54, 162, 235, 0.8)',   // Blue
+        'rgba(255, 159, 64, 0.8)',   // Orange
+        'rgba(200, 200, 0, 0.8)',    // Olive
+        'rgba(153, 102, 255, 0.8)',  // Purple
+
         'rgba(255, 206, 86, 0.8)',   // Yellow
         'rgba(75, 192, 192, 0.8)',   // Teal
-        'rgba(153, 102, 255, 0.8)',  // Purple
-        'rgba(255, 159, 64, 0.8)',   // Orange
         'rgba(255, 100, 255, 0.8)',  // Pink
-        'rgba(200, 200, 0, 0.8)',    // Olive
         'rgba(0, 200, 200, 0.8)'     // Aqua
     ];
 
@@ -648,23 +696,12 @@ document.getElementById('colorblind-toggle').addEventListener('change', toggleCo
 function setupToneMeter() {
     const meter = document.getElementById('tone-meter');
     meter.innerHTML = '';
-    const colors = [
-        'rgba(255,0,0,0.7)',       // Very Negative
-        'rgba(255,80,80,0.7)',     // Negative
-        'rgba(255,150,150,0.7)',   // Slightly Negative
-        'rgba(200,200,200,0.8)',   // Neutral
-        'rgba(150,255,200,0.7)',   // Slightly Positive
-        'rgba(0,255,153,0.7)',     // Positive
-        'rgba(0,200,120,0.7)'      // Very Positive
-    ];
-
-    colors.forEach((color, idx) => {
+    for (let idx = 0; idx < 7; idx++) {
         const box = document.createElement('div');
-        box.classList.add('tone-square');
+        box.classList.add('tone-square', `tone-square-${idx}`);
         box.dataset.binIndex = idx;
-        box.style.backgroundColor = color;
         meter.appendChild(box);
-    });
+    }
 }
 
 setupToneMeter();

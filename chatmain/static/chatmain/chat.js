@@ -106,30 +106,6 @@ function ultUX(){
     });
 }
 
-function setupChoiceSquares() {
-    const row = document.getElementById('topic-choice-row');
-    const topicInput = document.getElementById('topic-genre-input');
-    row.innerHTML = ''; // Clear existing
-
-    topic_list.forEach((label, i) => {
-        const square = document.createElement('div');
-        square.classList.add('choice-square');
-        square.dataset.choiceIndex = i;
-        square.textContent = label;
-
-        square.onclick = () => {
-            document.querySelectorAll('.choice-square').forEach(el => el.classList.remove('active'));
-            square.classList.add('active');
-            topicInput.value = label; // 🧠 Update the input field too
-            if (label==="Other"){
-                topicInput.value="";
-            }
-        };
-
-        row.appendChild(square);
-    });
-}
-
 function promptForTopic() {
 
     if(roomConfig.is_experiment===false)
