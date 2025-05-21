@@ -20,7 +20,7 @@
     --accent-color: #444;
     --chat-bg: #fff;
     --own-bg: #e0e0e0;
-    --shadow-color: rgba(0, 0, 0, 0.1);
+    --shadow-color: rgba(255, 255, 255, 0.1);
     --input-bg: #fff;
     --input-border: #ccc;
     --scroll-thumb: #888;
@@ -918,3 +918,111 @@ body.colorblind .tone-square-3 { background-color: rgba(255,255,255,1); }
 body.colorblind .tone-square-4 { background-color: rgba(192,224,240,1); }
 body.colorblind .tone-square-5 { background-color: rgba(128,179,255,1); }
 body.colorblind .tone-square-6 { background-color: rgba(0,120,255,1); }
+
+.reaction-section {
+    margin-top: 10px;
+    padding: 12px;
+    border: 1px dashed var(--border-color);
+    background-color: var(--chat-bg);
+    border-radius: 6px;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s ease-in-out;
+}
+
+.reaction-step {
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out;
+}
+
+.reaction-buttons {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+}
+
+.reaction-btn, .reaction-back-btn {
+    padding: 6px 12px;
+    border: 1px solid var(--border-color);
+    background-color: var(--own-bg);
+    cursor: pointer;
+    border-radius: 4px;
+}
+
+.reaction-btn:hover, .reaction-back-btn:hover {
+    background-color: var(--accent-color);
+    color: white;
+}
+
+.tone-rating-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    justify-content: center;
+    margin-top: 10px;
+}
+
+.slide-in {
+    animation: slideIn 0.3s forwards;
+}
+.slide-out {
+    animation: slideOut 0.3s forwards;
+}
+
+@keyframes slideIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slideOut {
+    from { opacity: 1; transform: translateY(0); }
+    to { opacity: 0; transform: translateY(-20px); }
+}
+
+.input-row {
+    flex-direction: column; /* make input + reaction stack vertically */
+    align-items: stretch;
+}
+
+#reaction-section {
+    margin-bottom: 10px;
+}
+
+.reaction-step {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.reaction-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+}
+
+.tone-rating-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 8px;
+}
+
+.input-control-row {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+    width: 100%;
+}
+
+.input-wrapper {
+    flex: 1;  /* make input stretch to available space */
+}
+
+#chat-message-submit {
+    white-space: nowrap;
+    flex-shrink: 0;
+}

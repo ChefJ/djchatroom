@@ -36,10 +36,32 @@
                 </div>
                 <div id="chat-log" class="chat-log"></div>
                 <div class="input-row">
-                    <div id="chat-input-wrapper" class="input-wrapper">
-                        <input id="chat-message-input" type="text" placeholder="Give order to adjust content or tone. Goal: align the tone to your expectation." class="typing-cursor">
-                        <div id="input-overlay" class="input-overlay"></div>
-                    </div>   <input id="chat-message-submit" type="button" value="Send">
+                    <div id="reaction-section" class="reaction-section">
+                        <div class="reaction-step reaction-initial">
+                            <div class="reaction-title">For the last message you receive:</div>
+                            <div class="reaction-buttons">
+                                <button id="btn-off-topic" class="reaction-btn">I’m NOT okay with it's content.</button>
+                                <button id="btn-tone" class="reaction-btn">I’m NOT okay with it's tone.</button>
+                                <button id="btn-aligned" class="reaction-btn">The tone aligns with my expectation.</button>
+                            </div>
+                        </div>
+
+                        <div class="reaction-step reaction-rating" style="display: none;">
+                            <div class="reaction-title" style="display: flex; justify-content: space-between; align-items: center;">
+                                <button id="tone-back-btn" class="reaction-back-btn">← Back</button>
+                                <span>How the tone aligns with your expectation:</span>
+                                <span></span> <!-- spacer -->
+                            </div>
+                            <div id="tone-score-buttons" class="tone-rating-buttons"></div>
+                        </div>
+                    </div>
+                    <div class="input-control-row">
+                        <div id="chat-input-wrapper" class="input-wrapper">
+                            <input id="chat-message-input" type="text" placeholder="Give order to adjust content or tone. Goal: align the tone to your expectation." class="typing-cursor">
+                            <div id="input-overlay" class="input-overlay"></div>
+                        </div>
+                        <input id="chat-message-submit" type="button" value="Send">
+                    </div>
 
                 </div>
             </div>

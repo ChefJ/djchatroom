@@ -91,7 +91,7 @@ function ultUX(){
         }
     };
     document.getElementById('input-overlay').addEventListener('click', () => {
-        const allGPTMessages = document.querySelectorAll('.score-buttons-wrapper');
+/*        const allGPTMessages = document.querySelectorAll('.score-buttons-wrapper');
         const lastBubble = Array.from(allGPTMessages).reverse().find(bubble => {
             const wrapper = bubble.closest('.message-wrapper');
             const sender = wrapper?.querySelector('.sender-name');
@@ -101,7 +101,11 @@ function ultUX(){
         if (lastBubble) {
             lastBubble.classList.add('blink-border');
             setTimeout(() => lastBubble.classList.remove('blink-border'), 1200);
-        }
+        }*/
+        const section = document.getElementById('reaction-section');
+
+        section.classList.add('blink-border');
+            setTimeout(() => section.classList.remove('blink-border'), 1200);
 
     });
 }

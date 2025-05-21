@@ -6,6 +6,47 @@ document.getElementById('server-ip').textContent = window.location.hostname;
 
 const globalBinAmount = 7;
 let comparedMessages = {}; // <-- NEW: Track compared messages
+
+function injectStandaloneRatingButtons(msgId) {
+    const container = document.getElementById('tone-score-buttons');
+    container.innerHTML = '';
+
+    for (let i = 1; i <= 4; i++) {
+        const btn = document.createElement('button');
+        btn.className = 'score-btn';
+        btn.dataset.score = i;
+        switch (i) {
+            case 1: btn.textContent = 'Very off'; break;
+            case 2: btn.textContent = 'Slightly Off'; break;
+            case 3: btn.textContent = 'Neutral'; break;
+            case 4: btn.textContent = 'Slightly Aligned'; break;
+     //       case 5: btn.textContent = 'Aligned'; break;
+        }
+
+        btn.addEventListener('click', () => {
+            fetch('/message_scoring/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': getCSRFToken(),
+                },
+                body: JSON.stringify({msg_uuid: msgId, score: i})
+            }).then(response => {
+                if (!response.ok) throw new Error('Failed to submit score');
+                container.querySelectorAll('button').forEach(b => b.disabled = true);
+                btn.classList.add('selected');
+                inputStatusElementUpdate("after_rated");
+
+
+                    setInputDisabled(false);
+                    document.querySelector('#chat-message-input').focus();
+
+            });
+        });
+
+        container.appendChild(btn);
+    }
+}
 function connectWebSocket() {
     updateStatus(`[CONNECTING] :: SERVER: ${window.location.hostname} :: ROOM: ${roomName}`);
     chatSocket = new WebSocket('ws://' + window.location.host + '/ws/chat/' + roomName + '/');
@@ -323,6 +364,123 @@ function addEventsForBubble(bubble) {
     });
 }
 
+
+function inputStatusElementUpdate(input_status){
+    const section = document.getElementById('reaction-section');
+    const initial = section.querySelector('.reaction-initial');
+    const rating = section.querySelector('.reaction-rating');
+
+    const offTopicBtn = document.getElementById('btn-off-topic');
+    const toneBtn = document.getElementById('btn-tone');
+    const backBtn = document.getElementById('tone-back-btn');
+
+    if(input_status==='after_rated'){
+        section.style.display='none';
+        setInputDisabled(false);
+
+    }
+
+    if(input_status==='after_respond'){
+        setInputDisabled(true);
+
+        rating.classList.remove('slide-in');
+        rating.classList.add('slide-out');
+
+        setTimeout(() => {
+            rating.style.display = 'none';
+            rating.classList.remove('slide-out');
+            initial.style.display = 'flex';
+            initial.classList.add('slide-in');
+            // ❗ Optional: clear rating buttons
+            //   document.getElementById('tone-score-buttons').innerHTML = '';
+        }, 300);
+        section.style.display='block';
+    }
+}
+function setupReactionButtons(msgId) {
+    const section = document.getElementById('reaction-section');
+    const initial = section.querySelector('.reaction-initial');
+    const rating = section.querySelector('.reaction-rating');
+
+    const offTopicBtn = document.getElementById('btn-off-topic');
+    const toneBtn = document.getElementById('btn-tone');
+    const backBtn = document.getElementById('tone-back-btn');
+
+    offTopicBtn.onclick = () => {
+        fetch('/message_scoring/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': getCSRFToken(),
+            },
+            body: JSON.stringify({msg_uuid: msgId, score: 0})
+        }).then(() => {
+            inputStatusElementUpdate("after_rated");
+
+            document.querySelector('#chat-message-input').focus();
+        }).catch(err => console.error('Failed to submit off-topic:', err));
+    };
+
+    const alignedBtn = document.getElementById('btn-aligned');
+
+    alignedBtn.onclick = () => {
+        alignedBtn.disabled = true;
+        toneBtn.disabled = true;
+        offTopicBtn.disabled = true;
+
+        fetch('/message_scoring/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': getCSRFToken(),
+            },
+            body: JSON.stringify({ msg_uuid: msgId, score: 5 })
+        }).then(() => {
+            const uuid = localStorage.getItem('anon_id') || '';
+            return fetch('/next_experiment/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': getCSRFToken(),
+                },
+                body: JSON.stringify({ uuid: uuid })
+            });
+        }).then(res => res.text())
+            .then(url => window.location.href = url)
+            .catch(err => console.error('Aligned quick-submit failed:', err));
+    };
+
+    toneBtn.onclick = () => {
+        initial.classList.add('slide-out');
+
+        setTimeout(() => {
+            initial.style.display = 'none';
+            initial.classList.remove('slide-out');
+
+            rating.style.display = 'flex';
+            rating.classList.remove('slide-out'); // Just in case
+            rating.classList.add('slide-in');
+
+            // ✅ Always refresh rating buttons
+            document.getElementById('tone-score-buttons').innerHTML = '';
+            injectStandaloneRatingButtons(msgId);
+        }, 300);
+    };
+    backBtn.onclick = () => {
+        rating.classList.remove('slide-in');
+        rating.classList.add('slide-out');
+
+        setTimeout(() => {
+            rating.style.display = 'none';
+            rating.classList.remove('slide-out');
+            initial.style.display = 'flex';
+            initial.classList.add('slide-in');
+            // ❗ Optional: clear rating buttons
+         //   document.getElementById('tone-score-buttons').innerHTML = '';
+        }, 300);
+    };
+}
+
 // ==== Handle Incoming Messages ====
 function handleIncomingMessage(message) {
     console.log(`📨 handleIncomingMessage called for: ${message.msg_uuid}`);
@@ -402,11 +560,16 @@ function handleIncomingMessage(message) {
 
         const scoreContainer = genScoreButtonContainer(message);
         if (message.user_rated_score === '-1') {
-            messageWrapper.appendChild(scoreContainer);
+            /*messageWrapper.appendChild(scoreContainer);*/
+            inputStatusElementUpdate('after_respond');
             setInputDisabled(true);
+        }else{
+            inputStatusElementUpdate('after_rated');
+
         }
         console.log(message)
 
+        setupReactionButtons(message.msg_uuid);
 
     }
 
