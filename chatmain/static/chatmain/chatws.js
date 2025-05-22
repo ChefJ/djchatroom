@@ -666,9 +666,10 @@ function updateComparisonCharts() {
     if (polarityTextBox) {
         let descriptionLines = [];
         let highestPos = -Infinity;
-        let highestIndex = -1;
+        let highestPosIndexes = [];
         let highestNeg = -Infinity;
-        let negIndex = -1;
+        let highestNegIndexes = [];
+
 
         messageEntries.forEach(([msgId, messageWithScores], index) => {
             try {
@@ -684,13 +685,17 @@ function updateComparisonCharts() {
 
                 if (posPercent > highestPos) {
                     highestPos = posPercent;
-                    highestIndex = index;
-                }
-                if (negPercent > highestNeg) {
-                    highestNeg = negPercent;
-                    negIndex = index;
+                    highestPosIndexes = [index];
+                } else if (posPercent === highestPos) {
+                    highestPosIndexes.push(index);
                 }
 
+                if (negPercent > highestNeg) {
+                    highestNeg = negPercent;
+                    highestNegIndexes = [index];
+                } else if (negPercent === highestNeg) {
+                    highestNegIndexes.push(index);
+                }
                 const bubble = document.querySelector(`[data-id="${msgId}"]`);
                 let preview = bubble?.querySelector('.message-text')?.textContent?.slice(0, 25) || `Message ${index + 1}`;
                 preview = preview.replace(/\n/g, ' ').trim();
@@ -705,21 +710,25 @@ function updateComparisonCharts() {
         });
 
         let finalSummary = '';
-        if (highestIndex >= 0) {
-            const [msgId] = messageEntries[highestIndex];
-            const bubble = document.querySelector(`[data-id="${msgId}"]`);
-            let preview = bubble?.querySelector('.message-text')?.textContent?.slice(0, 25) || `Message ${highestIndex + 1}`;
-            preview = preview.replace(/\n/g, ' ').trim();
-
-            finalSummary += `Overall, the <strong style="color:green">most positive</strong> paragraph is: “<strong>${preview}...</strong>”<br>`;
+        if (highestPosIndexes.length > 0) {
+            finalSummary += `Overall, the <strong style="color:green">most positive</strong> paragraph(s):<br>`;
+            highestPosIndexes.forEach(index => {
+                const [msgId] = messageEntries[index];
+                const bubble = document.querySelector(`[data-id="${msgId}"]`);
+                let preview = bubble?.querySelector('.message-text')?.textContent?.slice(0, 25) || `Message ${index + 1}`;
+                preview = preview.replace(/\n/g, ' ').trim();
+                finalSummary += `“<strong style="color:${colors[index]}">${preview}...</strong>”<br>`;
+            });
         }
-        if (negIndex >= 0) {
-            const [msgId] = messageEntries[negIndex];
-            const bubble = document.querySelector(`[data-id="${msgId}"]`);
-            let preview = bubble?.querySelector('.message-text')?.textContent?.slice(0, 25) || `Message ${negIndex + 1}`;
-            preview = preview.replace(/\n/g, ' ').trim();
-
-            finalSummary += `Overall, the <strong style="color:red">most negative</strong> paragraph is: “<strong>${preview}...</strong>”`;
+        if (highestNegIndexes.length > 0) {
+            finalSummary += `<br>Overall, the <strong style="color:red">most negative</strong> paragraph(s):<br>`;
+            highestNegIndexes.forEach(index => {
+                const [msgId] = messageEntries[index];
+                const bubble = document.querySelector(`[data-id="${msgId}"]`);
+                let preview = bubble?.querySelector('.message-text')?.textContent?.slice(0, 25) || `Message ${index + 1}`;
+                preview = preview.replace(/\n/g, ' ').trim();
+                finalSummary += `“<strong style="color:${colors[index]}">${preview}...</strong>”<br>`;
+            });
         }
 
         polarityTextBox.innerHTML = descriptionLines.join('<br>') + '<br><br>' + finalSummary;
