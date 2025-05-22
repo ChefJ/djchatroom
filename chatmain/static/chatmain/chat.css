@@ -317,31 +317,7 @@ body::before {
 }*/
 
 
-.score-btn {
-    font-size: 12px;
-    cursor: pointer;
-    border-radius: 4px;
-    background-color: #eee;
-    border: 1px solid #ccc;
-    transition: background-color 0.2s;
-}
 
-.score-btn:hover:not(:disabled) {
-    background-color: #ddd;
-}
-
-.score-btn:disabled {
-    opacity: 0.6;
-    cursor: not-allowed;
-}
-
-.score-buttons.scored {
-    opacity: 0.8;
-}
-
-div.score-buttons-wrapper:has([class*="scored"]) {
-    display: none;
-}
 
 @keyframes blink {
     0%   { box-shadow: 0 0 0px rgba(255, 80, 80, 0); }
@@ -1025,4 +1001,31 @@ body.colorblind .tone-square-6 { background-color: rgba(0,120,255,1); }
 #chat-message-submit {
     white-space: nowrap;
     flex-shrink: 0;
+}
+
+.score-btn {
+
+    padding: 6px 12px;
+    border: 1px solid var(--border-color);
+    background-color: var(--own-bg);
+    cursor: pointer;
+    border-radius: 4px;
+}
+
+.score-btn:hover:not(:disabled) {
+    background-color: var(--accent-color);
+    color: white;
+}
+
+.score-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.score-buttons.scored {
+    opacity: 0.8;
+}
+
+div.score-buttons-wrapper:has([class*="scored"]) {
+    display: none;
 }

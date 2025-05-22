@@ -216,12 +216,12 @@ function genComepareLabel(message) {
     compareLabel.style.marginTop = '4px';
     compareLabel.innerHTML = `
             <input type="checkbox" class="compare-checkbox" data-msg-id="${message.msg_uuid}">
-            <span style="font-size: 12px;">Add to Graph</span>
+            <span style="font-size: 14px;">Visualize the tone</span>
         `;
     if (roomConfig.experiment_type != 'all') {
         compareLabel.innerHTML = `
             <input type="checkbox" class="compare-checkbox" style="display: none" data-msg-id="${message.msg_uuid}">
-            <span style="font-size: 12px;display: none">Add to Graph</span>
+            <span style="font-size: 14px;display: none">Visualize the tone</span>
         `;
     }
     compareLabel.querySelector('input').addEventListener('change', (e) => {
