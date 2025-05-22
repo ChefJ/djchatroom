@@ -662,7 +662,68 @@ function updateComparisonCharts() {
             bubble.style.borderRight = '';
         }
     });
-}
+    const polarityTextBox = document.getElementById('polarity-text-description');
+    if (polarityTextBox) {
+        let descriptionLines = [];
+        let highestPos = -Infinity;
+        let highestIndex = -1;
+        let highestNeg = -Infinity;
+        let negIndex = -1;
+
+        messageEntries.forEach(([msgId, messageWithScores], index) => {
+            try {
+                const segments = JSON.parse(messageWithScores);
+                const scores = segments.map(s => s.sentiment_score);
+
+                const posCount = scores.filter(s => s.compound > 0).length;
+                const negCount = scores.filter(s => s.compound < 0).length;
+                const total = scores.length;
+
+                const posPercent = Math.round((posCount / total) * 100);
+                const negPercent = Math.round((negCount / total) * 100);
+
+                if (posPercent > highestPos) {
+                    highestPos = posPercent;
+                    highestIndex = index;
+                }
+                if (negPercent > highestNeg) {
+                    highestNeg = negPercent;
+                    negIndex = index;
+                }
+
+                const bubble = document.querySelector(`[data-id="${msgId}"]`);
+                let preview = bubble?.querySelector('.message-text')?.textContent?.slice(0, 25) || `Message ${index + 1}`;
+                preview = preview.replace(/\n/g, ' ').trim();
+
+                const color = colors[index];
+                descriptionLines.push(
+                    `• <span style="color:${color}">“${preview}...”</span> has <strong style="color:green">${posPercent}%</strong> positive and <strong style="color:red">${negPercent}%</strong> negative tone.`
+                );
+            } catch (e) {
+                console.warn('⚠️ Failed to build polarity description for one message:', e);
+            }
+        });
+
+        let finalSummary = '';
+        if (highestIndex >= 0) {
+            const [msgId] = messageEntries[highestIndex];
+            const bubble = document.querySelector(`[data-id="${msgId}"]`);
+            let preview = bubble?.querySelector('.message-text')?.textContent?.slice(0, 25) || `Message ${highestIndex + 1}`;
+            preview = preview.replace(/\n/g, ' ').trim();
+
+            finalSummary += `Overall, the <strong style="color:green">most positive</strong> paragraph is: “<strong>${preview}...</strong>”<br>`;
+        }
+        if (negIndex >= 0) {
+            const [msgId] = messageEntries[negIndex];
+            const bubble = document.querySelector(`[data-id="${msgId}"]`);
+            let preview = bubble?.querySelector('.message-text')?.textContent?.slice(0, 25) || `Message ${negIndex + 1}`;
+            preview = preview.replace(/\n/g, ' ').trim();
+
+            finalSummary += `Overall, the <strong style="color:red">most negative</strong> paragraph is: “<strong>${preview}...</strong>”`;
+        }
+
+        polarityTextBox.innerHTML = descriptionLines.join('<br>') + '<br><br>' + finalSummary;
+    }}
 
 function autoCheckLatestTwoGPT() {
     if (roomConfig.experiment_type != 'all') return;

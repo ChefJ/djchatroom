@@ -25,6 +25,24 @@ function renderSentimentPolarityBar(scores) {
         if (score < 0) negSum += val;
     });
 
+    const textBox = document.getElementById('polarity-text-description');
+    if (textBox) {
+        const posPercent = Math.round(posSum);
+        const negPercent = Math.round(negSum);
+
+        const comparison = posPercent > negPercent
+            ? "The green paragraph is overall more positive."
+            : posPercent < negPercent
+                ? "The red paragraph is overall more negative."
+                : "The sentiment is evenly balanced.";
+
+        textBox.innerHTML = `
+        The <span style="color:red">red</span> paragraph has ${negPercent}% tendency of being positive.<br>
+        The <span style="color:green">green</span> paragraph has ${posPercent}% tendency of being positive.<br>
+        ${comparison}
+    `;
+    }
+
     const ctx = document.getElementById('polarity-bar-chart').getContext('2d');
     if (chartRefs['polarityBar']) chartRefs['polarityBar'].destroy();
 

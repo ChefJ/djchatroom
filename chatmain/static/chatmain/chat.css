@@ -1029,3 +1029,11 @@ body.colorblind .tone-square-6 { background-color: rgba(0,120,255,1); }
 div.score-buttons-wrapper:has([class*="scored"]) {
     display: none;
 }
+
+.polarity-description {
+    margin-top: 8px;
+    font-size: 13px;
+    color: var(--text-color);
+    font-style: italic;
+    padding: 4px;
+}
