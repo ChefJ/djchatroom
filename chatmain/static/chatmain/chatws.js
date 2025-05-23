@@ -281,14 +281,21 @@ function colorizeMessage(segments) {
 
 function addEventsForBubble(bubble) {
     const segments = bubble.querySelectorAll('.sentiment-segment');
+    const msgId = bubble.dataset.id;
     segments.forEach(seg => {
         seg.addEventListener('mouseenter', () => {
 
             const score = parseFloat(seg.dataset.compound);
-            highlightChartBin(bubble, score);
+            if(Object.keys(comparedMessages).includes(msgId)){
+                highlightChartBin(bubble, score);
+
+            }
         });
         seg.addEventListener('mouseleave', () => {
-            removeChartHighlights();
+            if(Object.keys(comparedMessages).includes(msgId)){
+                removeChartHighlights();
+
+            }
         });
 
         // ✅ Double-click to open refine popup
