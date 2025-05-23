@@ -13,14 +13,14 @@ This research aims to examine the human computer experience with LLMs. More deta
 ---
 
 ## 3. Who will carry out the study?
-This study is conducted by **Hairuo Liu** (<[h.liu10@students.uu.nl]>), *[Master student]*, under the supervision of **[Jeroen Ooge]** (<[j.ooge@uu.nl]>), *[Universitair docent]*.
+This study is conducted by **Hairuo Liu** (h.liu10@students.uu.nl), Master student, under the supervision of **Jeroen Ooge** (j.ooge@uu.nl), *Universitair docent*.
 
 ---
 
 ## 4. How will the study be carried out?
 You will be asked to complete an online questionnaire that includes questions about your age. Other questions are about your user experiences of the upcoming experiment.
 The survey will take approximately 30 to complete.
-*[As a token of appreciation, you can obtain a further access to the webservice provided through 2003.io, including the free using of LLM interactions and other experimental functions.]*.
+*As a token of appreciation, you can obtain a further access to the webservice provided through 2003.io, including the free using of LLM interactions and other experimental functions.*.
 
 ---
 
@@ -37,7 +37,7 @@ To protect your privacy:
 - Data will be retained up to **12 months** on Microsoft Survey server.
 - Your contact details will be deleted once the results are published.
 
-*[De-identified data may be shared with other researchers upon request. No personal data that can identify you will be shared.]*
+*De-identified data may be shared with other researchers upon request. No personal data that can identify you will be shared.*
 
 ---
 
@@ -52,7 +52,7 @@ We will only collect your data if you provide **informed consent**.
 
 You may withdraw at any time without giving a reason.
 - During the survey: You can simply stop and close the browser.
-- After completing the survey: Contact us at **[h.liu10@students.uu.nl]** if you want your data removed.
+- After completing the survey: Contact us at **h.liu10@students.uu.nl** if you want your data removed.
 - Please note:
   - If your data is **not anonymised**, it can be deleted upon request up until the study results are published.
   - If your data is **fully anonymised**, it cannot be traced back to you and therefore cannot be deleted.
@@ -61,18 +61,18 @@ You may withdraw at any time without giving a reason.
 ---
 
 ## 8. Approval of this study
-This study has been **[approved by the Science-Geo Ethics Review Board (ETC-BETA-GEO) / allowed to proceed on the basis of an Ethics and Privacy Quick Scan]**.
+This study has been **approved by the Science-Geo Ethics Review Board (ETC-BETA-GEO) / allowed to proceed on the basis of an Ethics and Privacy Quick Scan**.
 
-- Complaints about the study: [etc-beta-geo@uu.nl](mailto:etc-beta-geo@uu.nl) or [ics-ethics@uu.nl](mailto:ics-ethics@uu.nl)
-- Privacy questions: [privacy-beta@uu.nl](mailto:privacy-beta@uu.nl)
-- More info about your data rights: [www.uu.nl/en/organisation/privacy](https://www.uu.nl/en/organisation/privacy)
+- Complaints about the study: etc-beta-geo@uu.nl(mailto:etc-beta-geo@uu.nl) or ics-ethics@uu.nl(mailto:ics-ethics@uu.nl)
+- Privacy questions: privacy-beta@uu.nl(mailto:privacy-beta@uu.nl)
+- More info about your data rights: www.uu.nl/en/organisation/privacy(https://www.uu.nl/en/organisation/privacy)
 
 ---
 
 ## 9. More information about this study?
 If you have questions or concerns, please contact:
-- **Hairuo Liu** – [h.liu10@gmail.com]
-- **Dr. Jeroen Ooge** – [j.ooge@uu.nl]
+- **Hairuo Liu** – h.liu10@gmail.com
+- **Dr. Jeroen Ooge** – j.ooge@uu.nl
 
 ---
 

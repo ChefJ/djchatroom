@@ -14,13 +14,13 @@
 }*/
 
 :root   {
-    --bg-color: #f4f4f5;
+    --bg-color: #fff;
     --text-color: #222;
-    --border-color: #ccc;
+    --border-color: #aaa;
     --accent-color: #444;
     --chat-bg: #fff;
     --own-bg: #e0e0e0;
-    --shadow-color: rgba(255, 255, 255, 0.1);
+    --shadow-color: rgba(0, 0, 0, 0);
     --input-bg: #fff;
     --input-border: #ccc;
     --scroll-thumb: #888;
@@ -28,9 +28,9 @@
 }
 
 body[data-theme='modern'] {
-    --bg-color: #f4f4f5;
+    --bg-color: #fff;
     --text-color: #222;
-    --border-color: #ccc;
+    --border-color: #f4f4f5;
     --accent-color: #444;
     --chat-bg: #fff;
     --own-bg: #e0e0e0;
@@ -46,7 +46,6 @@ html, body {
     margin: 0;
     padding: 0;
     font-family: 'Courier Prime', monospace;
-    background-color: #f4f4f5;
     color: var(--text-color);
 }
 
@@ -129,7 +128,6 @@ body {
     flex-direction: column;
 
     gap: 8px;
-    box-shadow: 0 0 10px var(--shadow-color);
 }
 
 .message-wrapper {
@@ -210,7 +208,7 @@ body {
 }
 
 #chat-message-submit:hover {
-    background-color: var(--accent-color);
+    background-color: #ffffff;
 }
 
 .image-box {
@@ -220,7 +218,6 @@ body {
     border: 2px solid var(--border-color);
     padding: 10px;
     background-color: var(--bg-color);
-    box-shadow: 0 0 10px var(--shadow-color);
     color: var(--text-color);
     margin-bottom: 10px;
 }
@@ -229,7 +226,6 @@ body {
     max-height: 100%;
     max-width: 100%;
     border-radius: 8px;
-    box-shadow: 0 0 10px rgba(0, 255, 153, 0.5);
     object-fit: contain;
 }
 
@@ -1037,3 +1033,4 @@ div.score-buttons-wrapper:has([class*="scored"]) {
     font-style: italic;
     padding: 4px;
 }
+

@@ -27,11 +27,13 @@
                 <div class="chat-log-title-container">
                     <h4 class="chat-log-title">Chat with AI Agent</h4>
                     <div class="tone-meter-wrapper">
-                        <span class="tone-meter-label">Sentence Color Legend:</span>
+                        <span class="tone-meter-label">Negative</span>
 
                         <div id="tone-meter">
                             <!-- Will be dynamically filled with 7 squares -->
                         </div>
+                        <span class="tone-meter-label">Positive</span>
+
                     </div>
                 </div>
                 <div id="chat-log" class="chat-log"></div>
@@ -68,18 +70,20 @@
 
             <div class="image-box">
                 <div class="image-box-title-container">
-                    <h4 class="image-box-title">Sentiment Distribution of Selected Message</h4>
+                    <h4 class="image-box-title">Graph of Tones</h4>
                 </div>
                 <div id="chart-container" style="width: 100%; margin-bottom: 20px;">
                     <!--                <canvas id="neg-chart"></canvas>-->
                     <!--                <canvas id="neu-chart"></canvas>-->
                     <!--                <canvas id="pos-chart"></canvas>-->
-                    <canvas id="compound-bar-chart" style="display: none"></canvas>
+                    <div id="polarity-text-description" class="polarity-description"></div>
+                    <canvas id="polarity-bar-chart" height="80" ></canvas>
+
+                    </br>
+                    </br>
 
                     <canvas id="compound-curve-chart" ></canvas>
-                    </br></br>
-                    <canvas id="polarity-bar-chart" height="80" ></canvas>
-                    <div id="polarity-text-description" class="polarity-description"></div>
+                    <canvas id="compound-bar-chart" style="display: none"></canvas>
 
                     <!--                <canvas id="ratio-bar" height="40" style="margin-top: 10px;"></canvas>-->
                     <!--                <canvas id="sum-bar" height="40" style="margin-bottom: 30px;"></canvas>-->
@@ -100,7 +104,7 @@
                     </div>
                 </div>
 
-                <label style="font-size: 13px;margin-top: 10px  ">
+                <label style="font-size: 13px;margin-top: 10px;display: none ">
                     <input type="checkbox" id="colorblind-toggle">
                     Toggle to use none-red-green colors
                 </label>

@@ -585,6 +585,8 @@ function renderMultiSentimentBarChart(datasets, canvasId = 'compound-bar-chart')
 
 
 function renderMultiSentimentPolarityChart(datasets, canvasId = 'polarity-bar-chart') {
+    const labels = Array.from({length: globalBinAmount}, (_, i) => (-(1 - (1/globalBinAmount)/2) + i * (2/globalBinAmount)).toFixed(2));
+
     const ctx = document.getElementById(canvasId).getContext('2d');
 
     if (chartRefs['polarityBar']) chartRefs['polarityBar'].destroy?.();
@@ -601,22 +603,27 @@ function renderMultiSentimentPolarityChart(datasets, canvasId = 'polarity-bar-ch
             scales: {
                 x: {
                     title: {
-                        display: true  ,
+                        display: false  ,
                         text: 'Compound Polarity',
                         color: '#000',
                         font: {size: 14, weight: 'bold'}},
                     beginAtZero: true,
                     min: -100,
                     max: 100,
-                    ticks: { color: '#000' },
+                    ticks:  { color: '#aaa' ,
+                        callback: value => `${value}%`
+                    },
                     grid: { color: '#aaa' }
                 },
                 y: {
-                    ticks: { color: '#aaa' },
+                    ticks: { color: '#aaa', display:false },
                     grid: { color: '#aaa' }
                 }
             },
             plugins: {
+                tooltip: {
+                    enabled: false
+                },
                 backgroundTitle: {
                     text: 'Sentiment Polarity',
                     font: 'bold 18px Courier Prime',
@@ -714,10 +721,14 @@ document.getElementById('colorblind-toggle').addEventListener('change', toggleCo
 function setupToneMeter() {
     const meter = document.getElementById('tone-meter');
     meter.innerHTML = '';
+
+    const SENTIMENT_COLORS = ['#c51b7d', '#e9a3c9', '#fde0ef', '#f7f7f7', '#e6f5d0', '#a1d76a', '#4d9221'];
+
     for (let idx = 0; idx < 7; idx++) {
         const box = document.createElement('div');
         box.classList.add('tone-square', `tone-square-${idx}`);
         box.dataset.binIndex = idx;
+        box.style.backgroundColor = SENTIMENT_COLORS[idx];
         meter.appendChild(box);
     }
 }

@@ -17,6 +17,16 @@ const configUrl = `${window.location.pathname.replace(/\/$/, '')}/config`;
 const updateTopicUrl = `${window.location.pathname.replace(/\/$/, '')}/topic_update`;
 const topic_list = ['Politics', 'Animals', 'Environments', 'Education', 'Netherlands', 'Other']
 
+const SENTIMENT_COLORS = [
+    '#c51b7d',  // Very Negative
+    '#e9a3c9',  // Negative
+    '#fde0ef',  // Slightly Negative
+    '#f7f7f7',  // Neutral
+    '#e6f5d0',  // Slightly Positive
+    '#a1d76a',  // Positive
+    '#4d9221'   // Very Positive
+];
+
 const getCSSVar = name => getComputedStyle(document.documentElement).getPropertyValue(name).trim();
 let glbTextColor = getCSSVar('--text-color') || '#000000';
 let glbGridColor = getCSSVar('--border-color') || '#444';

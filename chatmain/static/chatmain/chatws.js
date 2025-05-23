@@ -229,8 +229,8 @@ function genComepareLabel(message) {
         const bubble = document.querySelector(`[data-id="${msgId}"]`);
 
         if (e.target.checked) {
-            if (Object.keys(comparedMessages).length >= 3) {
-                alert("You can compare up to 3 messages at a time.");
+            if (Object.keys(comparedMessages).length >= 2) {
+                alert("You can compare up to 2 messages at a time.");
                 e.target.checked = false;
                 return;
             }
@@ -249,32 +249,25 @@ function genComepareLabel(message) {
 }
 
 function colorizeMessage(segments) {
+    const SENTIMENT_COLORS = ['#c51b7d', '#e9a3c9', '#fde0ef', '#f7f7f7', '#e6f5d0', '#a1d76a', '#4d9221'];
+    const binCount = SENTIMENT_COLORS.length;
+
     let messageHtml = '';
     segments.forEach(seg => {
         const text = seg.content;
         const compound = seg.sentiment_score.compound;
-        let bgColor = '';
-        let textColor = glbTextColor;
 
-        const alpha = Math.min(Math.abs(compound), 1).toFixed(2);
-        if (enableColorize) {
-            if (compound > 0) {
-                bgColor = rgbaFromVar('--positive-color', alpha);
-            } else if (compound < 0) {
-                bgColor = rgbaFromVar('--negative-color', alpha);
-            }
-        }
+        const binIndex = Math.min(Math.floor(((compound + 1) / 2) * binCount), binCount - 1);
+        const bgColor = SENTIMENT_COLORS[binIndex];
 
         const formatted = marked.parseInline(text);
-        const tooltip = `neg: ${seg.sentiment_score.neg.toFixed(2)}, neu: ${seg.sentiment_score.neu.toFixed(2)}, pos: ${seg.sentiment_score.pos.toFixed(2)}, compound: ${compound.toFixed(2)}`;
 
         messageHtml += `<span 
-                class="sentiment-segment" 
-                title="" 
-                data-compound="${compound}" 
-                style="border-radius: 6px; padding: 2px 4px; margin: 2px; display: inline; ${bgColor ? `background-color: ${bgColor};` : ''}">
-                ${formatted}
-            </span> `;
+            class="sentiment-segment" 
+            data-compound="${compound}" 
+            style="border-radius: 6px; padding: 2px 4px; margin: 2px; display: inline; background-color: ${bgColor};">
+            ${formatted}
+        </span> `;
     });
     return messageHtml;
 }
@@ -709,7 +702,7 @@ function updateComparisonCharts() {
 
                 const color = colors[index];
                 descriptionLines.push(
-                    `• <span style="color:${color}">“${preview}...”</span> has <strong style="color:green">${posPercent}%</strong> positive and <strong style="color:red">${negPercent}%</strong> negative tone.`
+                    `• <span style="color:${color}">“${preview}...”</span> has <strong>${posPercent}%</strong> positive and <strong>${negPercent}%</strong> negative tone.`
                 );
             } catch (e) {
                 console.warn('⚠️ Failed to build polarity description for one message:', e);
@@ -718,7 +711,7 @@ function updateComparisonCharts() {
 
         let finalSummary = '';
         if (highestPosIndexes.length > 0) {
-            finalSummary += `Overall, the <strong style="color:green">most positive</strong> paragraph(s):<br>`;
+            finalSummary += `Overall, the <strong >most positive</strong> paragraph(s):<br>`;
             highestPosIndexes.forEach(index => {
                 const [msgId] = messageEntries[index];
                 const bubble = document.querySelector(`[data-id="${msgId}"]`);
@@ -728,7 +721,7 @@ function updateComparisonCharts() {
             });
         }
         if (highestNegIndexes.length > 0) {
-            finalSummary += `<br>Overall, the <strong style="color:red">most negative</strong> paragraph(s):<br>`;
+            finalSummary += `<br>Overall, the <strongz>most negative</strongz> paragraph(s):<br>`;
             highestNegIndexes.forEach(index => {
                 const [msgId] = messageEntries[index];
                 const bubble = document.querySelector(`[data-id="${msgId}"]`);
@@ -738,6 +731,7 @@ function updateComparisonCharts() {
             });
         }
 
+       // polarityTextBox.innerHTML = descriptionLines.join('<br>') + '<br><br>' + finalSummary;
         polarityTextBox.innerHTML = descriptionLines.join('<br>') + '<br><br>' + finalSummary;
     }}
 
