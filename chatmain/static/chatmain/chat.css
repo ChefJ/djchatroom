@@ -894,7 +894,7 @@ body.colorblind .tone-square-6 { background-color: rgba(0,120,255,1); }
 .reaction-section {
     margin-top: 10px;
     padding: 12px;
-    border: 1px dashed var(--border-color);
+    border: 1px var(--border-color);
     background-color: var(--chat-bg);
     border-radius: 6px;
     position: relative;

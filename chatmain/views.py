@@ -79,7 +79,7 @@ def already_have_experiment(user_uuid):
 def gen_questionnaire_link(user_uuid):
     print("收到的 UUID：", user_uuid)
 
-    base_url = "https://forms.office.com/Pages/ResponsePage.aspx?id=oFgn10akD06gqkv5WkoQ50buHDTNqrBJhG49efO9psFUMUhXVEdEUlhUWEdVRUVPME5RRkVIWFQ1OC4u&r6b75ad6099d94a839d75403eb06e39d0="
+    base_url = "https://survey.uu.nl/jfe/form/SV_6wWDTG6LtKWgRPU?uuid="
     # entry_id = "entry.559352220"
     final_url = f"{base_url}{user_uuid}"
     return final_url
@@ -174,7 +174,7 @@ def update_experiment_progress(chat_room_obj):
     all_rooms = ChatRoom.objects.filter(related_experiment=experiment)
     print("all rooms:" + str(finished.count()))
 
-    progress_str = str(finished.count())+ "/" + str(all_rooms.count())
+    progress_str = str(finished.count()+1) + "/" + str(all_rooms.count())
     experiment.experiment_progress = progress_str
     experiment.save()
 

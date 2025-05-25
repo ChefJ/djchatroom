@@ -603,8 +603,8 @@ function renderMultiSentimentPolarityChart(datasets, canvasId = 'polarity-bar-ch
             scales: {
                 x: {
                     title: {
-                        display: false  ,
-                        text: 'Compound Polarity',
+                        display: true  ,
+                        text: 'Negative Tendency ← | → Positive Tendency',
                         color: '#000',
                         font: {size: 14, weight: 'bold'}},
                     beginAtZero: true,

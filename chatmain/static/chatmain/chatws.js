@@ -732,7 +732,7 @@ function updateComparisonCharts() {
         }
 
        // polarityTextBox.innerHTML = descriptionLines.join('<br>') + '<br><br>' + finalSummary;
-        polarityTextBox.innerHTML = descriptionLines.join('<br>') + '<br><br>' + finalSummary;
+        polarityTextBox.innerHTML = finalSummary  + '<br><br>' +descriptionLines.join('<br>') ;
     }}
 
 function autoCheckLatestTwoGPT() {
