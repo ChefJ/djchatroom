@@ -15,11 +15,12 @@ import os
 from djchatroom import settings
 
 
-def init_experiment(user_uuid, experiment_type=None):
+def init_experiment(user_uuid, experiment_type=None, ip_adres = "unknown"):
     tmp_type_list = ["all","novis", "novisnocolor"]
     if experiment_type is None:
         experiment_type = tmp_type_list[randrange(0, 3)]
     tmp_participant = AnonymousParticipant.objects.create(user_uuid=user_uuid)
+    tmp_participant.user_ip = ip_adres
     tmp_participant.save()
     tmp_experiment = OneExperiment.objects.create(
         participant=tmp_participant,
@@ -98,12 +99,25 @@ def consent_form_view(request):
 
     return render(request, "chatmain/consent_page.html", {"consent_text": consent_text, "info_text":info_text})
 
+
+def get_client_ip(request):
+    # First, check if behind a proxy
+    x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
+    if x_forwarded_for:
+        # X-Forwarded-For can contain multiple IPs if multiple proxies were used
+        ip = x_forwarded_for.split(',')[0].strip()
+    else:
+        # Fallback to direct remote address
+        ip = request.META.get('REMOTE_ADDR')
+    return ip
+
+
 def next_experiment(request):
     p_data = json.loads(request.body)
     user_uuid = p_data['uuid']
 
     if not already_have_experiment(user_uuid):
-        init_experiment(user_uuid)
+        init_experiment(user_uuid, None, get_client_ip(request))
 
     tgt_experiment = OneExperiment.objects.get(participant__user_uuid=user_uuid)
 
