@@ -262,6 +262,7 @@ function add_dbclick_refinement(){
             const bubble = popup.__sourceBubble;
             if(getInputDisabled()===true){
                 alert("Please rate the message before using the double click tuning.");
+                return;
             }
 /*            const scored = bubble?.closest('.message-wrapper')?.querySelector('.score-buttons.scored');
             if (!scored) {
