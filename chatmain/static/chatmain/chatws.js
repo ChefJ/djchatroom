@@ -596,11 +596,18 @@ function updateComparisonCharts() {
 
     const datasetsCurve = [];
     const datasetsBar = [];
-    const datasetsPolarity = [];
+    let datasetsPolarity = [];
+
+    const overall_labels = [];
+    const datasetsPolarity_pos = [];
+    const datasetsPolarity_neg = [];
+    const posColors = [];
+    const negColors = [];
     const colors = generateColorPalette(messageEntries.length).reverse();
 
     messageEntries.forEach(([msgId, messageWithScores], index) => {
         try {
+
             const segments = JSON.parse(messageWithScores);
             const scores = segments.map(s => s.sentiment_score);
             const {labels, normalized} = getCompoundBins(scores, globalBinAmount);
@@ -625,12 +632,18 @@ function updateComparisonCharts() {
             });
 
             let posSum = 0, negSum = 0;
-            normalized.forEach((val, i) => {
-                const score = parseFloat(labels[i]);
-                if (score > 0) posSum += val;
-                if (score < 0) negSum += val;
+            overall_labels.push(msgId);
+            scores.forEach((val, i) => {
+                if (val.compound > 0) posSum += 1;
+                if (val.compound < 0) negSum += 1;
             });
-            datasetsPolarity.push({
+            datasetsPolarity_pos.push(posSum*100/(scores.length));
+            datasetsPolarity_neg.push(-negSum*100/scores.length);
+
+            posColors.push(colors[index]);
+            negColors.push(lightenColor(colors[index], 0.5));
+
+/*            datasetsPolarity.push({
                 label: msgId + " (Pos)",
                 data: [posSum],
                 backgroundColor: colors[index]
@@ -639,7 +652,7 @@ function updateComparisonCharts() {
                 label: msgId + " (Neg)",
                 data: [-negSum],
                 backgroundColor: lightenColor(colors[index], 0.5)
-            });
+            });*/
 
             const color = colors[index];
             const bubble = document.querySelector(`[data-id="${msgId}"]`);
@@ -653,10 +666,24 @@ function updateComparisonCharts() {
         }
     });
 
+    datasetsPolarity = [
+        {
+            label: 'Negative',
+            data: datasetsPolarity_neg,
+            backgroundColor: negColors,
+            stack: 'sentiment'
+        },
+        {
+            label: 'Positive',
+            data: datasetsPolarity_pos,
+            backgroundColor: posColors,
+            stack: 'sentiment'
+        }
+    ]
     renderMultiSentimentDistributionChart(datasetsCurve);
     renderMultiSentimentBarChart(datasetsBar);
-    renderMultiSentimentPolarityChart(datasetsPolarity);
-
+    renderMultiSentimentPolarityChart(datasetsPolarity, overall_labels);
+    //renderMultisentimentPolarityChart_Beta(datasets_polarity, labels_polarity);
     document.querySelectorAll('.chat-message').forEach(bubble => {
         const msgId = bubble.dataset.id;
         if (!(msgId in comparedMessages)) {
@@ -680,6 +707,7 @@ function updateComparisonCharts() {
 
                 const posCount = scores.filter(s => s.compound > 0).length;
                 const negCount = scores.filter(s => s.compound < 0).length;
+                const neuCount = scores.filter(s => s.compound === 0).length;
                 const total = scores.length;
 
                 const posPercent = Math.round((posCount / total) * 100);
@@ -704,7 +732,7 @@ function updateComparisonCharts() {
 
                 const color = colors[index];
                 descriptionLines.push(
-                    `• <span style="color:${color}">“${preview}...”</span> has <strong>${posPercent}%</strong> positive and <strong>${negPercent}%</strong> negative tone.`
+                    `• <span style="color:${color}">“${preview}...”</span>  has <strong>${posPercent}%</strong> sentences in positive tone  and <strong>${negPercent}%</strong> sentences in negative tone.`
                 );
             } catch (e) {
                 console.warn('⚠️ Failed to build polarity description for one message:', e);

@@ -583,9 +583,7 @@ function renderMultiSentimentBarChart(datasets, canvasId = 'compound-bar-chart')
     });
 }
 
-
-function renderMultiSentimentPolarityChart(datasets, canvasId = 'polarity-bar-chart') {
-    const labels = Array.from({length: globalBinAmount}, (_, i) => (-(1 - (1/globalBinAmount)/2) + i * (2/globalBinAmount)).toFixed(2));
+function renderMultiSentimentPolarityChart(datasets, labels,canvasId = 'polarity-bar-chart') {
 
     const ctx = document.getElementById(canvasId).getContext('2d');
 
@@ -594,7 +592,7 @@ function renderMultiSentimentPolarityChart(datasets, canvasId = 'polarity-bar-ch
     chartRefs['polarityBar'] = new Chart(ctx, {
         type: 'bar',
         data: {
-            labels: [''],
+            labels: labels,
             datasets: datasets
         },
         options: {
