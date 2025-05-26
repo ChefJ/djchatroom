@@ -7,6 +7,12 @@ document.getElementById('server-ip').textContent = window.location.hostname;
 const globalBinAmount = 7;
 let comparedMessages = {}; // <-- NEW: Track compared messages
 
+function getLuminance(rgbStr) {
+    const rgb = rgbStr.match(/\d+/g).map(Number);
+    // Use the perceived luminance formula
+    return 0.299 * rgb[0] + 0.587 * rgb[1] + 0.114 * rgb[2];
+}
+
 function injectStandaloneRatingButtons(msgId) {
     const container = document.getElementById('tone-score-buttons');
     container.innerHTML = '';
@@ -261,13 +267,15 @@ function colorizeMessage(segments) {
 
         const binIndex = Math.min(Math.floor(((compound + 1) / 2) * binCount), binCount - 1);
         const bgColor = SENTIMENT_COLORS[binIndex];
+        const luminance = getLuminance(bgColor);
+        const textColor = ['#c51b7d', '#4d9221'].includes(bgColor) ? '#fff' : '#000';
 
         const formatted = marked.parseInline(text);
 
         messageHtml += `<span 
             class="sentiment-segment" 
             data-compound="${compound}" 
-            style="border-radius: 6px; padding: 2px 4px; margin: 2px; display: inline; background-color: ${bgColor};">
+            style="border-radius: 6px; padding: 2px 4px; margin: 2px; display: inline; background-color: ${bgColor}; color: ${textColor};">
             ${formatted}
         </span> `;
     });
