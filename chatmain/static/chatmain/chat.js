@@ -72,6 +72,13 @@ function setInputDisabled(state) {
     overlay.style.display = state ? 'block' : 'none';
 }
 
+function getInputDisabled(){
+    const input = document.getElementById('chat-message-input');
+    const overlay = document.getElementById('input-overlay');
+
+    return input.disabled;
+}
+
 function ultUX(){
     document.querySelector('#chat-message-input').focus();
     document.querySelector('#chat-message-input').onkeyup = function (e) {
@@ -253,11 +260,15 @@ function add_dbclick_refinement(){
 
             // 🛑 Check if the parent message bubble has been scored
             const bubble = popup.__sourceBubble;
-            const scored = bubble?.closest('.message-wrapper')?.querySelector('.score-buttons.scored');
+            if(getInputDisabled()===true){
+                alert("Please rate the message before using the double click tuning.");
+            }
+/*            const scored = bubble?.closest('.message-wrapper')?.querySelector('.score-buttons.scored');
             if (!scored) {
                 alert("Please rate the message before using the double click tuning.");
                 return;
-            }
+            }*/
+
 
             const prompt = `Make "${sentence}" more ${direction}. Keep the rest the same.`;
 
