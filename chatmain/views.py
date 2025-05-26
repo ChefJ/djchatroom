@@ -24,7 +24,7 @@ def init_experiment(user_uuid, experiment_type=None, ip_adres = "unknown"):
     tmp_participant.save()
     tmp_experiment = OneExperiment.objects.create(
         participant=tmp_participant,
-        experiment_progress="Init",
+        experiment_progress="1/4",
         experiment_type=experiment_type)
     tmp_experiment.save()
     room_pos_pos_id = str(uuid.uuid4()).replace("-","")

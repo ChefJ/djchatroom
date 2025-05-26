@@ -270,7 +270,7 @@ function renderSentimentDistributionChart(scores, canvasId = 'compound-curve-cha
             scales: {
                 x: {
                     title: {
-                        display: true,
+                        display: false,
                         text: 'Sentiment Distribution Curve',
                         color: glbTextColor,
                         font: {
@@ -500,7 +500,7 @@ function renderMultiSentimentDistributionChart(datasets, canvasId = 'compound-cu
             },
             scales: {
                 x: {             title: {
-                        display: true,
+                        display: false,
                         text: 'Sentiment Distribution Curve',
                         color: '#000',
                         font: {
@@ -594,7 +594,7 @@ function renderMultiSentimentPolarityChart(datasets, canvasId = 'polarity-bar-ch
     chartRefs['polarityBar'] = new Chart(ctx, {
         type: 'bar',
         data: {
-            labels: ['Polarity'],
+            labels: [''],
             datasets: datasets
         },
         options: {
