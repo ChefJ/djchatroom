@@ -310,6 +310,10 @@ function addEventsForBubble(bubble) {
     const msgId = bubble.dataset.id;
     segments.forEach(seg => {
         seg.addEventListener('mouseenter', () => {
+/*            sendLog({"tigger":"mouse_enter_segment",
+                "input_value":"",
+                "event_goal":"",
+                "goal_fulfilled":true})*/
 
             const score = parseFloat(seg.dataset.compound);
             if(Object.keys(comparedMessages).includes(msgId)){
@@ -327,6 +331,10 @@ function addEventsForBubble(bubble) {
         // ✅ Double-click to open refine popup
         seg.addEventListener('dblclick', (e) => {
             // Remove previous highlights
+            sendLog({"tigger":"mouse_dblclick_segment",
+                "input_value":"",
+                "event_goal":"",
+                "goal_fulfilled":true})
             document.querySelectorAll('.sentiment-segment.selected-sentence')
                 .forEach(el => el.classList.remove('selected-sentence'));
 
@@ -712,7 +720,7 @@ function updateComparisonCharts() {
         }
     ]
     renderMultiSentimentDistributionChart(datasetsCurve);
-    renderMultiSentimentBarChart(datasetsBar);
+    //renderMultiSentimentBarChart(datasetsBar);
     renderMultiSentimentPolarityChart(datasetsPolarity, overall_labels);
     //renderMultisentimentPolarityChart_Beta(datasets_polarity, labels_polarity);
     document.querySelectorAll('.chat-message').forEach(bubble => {
