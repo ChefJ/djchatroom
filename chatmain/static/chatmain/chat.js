@@ -367,7 +367,7 @@ function fetchRoomConfig() {
             if (roomConfig.is_experiment) {
                 const instructionText = `
 
-**Goal**: Tune the output on the tone instead of the content, until it's tone aligns your expectation.  
+**Goal**: Tune the output on the tone instead of the content, until its tone aligns your expectation.  
 `;
 
 

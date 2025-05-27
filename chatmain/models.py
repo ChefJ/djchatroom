@@ -43,7 +43,7 @@ class ChatRoom(models.Model):
 class ChatMessage(models.Model):
     chat_room = models.ForeignKey(ChatRoom,
                                   on_delete=models.DO_NOTHING,
-                                  verbose_name="the related poll")
+                                  verbose_name="the related room")
     chat_room_str = models.CharField(max_length=200)
     user_ip = models.CharField(max_length=200, default="unknown")
     msg_uuid = models.CharField(max_length=50)
@@ -53,4 +53,11 @@ class ChatMessage(models.Model):
     message_with_scores = models.TextField(default="")
     user_rated_score = models.CharField(max_length=5, default="-1")
 
+
+class EventLogger(models.Model):
+    chat_room = models.ForeignKey(ChatRoom,
+                                  on_delete=models.DO_NOTHING,
+                                  verbose_name="the related room")
+    content = models.TextField(default="{}")
+    created_date = models.DateTimeField(auto_now=True)
 

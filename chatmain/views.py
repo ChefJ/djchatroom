@@ -8,7 +8,7 @@ import json
 from django.shortcuts import render
 
 from chatmain.consumers import get_or_create_room
-from chatmain.models import ChatMessage, ChatRoom, OneExperiment, AnonymousParticipant
+from chatmain.models import ChatMessage, ChatRoom, OneExperiment, AnonymousParticipant, EventLogger
 from django.core.serializers import serialize
 import os
 
@@ -153,6 +153,19 @@ def topic_update(request, room_name):
     tmp_room_obj.notes = topic
     tmp_room_obj.save()
     return JsonResponse({"status": "OK"})
+
+
+def log_event(request, room_name):
+    p_data = json.loads(request.body)
+
+    tmp_chatroom = ChatRoom.objects.get(room_name=room_name)
+    tmp_event_logger = EventLogger.objects.create(
+        chat_room=tmp_chatroom,
+        content=p_data
+    )
+    tmp_event_logger.save()
+    return JsonResponse({"status": "OK"})
+
 
 def get_room_config(request, room_name):
     instance = ChatRoom.objects.get(room_name=room_name)

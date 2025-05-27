@@ -707,14 +707,6 @@ function rerenderActiveSentiment() {
     }
 }
 
-function toggleColorBlindMode() {
-    const isEnabled = document.getElementById('colorblind-toggle').checked;
-    document.body.classList.toggle('colorblind', isEnabled);
-    updateComparisonCharts();
-    rerenderActiveSentiment();
-}
-
-document.getElementById('colorblind-toggle').addEventListener('change', toggleColorBlindMode);
 
 function setupToneMeter() {
     const meter = document.getElementById('tone-meter');

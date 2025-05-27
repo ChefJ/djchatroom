@@ -213,6 +213,19 @@ function genScoreButtonContainer(message) {
 }
 
 
+function sendLog(logContentJson){
+    const logUrl = new URL('log_event', window.location.href);
+
+    fetch(logUrl, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': getCSRFToken(),
+        },
+        body:JSON.stringify(logContentJson)
+    })
+}
+
 function genComepareLabel(message) {
     const compareLabel = document.createElement('label');
     compareLabel.classList.add('compare-checkbox-wrapper');
@@ -236,6 +249,7 @@ function genComepareLabel(message) {
         const msgId = e.target.dataset.msgId;
         const bubble = document.querySelector(`[data-id="${msgId}"]`);
 
+        sendLog({"tigger":"compare_target_change"})
         if (e.target.checked) {
             if (Object.keys(comparedMessages).length >= 2) {
                 alert("You can compare up to 2 messages at a time.");
@@ -826,12 +840,4 @@ function getCSRFToken() {
         }
     }
     return '';
-}
-
-function refreshImageById(messageId) {
-    const img = document.getElementById('visbias-image');
-    if (img) {
-        const timestamp = new Date().getTime();
-        img.src = `/static/chatmain/${messageId}.jpg?t=${timestamp}`;
-    }
 }
