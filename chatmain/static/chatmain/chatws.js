@@ -701,12 +701,9 @@ function updateComparisonCharts() {
     });
     const polarityTextBox = document.getElementById('polarity-text-description');
     if (polarityTextBox) {
-        let descriptionLines = [];
-        let highestPos = -Infinity;
-        let highestPosIndexes = [];
-        let highestNeg = -Infinity;
-        let highestNegIndexes = [];
-
+        let posPercents = [];
+        let negPercents = [];
+        let previews = [];
 
         messageEntries.forEach(([msgId, messageWithScores], index) => {
             try {
@@ -715,63 +712,63 @@ function updateComparisonCharts() {
 
                 const posCount = scores.filter(s => s.compound > 0).length;
                 const negCount = scores.filter(s => s.compound < 0).length;
-                const neuCount = scores.filter(s => s.compound === 0).length;
                 const total = scores.length;
 
                 const posPercent = Math.round((posCount / total) * 100);
                 const negPercent = Math.round((negCount / total) * 100);
 
-                if (posPercent > highestPos) {
-                    highestPos = posPercent;
-                    highestPosIndexes = [index];
-                } else if (posPercent === highestPos) {
-                    highestPosIndexes.push(index);
-                }
+                posPercents.push(posPercent);
+                negPercents.push(negPercent);
 
-                if (negPercent > highestNeg) {
-                    highestNeg = negPercent;
-                    highestNegIndexes = [index];
-                } else if (negPercent === highestNeg) {
-                    highestNegIndexes.push(index);
-                }
                 const bubble = document.querySelector(`[data-id="${msgId}"]`);
                 let preview = bubble?.querySelector('.message-text')?.textContent?.slice(0, 25) || `Message ${index + 1}`;
                 preview = preview.replace(/\n/g, ' ').trim();
-
-                const color = colors[index];
-                descriptionLines.push(
-                    `• <span style="color:${color}">“${preview}...”</span>  has <strong>${posPercent}%</strong> sentences in positive tone  and <strong>${negPercent}%</strong> sentences in negative tone.`
-                );
+                previews.push(`“<strong style="color:${colors[index]}">${preview}...</strong>”`);
             } catch (e) {
-                console.warn('⚠️ Failed to build polarity description for one message:', e);
+                console.warn('⚠️ Failed to parse polarity description:', e);
             }
         });
 
         let finalSummary = '';
-        if (highestPosIndexes.length > 0) {
-            finalSummary += `Overall, the <strong >most positive</strong> paragraph(s):<br>`;
-            highestPosIndexes.forEach(index => {
-                const [msgId] = messageEntries[index];
-                const bubble = document.querySelector(`[data-id="${msgId}"]`);
-                let preview = bubble?.querySelector('.message-text')?.textContent?.slice(0, 25) || `Message ${index + 1}`;
-                preview = preview.replace(/\n/g, ' ').trim();
-                finalSummary += `“<strong style="color:${colors[index]}">${preview}...</strong>”<br>`;
-            });
-        }
-        if (highestNegIndexes.length > 0) {
-            finalSummary += `<br>Overall, the <strongz>most negative</strongz> paragraph(s):<br>`;
-            highestNegIndexes.forEach(index => {
-                const [msgId] = messageEntries[index];
-                const bubble = document.querySelector(`[data-id="${msgId}"]`);
-                let preview = bubble?.querySelector('.message-text')?.textContent?.slice(0, 25) || `Message ${index + 1}`;
-                preview = preview.replace(/\n/g, ' ').trim();
-                finalSummary += `“<strong style="color:${colors[index]}">${preview}...</strong>”<br>`;
+
+        if (messageEntries.length === 2) {
+            const [p1, p2] = posPercents;
+            const [n1, n2] = negPercents;
+            const [t1, t2] = previews;
+
+            const samePos = p1 === p2;
+            const sameNeg = n1 === n2;
+
+            if (samePos && sameNeg) {
+                finalSummary = `The overall tone of both paragraphs is similar (${p1}% positive and ${n1}% negative).<br>`;
+            } else {
+                if (samePos) {
+                    finalSummary += `Both paragraphs have similar positive tone (${p1}%). <br>`;
+                } else if (p1 > p2) {
+                    finalSummary += `Overall, ${t1} has the most positive tone (${p1}% vs ${p2}%). <br>`;
+                } else if (p2 > p1) {
+                    finalSummary += `Overall, ${t2} has the most positive tone (${p2}% vs ${p1}%). <br>`;
+                }
+
+                if (sameNeg) {
+                    finalSummary += `Both paragraphs have similar negative tone (${n1}%).<br>`;
+                } else if (n1 > n2) {
+                    finalSummary += `${t1} has a most negative tone (${n1}% vs ${n2}%).<br>`;
+                } else if (n2 > n1) {
+                    finalSummary += `${t2} has a most negative tone (${n2}% vs ${n1}%).<br>`;
+                }
+            }
+        }else {
+            // Fallback for more than 2 messages
+            finalSummary += `<strong>Paragraph summaries:</strong><br>`;
+            messageEntries.forEach((_, index) => {
+                finalSummary += `• ${previews[index]} has <strong>${posPercents[index]}%</strong> positive and <strong>${negPercents[index]}%</strong> negative tone.<br>`;
             });
         }
 
-       // polarityTextBox.innerHTML = descriptionLines.join('<br>') + '<br><br>' + finalSummary;
-        polarityTextBox.innerHTML = finalSummary  + '<br><br>' +descriptionLines.join('<br>') ;
-    }}
+        polarityTextBox.innerHTML = finalSummary;
+    }
+}
 
 function autoCheckLatestTwoGPT() {
     if (roomConfig.experiment_type != 'all') return;
