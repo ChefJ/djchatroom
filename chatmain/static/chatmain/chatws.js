@@ -213,17 +213,23 @@ function genScoreButtonContainer(message) {
 }
 
 
-function sendLog(logContentJson){
-    const logUrl = new URL('log_event', window.location.href);
+function sendLog(logContent) {
+    try {
+        const logUrl = new URL('log_event', window.location.href);
 
-    fetch(logUrl, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'X-CSRFToken': getCSRFToken(),
-        },
-        body:JSON.stringify(logContentJson)
-    })
+        void fetch(logUrl, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': getCSRFToken?.() || '',
+            },
+            body: typeof logContent === 'string' ? logContent : JSON.stringify(logContent)
+        }).catch(() => {
+            // Swallow fetch errors silently
+        });
+    } catch (e) {
+        // Swallow any other unexpected errors silently
+    }
 }
 
 function genComepareLabel(message) {
@@ -249,7 +255,10 @@ function genComepareLabel(message) {
         const msgId = e.target.dataset.msgId;
         const bubble = document.querySelector(`[data-id="${msgId}"]`);
 
-        sendLog({"tigger":"compare_target_change"})
+        sendLog({"tigger":"compare_target_change",
+                              "input_value":e.target.checked,
+                              "event_goal":e.target.checked?"Add to compare":"Remove from compare",
+                              "goal_fulfilled":Object.keys(comparedMessages).length < 2})
         if (e.target.checked) {
             if (Object.keys(comparedMessages).length >= 2) {
                 alert("You can compare up to 2 messages at a time.");

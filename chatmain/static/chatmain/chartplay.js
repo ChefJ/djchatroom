@@ -135,6 +135,7 @@ function highlightSentimentSegmentsByBin(binIndex, binCount = globalBinAmount) {
         const bubble = document.querySelector(`[data-id="${msgId}"]`);
         if (!bubble) return;
 
+
         const spans = bubble.querySelectorAll('.sentiment-segment');
         spans.forEach(span => {
             const score = parseFloat(span.dataset.compound);
@@ -143,6 +144,10 @@ function highlightSentimentSegmentsByBin(binIndex, binCount = globalBinAmount) {
             }
         });
     });
+/*    sendLog({"trigger":"hover_sentiment_curve",
+        "input_value":"",
+        "event_goal":"Find related sentences",
+        "goal_fulfilled":true});*/
 }
 
 function highlightChartBarsByBin(binIndex, binCount = globalBinAmount) {
