@@ -55,7 +55,7 @@ function injectStandaloneRatingButtons(msgId) {
 }
 function connectWebSocket() {
     updateStatus(`[CONNECTING] :: SERVER: ${window.location.hostname} :: ROOM: ${roomName}`);
-    chatSocket = new WebSocket('ws://' + window.location.host + '/ws/chat/' + roomName + '/');
+    chatSocket = new WebSocket('wss://' + window.location.host + '/ws/chat/' + roomName + '/');
 
     chatSocket.onopen = () => {
         reconnectAttempts = 0;
