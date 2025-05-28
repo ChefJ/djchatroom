@@ -65,6 +65,7 @@ function generateCleanUUID() {
 }
 
 function setInputDisabled(state) {
+    if(roomConfig.is_experiment===false) return;
     const input = document.getElementById('chat-message-input');
     const overlay = document.getElementById('input-overlay');
 
@@ -125,6 +126,10 @@ function ultUX(){
             setTimeout(() => section.classList.remove('blink-border'), 1200);
 
     });
+    if(roomConfig.is_experiment===false){
+        const reactionBlock = document.getElementById('reaction-section')
+        reactionBlock.style.display = 'none';
+    }
 }
 
 function promptForTopic() {

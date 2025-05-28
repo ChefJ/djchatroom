@@ -535,7 +535,8 @@ function handleIncomingMessage(message) {
     const sender = document.createElement('div');
     sender.classList.add('sender-name');
     sender.textContent = message.user_uuid.slice(0, 4);
-    sender.style = "display:none;"
+    if(roomConfig.is_experiment===true)  sender.style = "display:none;";
+
 
     const bubble = document.createElement('div');
     bubble.classList.add('chat-message');
