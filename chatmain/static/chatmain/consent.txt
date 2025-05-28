@@ -34,7 +34,7 @@ To protect your privacy:
 - Your contact information (e.g., email address) will be stored **separately** and will only be used for sending rewards or contacting you for follow-up (if applicable).
 - Data will be stored securely and accessible only by the research team.
 - Pseudonymisation (also called "coding") means your identity will be replaced with a code, and the key linking your identity to this code will be stored separately.
-- Data will be retained up to **12 months** on Microsoft Survey server.
+- Data will be retained up to **12 months** on XM Qualtricx.
 - Your contact details will be deleted once the results are published.
 
 *De-identified data may be shared with other researchers upon request. No personal data that can identify you will be shared.*
@@ -65,13 +65,13 @@ This study has been **approved by the Science-Geo Ethics Review Board (ETC-BETA-
 
 - Complaints about the study: etc-beta-geo@uu.nl(mailto:etc-beta-geo@uu.nl) or ics-ethics@uu.nl(mailto:ics-ethics@uu.nl)
 - Privacy questions: privacy-beta@uu.nl(mailto:privacy-beta@uu.nl)
-- More info about your data rights: www.uu.nl/en/organisation/privacy(https://www.uu.nl/en/organisation/privacy)
+- More info about your data rights: www.uu.nl/en/organisation/privacy
 
 ---
 
 ## 9. More information about this study?
 If you have questions or concerns, please contact:
-- **Hairuo Liu** – h.liu10@gmail.com
+- **Hairuo Liu** – h.liu10@students.uu.nl
 - **Dr. Jeroen Ooge** – j.ooge@uu.nl
 
 ---
