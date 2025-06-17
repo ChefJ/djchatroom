@@ -1,6 +1,10 @@
 
 
-Thank you for participating. This experiment involves **4 short chat rounds** with an AI agent. and takes around 30 minutes.
+Hi, I'm Hairuo.
+
+Thank you for participating in my experiment!
+You are about to test the app I created for my master's thesis. In this app, a chatbot will help you formulate opinions about your favourite topics. This experiment involves **4 short chat rounds** with an AI agent. and takes around 16 minutes.
+
 
 ---
 
@@ -13,6 +17,10 @@ Thank you for participating. This experiment involves **4 short chat rounds** wi
     - You will choose a topic you feel **positively** or **negatively** about.
     - Rate the answer using the buttons at the bottom part of the page.
     - There is going to be a questionnaire at the end of the rounds.
+
+3. ** Main goal **
+    The study investigate on how you will interact with AI to help you with writing tasks. The main goal is to align the tone of response of AI with your expectation.
+
 ---
 
 ### Notes
@@ -20,6 +28,8 @@ Thank you for participating. This experiment involves **4 short chat rounds** wi
 - Please rate each response thoughtfully — your feedback is important.
 - You can only proceed to the next round after marking one response as **'The tone's aligned with my expectation.'**.
 - Double click on any sentence, and you can adjust that sentence's tone.
+- Please use only English during the interaction.
 ---
+<span style="font-size: 20px; font-weight: bold;">Ready to help with shaping the future of trustworthy AI?</span>
 
 When you're ready, click **Next** to begin.

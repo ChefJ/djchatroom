@@ -18,9 +18,12 @@ This study is conducted by **Hairuo Liu** (h.liu10@students.uu.nl), Master stude
 ---
 
 ## 4. How will the study be carried out?
-You will be asked to complete an online questionnaire that includes questions about your age. Other questions are about your user experiences of the upcoming experiment.
-The survey will take approximately 30 to complete.
-*As a token of appreciation, you can obtain a further access to the webservice provided through 2003.io, including the free using of LLM interactions and other experimental functions.*.
+
+The study focus on how you will interact with AI to help you with writing tasks. The main goal is to align the tone of response of AI with your expectation.
+
+After 4 rounds of conversation there's going to be a survey asking about the experience of the experiment.
+
+The survey will take approximately 30 minutes to complete.
 
 ---
 
@@ -31,6 +34,7 @@ We will collect the following personal data:
 
 To protect your privacy:
 - Survey responses **pseudonymised** shortly after completion.
+- Your contact information (e.g., email address) will be stored **separately** and will only be used for sending rewards or contacting you for follow-up (if applicable).
 - Data will be stored securely and accessible only by the research team.
 - Pseudonymisation (also called "coding") means your identity will be replaced with a code, and the key linking your identity to this code will be stored separately.
 - Data will be retained up to **12 months** on XM Qualtricx.

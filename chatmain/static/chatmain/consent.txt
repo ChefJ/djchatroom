@@ -18,9 +18,12 @@ This study is conducted by **Hairuo Liu** (h.liu10@students.uu.nl), Master stude
 ---
 
 ## 4. How will the study be carried out?
-You will be asked to complete an online questionnaire that includes questions about your age. Other questions are about your user experiences of the upcoming experiment.
-The survey will take approximately 30 to complete.
-*As a token of appreciation, you can obtain a further access to the webservice provided through 2003.io, including the free using of LLM interactions and other experimental functions.*.
+
+The study focus on how you will interact with AI to help you with writing tasks. The main goal is to align the tone of response of AI with your expectation.
+
+After 4 rounds of conversation there's going to be a survey asking about the experience of the experiment.
+
+The survey will take approximately 30 minutes to complete.
 
 ---
 
