@@ -19,13 +19,25 @@ def init_experiment(user_uuid, experiment_type=None, ip_adres = "unknown"):
     tmp_type_list = ["all","novis", "novisnocolor"]
     if experiment_type is None:
         experiment_type = tmp_type_list[randrange(0, 3)]
+
     tmp_participant = AnonymousParticipant.objects.create(user_uuid=user_uuid)
     tmp_participant.user_ip = ip_adres
     tmp_participant.save()
+
+    tmp_dict = {}
+    tmp_exp = OneExperiment.objects.filter(experiment_finished=True)
+    for ap in tmp_exp:
+        if ap.experiment_type not in tmp_dict.keys():
+            tmp_dict[ap.experiment_type] = 1
+        else:
+            tmp_dict[ap.experiment_type] += 1
+
+    lowest_key = min(tmp_dict, key=tmp_dict.get)
+    print(lowest_key)
     tmp_experiment = OneExperiment.objects.create(
         participant=tmp_participant,
         experiment_progress="1/4",
-        experiment_type=experiment_type)
+        experiment_type=lowest_key)
     tmp_experiment.save()
     room_pos_pos_id = str(uuid.uuid4()).replace("-","")
     room_pos_neg_id = str(uuid.uuid4()).replace("-","")
