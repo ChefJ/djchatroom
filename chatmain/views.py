@@ -24,7 +24,7 @@ def init_experiment(user_uuid, experiment_type=None, ip_adres = "unknown"):
     tmp_participant.user_ip = ip_adres
     tmp_participant.save()
 
-    tmp_dict = {}
+    tmp_dict = {'novisnocolor': 0}
     tmp_exp = OneExperiment.objects.filter(experiment_finished=True)
     for ap in tmp_exp:
         if ap.experiment_type not in tmp_dict.keys():
