@@ -398,6 +398,22 @@ function fetchRoomConfig() {
         });
 }
 
+function setupToneMeter() {
+
+    const meter = document.getElementById('tone-meter');
+    meter.innerHTML = '';
+
+    const SENTIMENT_COLORS = ['#c51b7d', '#e9a3c9', '#fde0ef', '#f7f7f7', '#e6f5d0', '#a1d76a', '#4d9221'];
+
+    for (let idx = 0; idx < 7; idx++) {
+        const box = document.createElement('div');
+        box.classList.add('tone-square', `tone-square-${idx}`);
+        box.dataset.binIndex = idx;
+        box.style.backgroundColor = SENTIMENT_COLORS[idx];
+        meter.appendChild(box);
+    }
+}
+
 
 function initChatroom(){
     fetchRoomConfig().then(() => {
@@ -409,6 +425,12 @@ function initChatroom(){
         checkAlive();
         connectWebSocket();
         add_dbclick_refinement();
+        setupToneMeter();
+
+        if(roomConfig.experiment_type==='novisnocolor') {
+            const mw = document.getElementById('tm-id');
+            mw.style.display='none';
+        }
     });
 
 
@@ -425,6 +447,7 @@ function initChatroom(){
             document.getElementById('refine-popup').style.display = 'none';
         }
     });
+
 }
 
 initChatroom();

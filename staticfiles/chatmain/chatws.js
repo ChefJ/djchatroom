@@ -294,13 +294,22 @@ function colorizeMessage(segments) {
         const textColor = ['#c51b7d', '#4d9221'].includes(bgColor) ? '#fff' : '#000';
 
         const formatted = marked.parseInline(text);
-
-        messageHtml += `<span 
+        if (enableColorize){
+            messageHtml += `<span 
             class="sentiment-segment" 
             data-compound="${compound}" 
             style="border-radius: 6px; padding: 2px 4px; margin: 2px; display: inline; background-color: ${bgColor}; color: ${textColor};">
             ${formatted}
         </span> `;
+        } else{
+            messageHtml += `<span 
+            class="sentiment-segment" 
+            data-compound="${compound}" 
+            style="border-radius: 6px; padding: 2px 4px; margin: 2px; display: inline;">
+            ${formatted}
+        </span> `;
+        }
+
     });
     return messageHtml;
 }
