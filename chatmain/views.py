@@ -259,6 +259,7 @@ def info_overall(request):
     rst = {"result": []}
 
     tmp_exp = OneExperiment.objects.filter(experiment_finished=True)
+    tmp_dict["total"] = tmp_exp.count()
     for ap in tmp_exp:
         if ap.experiment_type not in tmp_dict:
             tmp_dict[ap.experiment_type] = 1
