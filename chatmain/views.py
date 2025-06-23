@@ -251,3 +251,15 @@ def questionnaire(request):
     final_url = f"{base_url}?usp=pp_url&{entry_id}={user_id}"
 
     return HttpResponseRedirect(final_url)
+
+
+def info_overall(request):
+    tmp_dict = {}
+    tmp_exp = OneExperiment.objects.filter(experiment_finished=True)
+    for ap in tmp_exp:
+        if ap.experiment_type not in tmp_dict.keys():
+            tmp_dict[ap.experiment_type] = 1
+        else:
+            tmp_dict[ap.experiment_type] += 1
+
+    return HttpResponse(json.dumps(tmp_dict))
