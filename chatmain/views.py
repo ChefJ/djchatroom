@@ -267,8 +267,9 @@ def info_overall(request):
 
         tmp_exp_dict = {
             "exp_id": ap.id,
+            "user_uuid": ap.participant.user_uuid,
+            "experiment_type": ap.experiment_type,
             "exp_rooms": [],
-            "user_uuid": ap.participant.user_uuid
         }
 
         related_rooms = ChatRoom.objects.filter(related_experiment=ap)
