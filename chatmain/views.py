@@ -11,6 +11,7 @@ from chatmain.consumers import get_or_create_room
 from chatmain.models import ChatMessage, ChatRoom, OneExperiment, AnonymousParticipant, EventLogger
 from django.core.serializers import serialize
 import os
+from django.http import JsonResponse
 
 from djchatroom import settings
 
@@ -259,18 +260,30 @@ def info_overall(request):
 
     tmp_exp = OneExperiment.objects.filter(experiment_finished=True)
     for ap in tmp_exp:
-        if ap.experiment_type not in tmp_dict.keys():
+        if ap.experiment_type not in tmp_dict:
             tmp_dict[ap.experiment_type] = 1
         else:
             tmp_dict[ap.experiment_type] += 1
-        tmp_exp_dict = {"exp_id":ap.id,
-                        "exp_rooms":[],
-                        "user_uuid":ap.participant.user_uuid}
+
+        tmp_exp_dict = {
+            "exp_id": ap.id,
+            "exp_rooms": [],
+            "user_uuid": ap.participant.user_uuid
+        }
+
         related_rooms = ChatRoom.objects.filter(related_experiment=ap)
         for a_room in related_rooms:
-            tmp_exp_dict["exp_rooms"].append({"iterations": ChatMessage.objects.filter(chat_room=a_room).count(),
-                                              "quick_adjust_amount": ChatMessage.objects.filter(chat_room=a_room,
-                                                                                                message__icontains="rest the same").count()})
+            tmp_exp_dict["exp_rooms"].append({
+                "room_name": a_room.room_name,
+                "created_at": str(a_room.created_date),
+                "iterations": ChatMessage.objects.filter(chat_room=a_room).count(),
+                "quick_adjust_amount": ChatMessage.objects.filter(
+                    chat_room=a_room,
+                    message__icontains="rest the same"
+                ).count()
+            })
+
         rst["result"].append(tmp_exp_dict)
+
     rst["brief"] = tmp_dict
-    return HttpResponse(json.dumps(rst))
+    return JsonResponse(rst, json_dumps_params={"indent": 2})
