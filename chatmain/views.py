@@ -255,11 +255,21 @@ def questionnaire(request):
 
 def info_overall(request):
     tmp_dict = {}
+    rst = {"result": []}
+
     tmp_exp = OneExperiment.objects.filter(experiment_finished=True)
     for ap in tmp_exp:
         if ap.experiment_type not in tmp_dict.keys():
             tmp_dict[ap.experiment_type] = 1
         else:
             tmp_dict[ap.experiment_type] += 1
-
-    return HttpResponse(json.dumps(tmp_dict))
+        tmp_exp_dict = {"exp_id":ap.id,
+                        "exp_rooms":[],
+                        "user_uuid":ap.participant.user_uuid}
+        related_rooms = ChatRoom.objects.filter(related_experiment=ap)
+        for a_room in related_rooms:
+            tmp_exp_dict["exp_rooms"].append({"iterations": ChatMessage.objects.filter(chat_room=a_room).count(),
+                                              "quick_adjust_amount": ChatMessage.objects.filter(chat_room=a_room,
+                                                                                                message__icontains="rest the same").count()})
+    rst["brief"] = tmp_dict
+    return HttpResponse(json.dumps(rst))
