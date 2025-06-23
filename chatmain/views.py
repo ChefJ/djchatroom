@@ -271,5 +271,6 @@ def info_overall(request):
             tmp_exp_dict["exp_rooms"].append({"iterations": ChatMessage.objects.filter(chat_room=a_room).count(),
                                               "quick_adjust_amount": ChatMessage.objects.filter(chat_room=a_room,
                                                                                                 message__icontains="rest the same").count()})
+        rst["result"].append(tmp_exp_dict)
     rst["brief"] = tmp_dict
     return HttpResponse(json.dumps(rst))
