@@ -1,4 +1,5 @@
 # chat/consumers.py
+import datetime
 import json
 import threading
 import uuid
@@ -63,8 +64,13 @@ class ChatConsumer(AsyncWebsocketConsumer):
                 previous_messages_list.append({"role":"system", "content": an_obj.message})
             else:
                 previous_messages_list.append({"role":"user", "content": an_obj.message})
+        t1 = datetime.datetime.now()
+        print(str(t1)+" Sending to GPT.")
         room_obj = ChatRoom.objects.get(room_name=self.room_name)
         gpt_rsp = ask_gpt(previous_messages_list, "Please be "+room_obj.bias_tendency)
+        t2 = datetime.datetime.now()
+        print(str(t2) + " Rsp from GPT."+" Latency:"+str(t2-t1))
+
         msg_id= str(uuid.uuid4()).replace("-","")
         neg_scores, neu_scores, pos_scores, compound_scores, sentence_with_scores = text_to_score(gpt_rsp)
         # generate_sentiment_graph(
