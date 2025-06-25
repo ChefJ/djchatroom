@@ -4,12 +4,13 @@
 ---
 
 ## 1. Introduction
-You are being invited to take part in a scientific research study. Your participation is entirely voluntary.
+You are invited to take part in a scientific research study. Your participation is entirely voluntary.
 
 ---
 
 ## 2. What is the background and purpose of this study?
-This research aims to examine the human computer experience with LLMs. More details will being uncovered in the post-experiment questionnaire.
+This research aims to examine the interaction experience with AIs. More details will being uncovered in the post-experiment questionnaire.
+
 ---
 
 ## 3. Who will carry out the study?
@@ -23,13 +24,13 @@ The study focus on how you will interact with AI to help you with writing tasks.
 
 After 4 rounds of conversation there's going to be a survey asking about the experience of the experiment.
 
-The survey will take approximately 30 minutes to complete.
+The experiment will take approximately 16 minutes to complete.
 
 ---
 
 ## 5. What will we do with your data?
 We will collect the following personal data:
-- Demographic data (e.g., age, gender, education level)
+- Demographic data (age)
 - Personal opinions and experiences related to the implementations provided through 2003.io.
 
 To protect your privacy:

@@ -14,18 +14,19 @@ You are about to test the app I created for my master's thesis. In this app, a c
    You will first review a consent form before entering the chat environment.
 
 2. **Topic Selection**  
-    - You will choose a topic you feel **positively** or **negatively** about.
+    - You will choose a topic you feel **positively** or **negatively** about, depending on which round you are having.
     - Rate the answer using the buttons at the bottom part of the page.
     - There is going to be a questionnaire at the end of the rounds.
 
 3. **Main goal**
-    The study investigate on how you will interact with AI to help you with writing tasks. The main goal is to align the tone of response of AI with your expectation.
+    - The study investigate on how you will interact with AI to help you with writing tasks.
+    - The main goal is to align the tone of response of AI with your expectation.
 
 ---
 
 ### Notes
 
-- Please rate each response thoughtfully — your feedback is important.
+- Please rate each response thoughtfully — your feedback is important. It's about your feelings and opinions, so there's no wrong answers.
 - You can only proceed to the next round after marking one response as **'The tone's aligned with my expectation.'**.
 - Double click on any sentence, and you can adjust that sentence's tone.
 - Please use only English during the interaction.
