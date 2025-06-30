@@ -279,7 +279,7 @@ def info_overall(request):
                 "room_name": a_room.room_name,
                 "topic": a_room.notes,
                 "bias_tendency": a_room.bias_tendency,
-                "user_tendency": a_room.uer_tendency,
+                "user_tendency": a_room.user_tendency,
                 "created_at": str(a_room.created_date),
                 "iterations": ChatMessage.objects.filter(chat_room=a_room).count(),
                 "quick_adjust_amount": ChatMessage.objects.filter(
