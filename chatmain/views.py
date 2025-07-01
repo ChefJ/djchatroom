@@ -14,6 +14,7 @@ import os
 from django.http import JsonResponse
 
 from djchatroom import settings
+from django.db.models import Min, Max
 
 
 def init_experiment(user_uuid, experiment_type=None, ip_adres = "unknown"):
