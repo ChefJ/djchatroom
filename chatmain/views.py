@@ -254,6 +254,22 @@ def questionnaire(request):
     return HttpResponseRedirect(final_url)
 
 
+def get_chat_timespan_seconds(chat_room_instance):
+    timestamps = ChatMessage.objects.filter(chat_room=chat_room_instance).aggregate(
+        earliest=Min("created_date"),
+        latest=Max("created_date")
+    )
+
+    earliest = timestamps["earliest"]
+    latest = timestamps["latest"]
+
+    if earliest and latest:
+        timespan = (latest - earliest).total_seconds()
+        return timespan
+    else:
+        return 0  # No messages found
+
+
 def info_overall(request):
     tmp_dict = {}
     rst = {"result": []}
@@ -275,12 +291,14 @@ def info_overall(request):
 
         related_rooms = ChatRoom.objects.filter(related_experiment=ap)
         for a_room in related_rooms:
+            timespan_sec = get_chat_timespan_seconds(a_room)
             tmp_exp_dict["exp_rooms"].append({
                 "room_name": a_room.room_name,
                 "topic": a_room.notes,
                 "bias_tendency": a_room.bias_tendency,
                 "user_tendency": a_room.user_tendency,
                 "created_at": str(a_room.created_date),
+                "timespan_sec": timespan_sec,
                 "iterations": ChatMessage.objects.filter(chat_room=a_room).count(),
                 "quick_adjust_amount": ChatMessage.objects.filter(
                     chat_room=a_room,
