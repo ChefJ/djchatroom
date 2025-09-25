@@ -525,14 +525,14 @@ function handleIncomingMessage(message) {
 
 
         const scoreContainer = genScoreButtonContainer(message);
-        if (message.user_rated_score === '-1') {
-            /*messageWrapper.appendChild(scoreContainer);*/
+/*        if (message.user_rated_score === '-1') {
+            /!*messageWrapper.appendChild(scoreContainer);*!/
             inputStatusElementUpdate('after_respond');
             setInputDisabled(true);
         }else{
             inputStatusElementUpdate('after_rated');
 
-        }
+        }*/
         console.log(message)
 
     //    setupReactionButtons(message.msg_uuid);

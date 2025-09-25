@@ -445,7 +445,7 @@ function inputStatusElementUpdate(input_status){
             initial.classList.add('slide-in');
 
         }, 300);
-        section.style.display='block';
+        section.style.display='none';
     }
 }
 
