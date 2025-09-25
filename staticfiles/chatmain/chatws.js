@@ -249,8 +249,8 @@ function genComepareLabel(message) {
         <input type="checkbox" class="compare-checkbox" style="display: none" data-msg-id="${message.msg_uuid}">
         <span style="font-size: 14px;display: none">Visualize the tone</span>
     `;
-    const img_box = document.getElementById('imgbbox');
-    img_box.style.display="none";
+/*    const img_box = document.getElementById('imgbbox');
+    img_box.style.display="none";*/
 
     compareLabel.querySelector('input').addEventListener('change', (e) => {
         const msgId = e.target.dataset.msgId;
