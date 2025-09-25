@@ -332,18 +332,6 @@ function checkUserConsent() {
     return true;  // 👈 Consent already given
 }
 
-function highlightScoringInstruction() {
-    const instruction = document.getElementById('score-instruction');
-    if (!instruction) return;
-
-    instruction.classList.add('barber-highlight');
-
-    // Optionally remove it after a few seconds
-    setTimeout(() => {
-        instruction.classList.remove('barber-highlight');
-    }, 5000); // 5 seconds
-}
-
 
 function fetchRoomConfig() {
 
@@ -352,7 +340,7 @@ function fetchRoomConfig() {
         .then(data => {
             roomConfig = data;
             console.log("Room config loaded:", roomConfig);
-
+            roomConfig.experiment_type = "all";
             // Apply experiment settings
             switch (roomConfig.experiment_type) {
 /*                case "novis":
@@ -368,7 +356,7 @@ function fetchRoomConfig() {
                     break;*/
             }
 
-            // ✅ Inject experiment info markdown panel if needed
+/*
             if (roomConfig.is_experiment) {
                 const instructionText = `
 
@@ -392,6 +380,7 @@ function fetchRoomConfig() {
 
                 document.body.prepend(wrapper);
             }
+*/
         })
         .catch(err => {
             console.error('❌ Failed to load room config:', err);
@@ -427,10 +416,10 @@ function initChatroom(){
         add_dbclick_refinement();
         setupToneMeter();
 
-        if(roomConfig.experiment_type==='novisnocolor') {
+/*        if(roomConfig.experiment_type==='novisnocolor') {
             const mw = document.getElementById('tm-id');
             mw.style.display='none';
-        }
+        }*/
     });
 
 

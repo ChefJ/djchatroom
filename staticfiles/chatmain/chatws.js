@@ -545,7 +545,7 @@ function handleIncomingMessage(message) {
     const sender = document.createElement('div');
     sender.classList.add('sender-name');
     sender.textContent = message.user_uuid.slice(0, 4);
-    if(roomConfig.is_experiment===true)  sender.style = "display:none;";
+   // if(roomConfig.is_experiment===true)  sender.style = "display:none;";
 
 
     const bubble = document.createElement('div');
@@ -559,10 +559,7 @@ function handleIncomingMessage(message) {
         const scores = segments.map(s => s.sentiment_score);
 
         try {
-/*            renderSentimentDistributionChart(scores, 'compound-curve-chart', globalBinAmount);
-            renderSentimentPolarityBar(scores);*/
             window.__activeSentimentMessage = bubble;
-
             messageHtml = colorizeMessage(segments);
         } catch (err) {
             console.error('Failed to parse message_with_scores:', err);
