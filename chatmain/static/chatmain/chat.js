@@ -355,7 +355,7 @@ function fetchRoomConfig() {
 
             // Apply experiment settings
             switch (roomConfig.experiment_type) {
-                case "novis":
+/*                case "novis":
                     document.getElementById('chart-container').style.setProperty('display', 'none', 'important');
 
                     break;
@@ -365,7 +365,7 @@ function fetchRoomConfig() {
                     break;
                 case "all":
                 default:
-                    break;
+                    break;*/
             }
 
             // ✅ Inject experiment info markdown panel if needed

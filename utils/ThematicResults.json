@@ -1,0 +1,2264 @@
+{
+  "csv_path": "2008.json",
+  "columns": [
+    {
+      "column_name": "background_colorization_open",
+      "cells": [
+        {
+          "text": "Compare the level of highlights with my intended words and tones, then adjust them.",
+          "tags": [
+            "alignment"
+          ]
+        },
+        {
+          "text": "",
+          "tags": [
+            "nofeedback"
+          ]
+        },
+        {
+          "text": "I only used it as an indicator of how the LLM interpreted its own tone, as it was pretty clear to me that the type of adjectives the model used were weighed more heavily then the actual contents of the sentences. As an example a sentence containing something similar to: \"his incredible stupidity\" would be interpreted as positive because the model thinks incredible is a positive word and ignores the rest of the sentence contents.",
+          "tags": [
+            "partially use",
+            "output biased",
+            "inaccurate"
+          ]
+        },
+        {
+          "text": "I'd be more direct regarding the content I want out of a paragraph",
+          "tags": [
+            "not to use"
+          ]
+        },
+        {
+          "text": "i did not use it as i doubt whether it accurately reflects the tone of those sentences. Sometimes the tone indicated by \"this feature\" is inconsistent with my perception.",
+          "tags": [
+            "inaccurate",
+            "not to use"
+          ]
+        },
+        {
+          "text": "",
+          "tags": [
+            "nofeedback"
+          ]
+        },
+        {
+          "text": "it helped me understand the structure of the answers better and help identify how positive or negative the answers are.",
+          "tags": [
+            "awareness"
+          ]
+        },
+        {
+          "text": "",
+          "tags": [
+            "nofeedback"
+          ]
+        },
+        {
+          "text": "I would adjust the tone and, in the writing of a scientific paper, make the presentation more objective without too much positivity or negativity.",
+          "tags": [
+            "alignment"
+          ]
+        },
+        {
+          "text": "If the output doesn\u2019t match my expectations, I adjust it until it matches my expectations.",
+          "tags": [
+            "alignment"
+          ]
+        },
+        {
+          "text": "I will not only observe sentences marked with colours, but also study the content of sentences that are not marked. Often, AI will show a particular bias in specific topics.",
+          "tags": [
+            "awareness"
+          ]
+        },
+        {
+          "text": "When I was using it for negative paragraphs, I could see how sentences are negatively expressed. It helped me to focus on the ones that I would love to adjust and make them get close to my expectation as possible.",
+          "tags": [
+            "alignment"
+          ]
+        },
+        {
+          "text": "I use this function to conduct a basic, general direction-based debugging, but the final judgment on the tone still depends on me.",
+          "tags": [
+            "alignment"
+          ]
+        },
+        {
+          "text": "I may not use this feature because I need the whole context to be logical and read smoothly.",
+          "tags": [
+            "not to use"
+          ]
+        },
+        {
+          "text": "Firstlt, I check each sentence whether fit the color it shows with my expectation. If it fits, then I check the content and visulize the tone/content. If it not fits, I will give the AI my own opinion to improve the answer. Sometimes, the neg or pos which system shows is not so accurate. ",
+          "tags": [
+            "alignment",
+            "awareness",
+            "inaccurate"
+          ]
+        },
+        {
+          "text": "Please take a look at my other response.",
+          "tags": [
+            "nofeedback"
+          ]
+        },
+        {
+          "text": "I will use the color to roughly judge whether the text has the attitude I want",
+          "tags": [
+            "alignment",
+            "awareness"
+          ]
+        },
+        {
+          "text": "Well, I think it only works for those topic which naturally has a strong inclination, where it conveniently help me to realize those unsatisfying content; But it does not work well for some ambiguous case, in which I ignore it at all.",
+          "tags": [
+            "alignment",
+            "partially use"
+          ]
+        },
+        {
+          "text": "",
+          "tags": [
+            "nofeedback"
+          ]
+        },
+        {
+          "text": "",
+          "tags": [
+            "nofeedback"
+          ]
+        },
+        {
+          "text": "I just made adjustment when I thought it did not meet my expectation.",
+          "tags": [
+            "alignment"
+          ]
+        },
+        {
+          "text": "I was trying to adjust the tone by the hint of these highlights to my intended tone for the topic",
+          "tags": [
+            "alignment"
+          ]
+        },
+        {
+          "text": "I can adjust the sentences more accurately. Sometimes Chatgpt often use uncommon words and improper tones. I use this feature to slightly adjust the tone and words to balance the tone in the whole paragraphs.",
+          "tags": [
+            "alignment",
+            "awareness"
+          ]
+        },
+        {
+          "text": "I can recognise the positivity and the negativity more quickly through using this, and I can suggest how to make the tone more positively and negatively to meet my expectation.",
+          "tags": [
+            "alignment",
+            "awareness"
+          ]
+        },
+        {
+          "text": "I continuously revised and improved the topic of the discussion.",
+          "tags": [
+            "alignment"
+          ]
+        },
+        {
+          "text": "By identifying different color, I would use the most positive sentence at the beginning and the end to emphasize my opinion.",
+          "tags": [
+            "alignment"
+          ]
+        },
+        {
+          "text": "I use the color-coded text to better understand how the system interprets my input and adjusts the content accordingly. However, there are times when I don't notice any visible change in the colored text after making adjustments. This can reduce my trust in the system and may lead me to ignore the colored text in future interactions. That said, overall, it still helps me align the paragraph with my intended goal more easily.",
+          "tags": [
+            "alignment",
+            "partially use"
+          ]
+        },
+        {
+          "text": "I will familiarize myself with the expression characteristics of AI based on the highlights and then change the way I ask questions.",
+          "tags": [
+            "alignment",
+            "awareness"
+          ]
+        },
+        {
+          "text": "The answers are a bit short and the sentences don't flow very well and are sometimes hard to understand. And the answers are a bit stiff.",
+          "tags": [
+            "not satisfied with content"
+          ]
+        },
+        {
+          "text": "This feather helped me to identify the tone better. I can focus on stronger color and pay more attention to these sentences (to change)",
+          "tags": [
+            "awareness",
+            "alignment"
+          ]
+        },
+        {
+          "text": "this is an useful and specialized feature, i think give some simple command to ai and simple remind to human",
+          "tags": [
+            "awareness"
+          ]
+        },
+        {
+          "text": "Distinguish the negative and positive perspectives.",
+          "tags": [
+            "awareness"
+          ]
+        },
+        {
+          "text": "I still would read the text in detail and check whether it matched my intended tone and content.",
+          "tags": [
+            "partially use"
+          ]
+        },
+        {
+          "text": "In this experiment I could've used this feature to make sure all sentences align with the intended tone. To me it would be more interesting in real-world uses. For example te balance the different tones in a text when writing a piece about something for which you want both the positive and negative to be equally represented.",
+          "tags": [
+            "alignment",
+            "awareness"
+          ]
+        },
+        {
+          "text": "Improve the tone of messages",
+          "tags": [
+            "alignment"
+          ]
+        },
+        {
+          "text": "It would help in recognizing the tone of the sentences more clearly, since sometimes it's not very apparent what the tone is. Because of this, it makes it easier to change the sentences that I feel need adjustment to match my desired tone.",
+          "tags": [
+            "alignment",
+            "awareness"
+          ]
+        },
+        {
+          "text": "It would be especially helpful when writing balanced arguments, instead of ones that are fully negative or fully positive. In this context, the color-coded sections could quickly show me where the for-arguments and against-arguments are.",
+          "tags": [
+            "alignment",
+            "awareness"
+          ]
+        },
+        {
+          "text": "If this feature were available, I would use it to encode or categorize my text content",
+          "tags": [
+            "alignment"
+          ]
+        },
+        {
+          "text": "I would probably aim to either get it fully green or violet depending on the emotion.",
+          "tags": [
+            "alignment"
+          ]
+        },
+        {
+          "text": "I would have used it to take a more critical look at whether the sentences were truly factual/neutral or had a positive or negative tilt. I don't know if a sentence-by-sentence highlighting would have been useful to me overall though since I was taking the full paragraph into consideration when reviewing content and tone.",
+          "tags": [
+            "alignment"
+          ]
+        },
+        {
+          "text": "I would look for certain parts that might come off as less positive/negative than the other sentences to make sure I don't accidentally 'post' something that has a different tone than intended",
+          "tags": [
+            "alignment"
+          ]
+        },
+        {
+          "text": "It is very interesting to look at the answers separately among sentences. ",
+          "tags": [
+            "interesting"
+          ]
+        },
+        {
+          "text": "First, help me introduce the character Eva\u2014who she is, her key traits, and her role in the game.",
+          "tags": [
+            "nofeedback"
+          ]
+        },
+        {
+          "text": "",
+          "tags": [
+            "nofeedback"
+          ]
+        },
+        {
+          "text": "",
+          "tags": [
+            "nofeedback"
+          ]
+        },
+        {
+          "text": "",
+          "tags": [
+            "nofeedback"
+          ]
+        },
+        {
+          "text": "i think this function is smart. because it can clearly catch what i want to descirbe in my paragraphs, but sometimes i think it can only give some short summary concept of my paragraphs! maybe because i didn't try the more steps. but i think it's smarter than some AI. so keep on fighting.",
+          "tags": [
+            "smart",
+            "awareness"
+          ]
+        },
+        {
+          "text": "",
+          "tags": [
+            "nofeedback"
+          ]
+        },
+        {
+          "text": " I feel like this is the use of sentimental analysis. I might not use it.",
+          "tags": [
+            "not to use"
+          ]
+        },
+        {
+          "text": "",
+          "tags": [
+            "nofeedback"
+          ]
+        },
+        {
+          "text": "This feature will be helpful in adjusting the tone. I would make it more aligned with my tone if I want to sound neutral, but sometimes it categorizes neutral tone as positive. ",
+          "tags": [
+            "alignment",
+            "inaccurate"
+          ]
+        },
+        {
+          "text": "When I'm reading a news report or articles, the feature would help me to understand the attitude of author.",
+          "tags": [
+            "awareness"
+          ]
+        },
+        {
+          "text": "Not often used, some help, but the tone of the response seems inaccurate",
+          "tags": [
+            "partially use",
+            "inaccurate"
+          ]
+        },
+        {
+          "text": "I did not notice this feature during the experiment; however I believe that it can help users reflect on the tone they want to convey, while at the same time making them aware that content is never purely 'neutral' and devoid of emotions. \"Positive\" or \"negative\" tone impacts our experience of content, and the meaning we give to it. This type of feature, therefore, can be helpful for adapting text to a specific audience and conveying emotions",
+          "tags": [
+            "awareness"
+          ]
+        },
+        {
+          "text": "When I am writing on a positive topic, the colors help tell me how positive the tone is, because I can be biased towards the tone, and vice versa for the negative topics.",
+          "tags": [
+            "awareness"
+          ]
+        },
+        {
+          "text": "I would focus on the sentences that I need to refine and add more specific requirements",
+          "tags": [
+            "alignment",
+            "awareness"
+          ]
+        },
+        {
+          "text": "",
+          "tags": [
+            "nofeedback"
+          ]
+        },
+        {
+          "text": "The browser I'm using doesn't display this function",
+          "tags": [
+            "nofeedback"
+          ]
+        },
+        {
+          "text": "i read the sentence first to get a general feeling of each sentence, then comparing my feeling with the color area. totally, my feeling is always same with the color it represents. when i have some uncomfortable feeling when reading one sentence, the color is also the corresponding one, i double click the color area and adjust the tone many times untu=il i feel satisfied\n",
+          "tags": [
+            "alignment",
+            "awareness"
+          ]
+        },
+        {
+          "text": "I did not have this feature, but I would have used it to guide which sentences to change. I sometimes found it difficult to decide which sentence to adjust, as one sentence could make the difference for the whole text.",
+          "tags": [
+            "alignment",
+            "awareness"
+          ]
+        },
+        {
+          "text": "",
+          "tags": [
+            "nofeedback"
+          ]
+        }
+      ],
+      "general_info": "",
+      "current_progress": 59
+    },
+    {
+      "column_name": "double_clicking_open",
+      "cells": [
+        {
+          "text": "I don't know what to say",
+          "tags": [
+            "nofeedback"
+          ]
+        },
+
+        {
+          "text": "kind of trial and error, adjusting tone and content were less impactful then I thought they would be. Mostly used it because text based corrections didn't work.",
+          "tags": [
+            "error",
+            "less impactful than thought"
+          ]
+        },
+        {
+          "text": "I would rather use written commands rather than this method",
+          "tags": [
+            "prefer written commands"
+          ]
+        },
+        {
+          "text": "I can imagine it\u2019s a very convenient way to adjust the tone of sentences. If I only need to fine-tune a sentence or two, I\u2019d prefer to use this to quickly make those tweaks. However, I can also imagine that if the tone of an entire passage doesn\u2019t meet my expectations, I\u2019d prefer to apply a command to change it all at once.",
+          "tags": [
+            "only when fine-tuen one or two sentences"
+          ]
+        },
+
+        {
+          "text": "Didn't notice this feature",
+          "tags": [
+            "did not notice feature"
+          ]
+        },
+        {
+          "text": "",
+          "tags": [
+            "nofeedback"
+          ]
+        },
+        {
+          "text": "With this function, I can standardize overly subjective content during the article polishing process, so that it is neither too positive nor too pessimistic.",
+          "tags": [
+            "alignment"
+          ]
+        },
+        {
+          "text": "If the output doesn\u2019t match my expectations, I adjust it until it matches my expectations.",
+          "tags": [
+            "alignment"
+          ]
+        },
+        {
+          "text": "I think this feature helps to quickly modify content and tone, but relatively speaking, I don't find the separate modification feature to be more convenient.",
+          "tags": [
+            "alignment",
+            "efficient",
+            "not convenient"
+          ]
+        },
+        {
+          "text": "Although sometimes the change of tone and the recognition of the tone do not work as I expected, it does help to make it align better with my expectation. When I used it to do the last positive paragraph for fried chicken, it works perfectly to change it to what I want.",
+          "tags": [
+            "alignment",
+            "unexpected changes"
+          ]
+        },
+        {
+          "text": "I usually first use this function to set the corresponding color. Once the color becomes dark enough, I will then carefully check if it meets my expectations for the tone.",
+          "tags": [
+            "alignment"
+          ]
+        },
+        {
+          "text": "I may not use this feature because I want the whole context to be logical and read smoothly.",
+          "tags": [
+            "not using"
+          ]
+        },
+        {
+          "text": "I can change the tone(character) that system output",
+          "tags": [
+            "alignment"
+          ]
+        },
+        {
+          "text": "Please take a look at my other response.",
+          "tags": [
+            "nofeedback"
+          ]
+        },
+        {
+          "text": "I will change the highlights of the color by content and attitude I want to output",
+          "tags": [
+            "alignment"
+          ]
+        },
+        {
+          "text": "Well, basically same as the previous function. For those topics which I have a strong inclination, this can help me to easily adjust the tone of sentences. For more complex topic I think it is also worth to try as it is very easy and intuitive to use but I may not rely on the results of that feature too much.",
+          "tags": [
+            "only when fine-tuen one or two sentences"
+          ]
+        },
+        {
+          "text": "",
+          "tags": [
+            "nofeedback"
+          ]
+        },
+        {
+          "text": "",
+          "tags": [
+            "nofeedback"
+          ]
+        },
+        {
+          "text": "I just made adjustment when I thought it did not meet my expectation.",
+          "tags": [
+            "alignment"
+          ]
+        },
+        {
+          "text": "I tried to use it to change the tone to make it more suitable with my expected tone for the topic if the highlight color shows the sentence is relatively more opposite to my inended tone.",
+          "tags": [
+            "alignment"
+          ]
+        },
+        {
+          "text": "adjust the tone in each sentence slightly to improve the whole paragraph.",
+          "tags": [
+            "alignment"
+          ]
+        },
+        {
+          "text": "I can tell if the tone was appropriate and make it sound more neutral.",
+          "tags": [
+            "alignment"
+          ]
+        },
+        {
+          "text": "I continuously revised and improved the topic of the discussion.",
+          "tags": [
+            "alignment"
+          ]
+        },
+        {
+          "text": "I like to use story telling in 4 paragraphs, so it helps me to change attitude when writing. Also, I can just change some of the sentences instead of the entire.",
+          "tags": [
+            "alignment",
+            "convenient"
+          ]
+        },
+        {
+          "text": "it helped me better align the tone with my intended emtional framing. however, the changes sometimes changes is subtle, which may doublt me if the adjustion really works, whose inconsistency made me less confidence about the feature, but it is still nessary for existing. just improve the problem of subtle change",
+          "tags": [
+            "alignment",
+            "change is subtle"
+          ]
+        },
+        {
+          "text": "I don't think this feature is very helpful to me.",
+          "tags": [
+            "unhelpful"
+          ]
+        },
+        {
+          "text": "I think this function is very useful, allow me to change every sentence that I want to improve",
+          "tags": [
+            "alignment",
+            "helpful"
+          ]
+        },
+        {
+          "text": "This function allows me to change the sentence, either more positive or more negative. I think it is handy as I don't need to copy paste the sentence and ask AI to change, just double click",
+          "tags": [
+            "alignment",
+            "convenient"
+          ]
+        },
+        {
+          "text": "smart and easy use",
+          "tags": [
+            "alignment",
+            "convenient"
+          ]
+        },
+        {
+          "text": "To adjust tone to close my real own opinion",
+          "tags": [
+            "alignment"
+          ]
+        },
+        {
+          "text": "I couldn't help but noticing that I really wanted to improve the text about the topics that I am positive about, but that I actually immediately agreed with the text generated about the topics that I am negative about.",
+          "tags": [
+            "feedbackirrelavent"
+          ]
+        },
+        {
+          "text": "Change sentences that do not fit the tone of the rest of the paragraph.",
+          "tags": [
+            "alignment"
+          ]
+        },
+        {
+          "text": "Reformulate problematic parts.",
+          "tags": [
+            "alignment"
+          ]
+        },
+        {
+          "text": "It would help in making the paragraph more suited to my needs.",
+          "tags": [
+            "alignment"
+          ]
+        },
+        {
+          "text": "I used this feature to balance arguments more. So, in texts that were mostly positive or negative, I didn't use this feature as much. However, when I did, it allowed me to shape the text and its argument according to my view and thus align it.",
+          "tags": [
+            "alignment",
+            "only when fine-tuen one or two sentences"
+          ]
+        },
+        {
+          "text": "If this feature were available, I would use it to adjust the tone I want to express!\n",
+          "tags": [
+            "alignment"
+          ]
+        },
+        {
+          "text": "I rarely used this feature, as I felt open text input how I felt about the entire text works better to finetune the model than just clicking a button. ",
+          "tags": [
+            "not using"
+          ]
+        },
+        {
+          "text": "I think I saw this feature but didn't feel a need to use it. I don't usually think about tone and content on a per-sentence basis so suggesting a sentence to be more positive or negative seemed like it could throw the \"vibe\" of the whole thing off",
+          "tags": [
+            "not using"
+          ]
+        },
+        {
+          "text": "I had a good example where I found this feature surprisingly useful. When i had to write positively and it started off negative, when I asked the chatbot to change it into a positive text, it kept some negative content in it. For example, it still stated every possible health condition that was wrong with the type of dog breed I wanted to write positive about. Using this feature, I could easily change the text that was wrong, while keeping the rest the same.",
+          "tags": [
+            "helpful"
+          ]
+        },
+        {
+          "text": "It can better tailor the answer to my expectation",
+          "tags": [
+            "alignment"
+          ]
+        },
+        {
+          "text": "First, introduce the significance of numerology; then, provide examples of how numbers hold different meanings across cultures; finally, explain the broader implications of this phenomenon.",
+          "tags": [
+            "feedbackirrelavent"
+          ]
+        },
+        {
+          "text": "I used this feature as a tool to assist in structuring and refining my writing. First, I outlined my main ideas and input them into the system. Then, I used the feature to rephrase and expand these ideas into coherent paragraphs. It helped ensure clarity, correct grammar, and smooth transitions between sentences. Throughout the process, I reviewed and edited the output to maintain my original voice while enhancing overall quality.",
+          "tags": [
+            "alignment",
+            "helpful"
+          ]
+        },
+        {
+          "text": "",
+          "tags": [
+            "nofeedback"
+          ]
+        },
+        {
+          "text": "",
+          "tags": [
+            "nofeedback"
+          ]
+        },
+        {
+          "text": "i think this function is smart. because it can clearly catch what i want to descirbe in my paragraphs, but sometimes i think it can only give some short summary concept of my paragraphs! maybe because i didn't try the more steps. but i think it's smarter than some AI. so keep on fighting.",
+          "tags": [
+            "alignment"
+          ]
+        },
+        {
+          "text": "",
+          "tags": [
+            "nofeedback"
+          ]
+        },
+        {
+          "text": "Sometimes the stuff the sentences is talking about is not align with what I want to express, like the stuff is even not exist in the topic I choose. If they are talking about the right stuff in the topic, just the tone is not align with me, I would like to change it to positive or negative. It is the use of  sentimental analysis. ",
+          "tags": [
+            "feedbackirrelavent"
+          ]
+        },
+        {
+          "text": "",
+          "tags": [
+            "nofeedback"
+          ]
+        },
+        {
+          "text": "It is helpful when changing tone from negative to positive. I would use it for extremes. ",
+          "tags": [
+            "alignment",
+            "only when fine-tuen one or two sentences"
+          ]
+        },
+        {
+          "text": "I think the contents match my positive topic so well. When I'm talking about the negative topic, the tone is a little bit harsh, so I could use this feature to slightly make a revisement.",
+          "tags": [
+            "alignment",
+            "only when fine-tuen one or two sentences"
+          ]
+        },
+        {
+          "text": "useful",
+          "tags": [
+            "nofeedback"
+          ]
+        },
+        {
+          "text": "I used this feature during the experiment to modify the tone of the content and align it with what I wanted to convey. Indirectly, this also makes me aware of potential biases in the generated text (or, to be specific more, of how the words and tone we use, the way we present information, can affect an audience's perspective of a specific topic)",
+          "tags": [
+            "alignment",
+            "awareness"
+          ]
+        },
+        {
+          "text": "I was able to adjust a specific sentence (its tone or content), which is very handy.",
+          "tags": [
+            "alignment",
+            "convenient"
+          ]
+        },
+        {
+          "text": "I would add some more attempts beyond positive and negative",
+          "tags": [
+            "want more detailed control"
+          ]
+        },
+        {
+          "text": "",
+          "tags": [
+            "nofeedback"
+          ]
+        },
+        {
+          "text": "I will adjust some concluding statements at the beginning or end to make them more emotional",
+          "tags": [
+            "alignment"
+          ]
+        },
+        {
+          "text": "i explain this on my previous question",
+          "tags": [
+            "nofeedback"
+          ]
+        },
+        {
+          "text": "I used this feature to adapt my sentences. I looked for sentences that would strengthen my view most if they were changed. I also used it in the third round, when the AI was very negative about the thing I am positive about to change nearly all sentences to more positive.",
+          "tags": [
+            "alignment"
+          ]
+        },
+        {
+          "text": "",
+          "tags": [
+            "nofeedback"
+          ]
+        }
+      ],
+      "general_info": "",
+      "current_progress": 61
+    },
+    {
+      "column_name": "vis_polarity_open",
+      "cells": [
+        {
+          "text": "I didn't see them but I think this can help me determine the tone more clearly.",
+          "tags": [
+            "awareness"
+          ]
+        },
+
+        {
+          "text": "I would have used it to identify which parts of the paragraph the model looks at when determining what the tone of the paragraph is.",
+          "tags": [
+            "awareness"
+          ]
+        },
+        {
+          "text": "I did not see this visualization as part of the experiment, and therefore cannot judge it",
+          "tags": [
+            "nofeedback"
+          ]
+        },
+        {
+          "text": "I guess i will pay more attention to the sentences that are highlighted in colors that don\u2019t match my expected tone.",
+          "tags": [
+            "awareness"
+          ]
+        },
+        {
+          "text": "to see  the focus of this paragraph is more postive or negative",
+          "tags": [
+            "awareness"
+          ]
+        },
+
+        {
+          "text": "I can determine how much I can believe this statement based on its positive or negative truthfulness.",
+          "tags": [
+            "trust judgement"
+          ]
+        },
+        {
+          "text": "If the output doesn\u2019t match my expectations, I adjust it until it matches my expectations.",
+          "tags": [
+            "alignment"
+          ]
+        },
+        {
+          "text": "For me, the degree of positivity in tone does not affect my decision to make changes when applying it in practice. I only make corresponding modifications after reading it myself, as I believe I have a better grasp of whether the tone is appropriate in human social interactions.",
+          "tags": [
+            "no effect"
+          ]
+        },
+        {
+          "text": "I didn't see this feature when I used the chatbox. But I might adjust the overall tone accordingly.",
+          "tags": [
+            "alignment"
+          ]
+        },
+        {
+          "text": "Didn't pay attention to that function.",
+          "tags": [
+            "nofeedback"
+          ]
+        },
+        {
+          "text": "I won't use ",
+          "tags": [
+            "wont use"
+          ]
+        },
+        {
+          "text": "Please take a look at my other response.",
+          "tags": [
+            "nofeedback"
+          ]
+        },
+        {
+          "text": "I will use the graph to roughly judge whether the text has the attitude I want.",
+          "tags": [
+            "awareness"
+          ]
+        },
+        {
+          "text": "Well, I have to admit I do not really understand those parts. Because they seems lack of instructions/introductions and are not directly connected to the operations. And I suppose this is not that helpful as anyhow I need to go through the generated content and have my own judgement, so for me this indicator would be ignored in most cases.",
+          "tags": [
+            "no effect",
+            "lack of instruction"
+          ]
+        },
+        {
+          "text": "",
+          "tags": [
+            "nofeedback"
+          ]
+        },
+        {
+          "text": "",
+          "tags": [
+            "nofeedback"
+          ]
+        },
+        {
+          "text": "I just made adjustment when I thought it did not meet my expectation.",
+          "tags": [
+            "alignment"
+          ]
+        },
+        {
+          "text": "By checking this part in this app I could more easily see if the AI has made the tone of this paragraph closer to my intended tone after rewriting.",
+          "tags": [
+            "alignment"
+          ]
+        },
+        {
+          "text": "I can use it to compare the quantified tendency with my feeling, and better assessing the paragraphs.",
+          "tags": [
+            "awareness",
+            "alignment"
+          ]
+        },
+        {
+          "text": "I can tell the slight difference between different tones, such as slightly negative and very negative contents. And I can make it sound more positively by adjusting the tones.",
+          "tags": [
+            "awareness",
+            "alignment"
+          ]
+        },
+        {
+          "text": "I continuously revised and improved the topic of the discussion.",
+          "tags": [
+            "alignment"
+          ]
+        },
+        {
+          "text": "To make sure my writing fits my expectations",
+          "tags": [
+            "alignment"
+          ]
+        },
+        {
+          "text": "i did see the visualization, but i guess the the tone should be feeling during the reading. feeling is objective and analysis is subjective. the participator may sometings dont know why a tone align their expectation and the other why not algin. the visualization may sometime doubleful when it shows the analysis the tone which the participator dont think about.",
+          "tags": [
+            "doubtful"
+          ]
+        },
+        {
+          "text": "It can help me feel the tone of AI more intuitively. I like this feature, it's very beautiful",
+          "tags": [
+            "awareness"
+          ]
+        },
+        {
+          "text": "I didn't text this function, but looks so cool! I like it.",
+          "tags": [
+            "cool"
+          ]
+        },
+        {
+          "text": "By using this feature, you can measure the amount of changes and made further changes based on this data. Then you can make better sentences which aligh with the tone",
+          "tags": [
+            "awareness",
+            "alignment"
+          ]
+        },
+        {
+          "text": "give me an overview of tone, good range management",
+          "tags": [
+            "awareness"
+          ]
+        },
+        {
+          "text": "more qualitative",
+          "tags": [
+            "nofeedback"
+          ]
+        },
+        {
+          "text": "I didn't spot the visualization and mainly focused on the text.",
+          "tags": [
+            "no effect"
+          ]
+        },
+        {
+          "text": "Seeing whether the sentiment of the overall text matches my expectations.",
+          "tags": [
+            "awareness"
+          ]
+        },
+        {
+          "text": "Assess the overall tone of the text.",
+          "tags": [
+            "awareness"
+          ]
+        },
+        {
+          "text": "I would use this feature to reconfigure the overarching them of the paragraph.",
+          "tags": [
+            "alignment"
+          ]
+        },
+        {
+          "text": "I would use this to compare texts that I am doubting between and see how they compare. The visualization would be useful because it shows me a quickly interpretable overview, leaving me to decide instead of analyzing the text's sentiment.",
+          "tags": [
+            "awareness",
+            "alignment"
+          ]
+        },
+        {
+          "text": "\nWith the visualization feature, I will use it to adjust the tone I want to express (more sensitive).",
+          "tags": [
+            "awareness",
+            "alignment"
+          ]
+        },
+        {
+          "text": "I would probably aim to either keep it very positive or negative. I do not feel like it would make me trust the system more as it does not highlight anything about the content. I would not even know how this metric is calculated, so why would I trust the system more?",
+          "tags": [
+            "alignment",
+            "doubtful"
+          ]
+        },
+        {
+          "text": "This feature would have been a closer representation of how I weighed the paragraphs in my head. Seeing a visual validation could have helped me get a better sense of where the AI was and how much more I should prod it along",
+          "tags": [
+            "awareness",
+            "alignment"
+          ]
+        },
+        {
+          "text": "I could see the overall emotion of my text, however i feel that, if you want to change this, it would be usefull to have the other feature with the colored text message, to pinpoint what I need to change if I am not happy with my results. Otherwhise i would have to use trial-and-error to change the overall feeling of my message",
+          "tags": [
+            "alignment",
+            "doubtful"
+          ]
+        },
+        {
+          "text": "More visual and more clear presentation of the answer",
+          "tags": [
+            "awareness"
+          ]
+        },
+        {
+          "text": "Help me briefly explain what Pepsi is, in your answer, if it is mentioning the better aspects of the thing or anything positive, please mark the corresponding sentence in green, and vice versa, please use pink.No colour is used for other statements that are neutral.",
+          "tags": [
+            "nofeedback"
+          ]
+        },
+        {
+          "text": "I used this feature as a tool to assist in structuring and refining my writing. First, I outlined my main ideas and input them into the system. Then, I used the feature to rephrase and expand these ideas into coherent paragraphs. It helped ensure clarity, correct grammar, and smooth transitions between sentences. Throughout the process, I reviewed and edited the output to maintain my original voice while enhancing overall quality.",
+          "tags": [
+            "alignment"
+          ]
+        },
+        {
+          "text": "",
+          "tags": [
+            "nofeedback"
+          ]
+        },
+        {
+          "text": "",
+          "tags": [
+            "nofeedback"
+          ]
+        },
+        {
+          "text": "i think this function is smart. because it can clearly catch what i want to descirbe in my paragraphs, but sometimes i think it can only give some short summary concept of my paragraphs! maybe because i didn't try the more steps. but i think it's smarter than some AI. so keep on fighting.",
+          "tags": [
+            "cool"
+          ]
+        },
+        {
+          "text": "",
+          "tags": [
+            "nofeedback"
+          ]
+        },
+        {
+          "text": "I might not use this feature",
+          "tags": [
+            "wont use"
+          ]
+        },
+        {
+          "text": "",
+          "tags": [
+            "nofeedback"
+          ]
+        },
+        {
+          "text": "The visuals help me to understand the underlying tones when creating the text. I would send prompts such as be more positive to reflect the change in the bar, while also using it when creating campaigns. ",
+          "tags": [
+            "awareness",
+            "alignment"
+          ]
+        },
+        {
+          "text": "Overall, I think we need to look at the topic dialectically, so there is no 100% good or bad thing. This feature can show the tendency of positive and nagative, which is very helpful in judging the generated content.",
+          "tags": [
+            "awareness",
+            "alignment",
+            "helpful"
+          ]
+        },
+        {
+          "text": "never use them ",
+          "tags": [
+            "nofeedback"
+          ]
+        },
+        {
+          "text": "I did not see this feature, but once again I think it can be very valuable for editing the tone of a text and reflecting on what the user wants to convey (or is actually conveying). I realise that when I write, I don't necessarily pay attention to whether the tone I use is positive, neutral or negative, and how this may influence my audience. This kind of feature, therefore, is a great tool for reviewing and editing content's tone during writing tasks. It can also help users become more aware of their own biases when writing",
+          "tags": [
+            "awareness",
+            "alignment"
+          ]
+        },
+        {
+          "text": "The distribution clearly showed the overall tone and how it changed after the adjustment, which was useful.",
+          "tags": [
+            "awareness",
+            "alignment"
+          ]
+        },
+        {
+          "text": "Try to relate more examples and external topics by linking the generated sentences",
+          "tags": [
+            "nofeedback"
+          ]
+        },
+        {
+          "text": "",
+          "tags": [
+            "nofeedback"
+          ]
+        },
+        {
+          "text": "I can adjust the mood of the entire article according to the values in the chart on the right",
+          "tags": [
+            "awareness",
+            "alignment"
+          ]
+        },
+        {
+          "text": "i actually dont really understand how this visualization works, and this kind of visualization i did often see on my daily life. but aaccording the the total color of the two box on the vusualization i can know the general tone is bad or good of this papragragh",
+          "tags": [
+            "awareness"
+          ]
+        },
+        {
+          "text": "I would use it to check the general tone after changing a sentence. Sometimes, changing one sentence set the tone for the rest, so having a general overview would be nice.",
+          "tags": [
+            "awareness",
+            "alignment"
+          ]
+        },
+        {
+          "text": "They were pretty well formed as they were",
+          "tags": [
+            "cool"
+          ]
+        }
+      ],
+      "general_info": "",
+      "current_progress": 59
+    },
+    {
+      "column_name": "vis_distribution_open",
+      "cells": [
+        {
+          "text": "To create a critical paragraph.",
+          "tags": [
+            "alignment"
+          ]
+        },
+        {
+          "text": "same as previous answer, I would use it to find out which parts of the paragraph the model looks at when determining its own tone.",
+          "tags": [
+            "awareness"
+          ]
+        },
+        {
+          "text": "I did not see this type of visualization either during the tests",
+          "tags": [
+            "nofeedback"
+          ]
+        },
+        {
+          "text": "I\u2019ll use this feature to select the most appropriate answer for each topic",
+          "tags": [
+            "alignment"
+          ]
+        },
+        {
+          "text": "the visualization is very clear",
+          "tags": [
+            "clear"
+          ]
+        },
+        {
+          "text": "",
+          "tags": [
+            "nofeedback"
+          ]
+        },
+        {
+          "text": "This can help me roughly judge the degree to which I believe in the entire paragraph",
+          "tags": [
+            "increase trust"
+          ]
+        },
+        {
+          "text": "If the output doesn\u2019t match my expectations, I adjust it until it matches my expectations.",
+          "tags": [
+            "alignment"
+          ]
+        },
+        {
+          "text": "For me, the degree of positivity in tone does not affect my decision to make changes when applying it in practice. I only make corresponding modifications after reading it myself, as I believe I have a better grasp of whether the tone is appropriate in human social interactions.\nHowever, when editing something like an IELTS essay, I would be more interested in the distribution of such tones.",
+          "tags": [
+            "no effect",
+            "self-judgement",
+            "useful in acadimic eng"
+          ]
+        },
+        {
+          "text": "I didn't see this feature. I think it might not be so helpful for me compared with the previous one. I might use it for some public speeches. For some paragraphs when I want to make them more persuasive I would love to use it or the previous feature.",
+          "tags": [
+            "useful in acadimic eng"
+          ]
+        },
+        {
+          "text": "Didn't pay attention to that function.",
+          "tags": [
+            "nofeedback"
+          ]
+        },
+        {
+          "text": "I won't use it ",
+          "tags": [
+            "wont use"
+          ]
+        },
+        {
+          "text": "",
+          "tags": [
+            "nofeedback"
+          ]
+        },
+        {
+          "text": "Please take a look at my other response.",
+          "tags": [
+            "nofeedback"
+          ]
+        },
+        {
+          "text": "I will use the graph to roughly judge whether the text has the attitude I want, same as previous",
+          "tags": [
+            "alignment",
+            "awareness"
+          ]
+        },
+        {
+          "text": "This distribution is more interesting to me. It is gives more insights than the whole tendency of the paragraph while more concise than the each sentence highlighting. ",
+          "tags": [
+            "awareness"
+          ]
+        },
+        {
+          "text": "",
+          "tags": [
+            "nofeedback"
+          ]
+        },
+        {
+          "text": "",
+          "tags": [
+            "nofeedback"
+          ]
+        },
+        {
+          "text": "I just made adjustment when I thought it did not meet my expectation.",
+          "tags": [
+            "alignment",
+            "awareness"
+          ]
+        },
+        {
+          "text": "It helps me check how the AI works with my expecting tone and content of this paragraph it wrote for me, also more easily to compare the results after I ask it to adjust the tone or content. ",
+          "tags": [
+            "alignment",
+            "awareness"
+          ]
+        },
+        {
+          "text": "this might not differ a lot to the previous feature. Still somewhat assess the whole paragraph.",
+          "tags": [
+            "alignment",
+            "awareness"
+          ]
+        },
+        {
+          "text": "I can visualise the tones to see if different paragraphs are coherent (both the contents and the tones) and make some slight adjustments.",
+          "tags": [
+            "alignment",
+            "awareness"
+          ]
+        },
+        {
+          "text": "I continuously revised and improved the topic of the discussion.",
+          "tags": [
+            "alignment",
+            "awareness"
+          ]
+        },
+        {
+          "text": "Be more convince about my attitude and what i would like to deliver by post",
+          "tags": [
+            "increase confident"
+          ]
+        },
+        {
+          "text": "same with the previous one, as i didnt see the both graph during the test\n",
+          "tags": [
+            "nofeedback"
+          ]
+        },
+        {
+          "text": "It's a bit cumbersome and doesn't feel very concise.",
+          "tags": [
+            "cumbersome"
+          ]
+        },
+        {
+          "text": "good idea with this function",
+          "tags": [
+            "good idea"
+          ]
+        },
+        {
+          "text": "By using this feature, it could help you adjust the tone even more accurate as you could see the distribution.",
+          "tags": [
+            "alignment",
+            "awareness"
+          ]
+        },
+        {
+          "text": "this tone distribution is out of my expectation, i never thought about such analysis",
+          "tags": [
+            "innovative"
+          ]
+        },
+        {
+          "text": "Make more virtual to view my writting",
+          "tags": [
+            "nofeedback"
+          ]
+        },
+        {
+          "text": "I might want to ensure that there is some balance between the blue and red. Still, I would ultimately want to judge the text by myself.",
+          "tags": [
+            "alignment",
+            "awareness"
+          ]
+        },
+        {
+          "text": "Seeing the balance between positive and negative in a text.",
+          "tags": [
+            "alignment"
+          ]
+        },
+        {
+          "text": "Assess the overall tone of the text.",
+          "tags": [
+            "awareness"
+          ]
+        },
+        {
+          "text": "I don't think this feature would be something that i want to use.",
+          "tags": [
+            "wont use"
+          ]
+        },
+        {
+          "text": "I would use it to see whether some texts are \"too much\" or not, since it can show me the balance of the text's sentiment.",
+          "tags": [
+            "alignment",
+            "awareness"
+          ]
+        },
+        {
+          "text": "As before:\nWith the visualization feature, I will use it to adjust the tone I want to express (more sensitive).",
+          "tags": [
+            "alignment",
+            "awareness"
+          ]
+        },
+        {
+          "text": "",
+          "tags": [
+            "nofeedback"
+          ]
+        },
+        {
+          "text": "This feature would have had a similar effect as the other paragraph tone visualization, but I was initially more confused about what I was seeing than with the other one. I think it could still help me weigh the differences between the revised paragraphs though",
+          "tags": [
+            "alignment",
+            "awareness",
+            "cumbersome"
+          ]
+        },
+        {
+          "text": "Same as my previous answer: \nI could see the overall emotion of my text, however i feel that, if you want to change this, it would be usefull to have the other feature with the colored text message, to pinpoint what I need to change if I am not happy with my results. Otherwhise i would have to use trial-and-error to change the overall feeling of my message",
+          "tags": [
+            "alignment",
+            "awareness"
+          ]
+        },
+        {
+          "text": "Somewhat I do not want my answer to be this level of complex",
+          "tags": [
+            "cumbersome"
+          ]
+        },
+        {
+          "text": "Help me create a tone distribution graph for each sentence in these two paragraphs\u2014use blue for one and orange for the other.",
+          "tags": [
+            "nofeedback"
+          ]
+        },
+        {
+          "text": "",
+          "tags": [
+            "nofeedback"
+          ]
+        },
+        {
+          "text": "",
+          "tags": [
+            "nofeedback"
+          ]
+        },
+        {
+          "text": "",
+          "tags": [
+            "nofeedback"
+          ]
+        },
+        {
+          "text": "i think this function is smart. because it can clearly catch what i want to descirbe in my paragraphs, but sometimes i think it can only give some short summary concept of my paragraphs! maybe because i didn't try the more steps. but i think it's smarter than some AI. so keep on fighting.",
+          "tags": [
+            "nofeedback"
+          ]
+        },
+        {
+          "text": "",
+          "tags": [
+            "nofeedback"
+          ]
+        },
+        {
+          "text": "I might not use this feature.",
+          "tags": [
+            "wont use"
+          ]
+        },
+        {
+          "text": "",
+          "tags": [
+            "nofeedback"
+          ]
+        },
+        {
+          "text": "This feature is similar to the one earlier. Not sure how it will help better? But I would think the visuals can help me with the adjustment for each sentence and get the overall impression of positivity or negativity. ",
+          "tags": [
+            "alignment",
+            "awareness"
+          ]
+        },
+        {
+          "text": "I would use this feature to evaluate the general emotional attitude of the entire paragraph.",
+          "tags": [
+            "alignment",
+            "awareness"
+          ]
+        },
+        {
+          "text": "not helpful",
+          "tags": [
+            "not helpful"
+          ]
+        },
+        {
+          "text": "I personally find this graph a bit less readable",
+          "tags": [
+            "not very readable"
+          ]
+        },
+        {
+          "text": "It was helpful to see exactly how positive or negative a tone was.",
+          "tags": [
+            "helpful"
+          ]
+        },
+        {
+          "text": "I would make use of it to evaluate the overall tone, as well as the structure.",
+          "tags": [
+            "alignment",
+            "awareness"
+          ]
+        },
+        {
+          "text": "",
+          "tags": [
+            "alignment"
+          ]
+        },
+        {
+          "text": "I can use this function to identify the overall tone of a paragraph, which can make the tone more extreme in emphasizing positive or negative",
+          "tags": [
+            "alignment"
+          ]
+        },
+        {
+          "text": "this visualization works very well, it shows the frequence that a bad or good tone sentence appear on the paragraph. ",
+          "tags": [
+            "awareness"
+          ]
+        },
+        {
+          "text": "I would use it similarly to the previous one.",
+          "tags": [
+            "nofeedback"
+          ]
+        },
+        {
+          "text": "",
+          "tags": [
+            "nofeedback"
+          ]
+        }
+      ],
+      "general_info": "",
+      "current_progress": 59
+    },
+    {
+      "column_name": "future_development",
+      "cells": [
+        {
+          "text": "Something like comparing me and other users when we are asking similar questions.",
+          "tags": [
+            "cross-user-comparison on answers"
+          ]
+        },
+        {
+          "text": "Provide multiple options simultaneously.",
+          "tags": [
+            "provide more detailed gaps of adjusting the tone"
+          ]
+        },
+        {
+          "text": "being able to select specific words or phrases as being wrong or having the wrong tone. So the parts of the sentence the model changes actually match the erronious parts.",
+          "tags": [
+            "ability to select at different scale"
+          ]
+        },
+        {
+          "text": "Links or references to the text that inspired the AI chatbot to express these opinions would make it easier to understand its thought process",
+          "tags": [
+            "add references/links to support it's reasoning"
+          ]
+        },
+        {
+          "text": "Maybe\u2026 as I stated in the next question, I always need to pay attention to verifying the accuracy of the content generated by AI. So if there\u2019s a feature that indicates which parts of the content are accurate (are facts) and which are generated by the AI itself, I\u2019d be really grateful for that",
+          "tags": [
+            "fact meter would be great"
+          ]
+        },
+
+        {
+          "text": "obsidian",
+          "tags": [
+            "nofeedback"
+          ]
+        },
+        {
+          "text": "Maybe heatmap to showed the positve or negative. ",
+          "tags": [
+            "more visualization tool: heatmap"
+          ]
+        },
+        {
+          "text": "Real-time data visualization tools to convert text-based analysis into charts/graphs.Citation management integrations with academic databases.",
+          "tags": [
+            "add references/links to support it's reasoning"
+          ]
+        },
+        {
+          "text": "I believe that visualising the source of information will give people more confidence in the AI writing process.",
+          "tags": [
+            "add references/links to support it's reasoning"
+          ]
+        },
+        {
+          "text": "",
+          "tags": [
+            "nofeedback"
+          ]
+        },
+        {
+          "text": "nope",
+          "tags": [
+            "nofeedback"
+          ]
+        },
+        {
+          "text": "The central idea of each paragraph",
+          "tags": [
+            "An abbreviation of each paragraph"
+          ]
+        },
+        {
+          "text": "forecast  the viewer mood",
+          "tags": [
+            "mood forecast"
+          ]
+        },
+        {
+          "text": "Please take a look at my other response.",
+          "tags": [
+            "nofeedback"
+          ]
+        },
+        {
+          "text": "the content that AI reference.",
+          "tags": [
+            "add references/links to support it's reasoning"
+          ]
+        },
+        {
+          "text": "If possible, it could be more helpful to point out which specific word leads to the tendency of the tone, rather than just the whole score of the sentence. That would make users have a better idea about the root of the tone and more flexible for modification.",
+          "tags": [
+            "change the scale of the tone analysis to words/phrases"
+          ]
+        },
+        {
+          "text": "",
+          "tags": [
+            "nofeedback"
+          ]
+        },
+        {
+          "text": "The accuracy of word usage can be assisted.",
+          "tags": [
+            "nofeedback"
+          ]
+        },
+        {
+          "text": "Collaboration tools for sharing and reviewing with peers.",
+          "tags": [
+            "team co-operating tool"
+          ]
+        },
+        {
+          "text": "Give some advises or hints about how to write the question to the AI to get a result that the user would be more satisfied, and put this in the corner of the app page.",
+          "tags": [
+            "An aid of how to write the prompt to make the answer more fit the need"
+          ]
+        },
+        {
+          "text": "maybe like quillbot. Only change some words instead of a whole sentence.",
+          "tags": [
+            "ability to select at different scale"
+          ]
+        },
+        {
+          "text": "To check if the language was appropriate when describing different groups, such as people with autism. I would like to know if my language was polite enough and if it can elicit any prejudice and minor discrimination.",
+          "tags": [
+            "more perspectivies than just sentiment",
+            "but also consider different groups of people."
+          ]
+        },
+        {
+          "text": "I hope GTP can have different personality types, such as having different tones, being either formal and official or being fun and humorous.",
+          "tags": [
+            "add more personalities to gpt"
+          ]
+        },
+        {
+          "text": "Writing according to the culture of users",
+          "tags": [
+            "write under the background of the users"
+          ]
+        },
+        {
+          "text": "may the double click be marked deeper color, the color is grey and the word of content of al generated above is dark, so i ignore this function on the early participation. the color of it may be the dark blue or other i guess. ",
+          "tags": [
+            "more enphasized font or guide for the 'double clicking adjustment' feature"
+          ]
+        },
+        {
+          "text": "Can increase the percentage of information reliability.",
+          "tags": [
+            "add references/links to support it's reasoning"
+          ]
+        },
+        {
+          "text": "I usually ask it to focus more on the fact",
+          "tags": [
+            "add references/links to support it's reasoning"
+          ]
+        },
+        {
+          "text": "mindmaps",
+          "tags": [
+            "nofeedback"
+          ]
+        },
+        {
+          "text": "some times same topic is not very consistent response",
+          "tags": [
+            "consistency between the answers"
+          ]
+        },
+        {
+          "text": "",
+          "tags": [
+            "nofeedback"
+          ]
+        },
+        {
+          "text": "Highlighting of words that have a high valence; highlighting of entities (persons, places, events) that are controversial. Perhaps instead of providing the text as a whole, let users build it piece by piece (and possibly offer different alternatives with corresponding visualizations instead of waiting before users ask for it - by double-clicking on it).",
+          "tags": [
+            "provided several options when doing the modification(make the modification more predictable)",
+            "Highligh on entities",
+            "Highlight of high valence words"
+          ]
+        },
+        {
+          "text": "",
+          "tags": [
+            "nofeedback"
+          ]
+        },
+        {
+          "text": "Word cloud.",
+          "tags": [
+            "word cloud"
+          ]
+        },
+        {
+          "text": "Adding a feature to make it \"more personal\" or incorporating a \"write with feeling\" option would help, as the current version feels too neutral and lacks any personal association with the topics.",
+          "tags": [
+            "add more personalities to gpt"
+          ]
+        },
+        {
+          "text": "",
+          "tags": [
+            "nofeedback"
+          ]
+        },
+        {
+          "text": "",
+          "tags": [
+            "nofeedback"
+          ]
+        },
+        {
+          "text": "For example, it could help me to get explanations how those metrics are calculated and if further things can be determined (e.g., is the text insulting, is it adressing my target group etc.)",
+          "tags": [
+            "transparent calculation on the visualizations",
+            "extra measurements that can be modified according to user's expectation"
+          ]
+        },
+        {
+          "text": "For academic/professional writing, something to keep track of links/citations would be helpful. I would want to make sure I'm not plagiarizing, but also that I'm faithfully capturing the main points of the resources in a neutral (unbiased) tone. Then I can use those as building blocks to provide my own opinions (positive or negative) after that.\n\nFor more casual writing (like on social media), I wouldn't reach for a chatbot's help, or at least not part of the first draft attempt.",
+          "tags": [
+            "add references/links to support it's reasoning"
+          ]
+        },
+        {
+          "text": "",
+          "tags": [
+            "nofeedback"
+          ]
+        },
+        {
+          "text": "Some would be nice, but sometimes I ask AI chatbots only for simplify or quick response. When I have simple request, I do not want it. But if I want customized answer, I would like to have that",
+          "tags": [
+            "use only when needed would be nice"
+          ]
+        },
+        {
+          "text": "yes. For example, writing an essay in the tone of a writer, the passage might be a little literary\n",
+          "tags": [
+            "nofeedback"
+          ]
+        },
+        {
+          "text": "Such as charts, data analysis and so on",
+          "tags": [
+            "nofeedback"
+          ]
+        },
+        {
+          "text": "",
+          "tags": [
+            "nofeedback"
+          ]
+        },
+        {
+          "text": "",
+          "tags": [
+            "nofeedback"
+          ]
+        },
+        {
+          "text": "sometimes i like learn some languages from reviews to help me writing.",
+          "tags": [
+            "nofeedback"
+          ]
+        },
+        {
+          "text": "visualization of the confidence of each scentence",
+          "tags": [
+            "add references/links to support it's reasoning"
+          ]
+        },
+        {
+          "text": "I think the ability to handle more tokens could be helpful.",
+          "tags": [
+            "multiple updates in a batch"
+          ]
+        },
+        {
+          "text": "",
+          "tags": [
+            "nofeedback"
+          ]
+        },
+        {
+          "text": "Remember all the inputs I gave, but ChatGPT has already enabled that function. I would think the mimic of my tone would be very helpful when creating \"me\" text. ",
+          "tags": [
+            "add more personalities to gpt"
+          ]
+        },
+        {
+          "text": "When the topic involves irony, sometimes the chatbot does not understand my attitude well.",
+          "tags": [
+            "increase the understand of irony"
+          ]
+        },
+        {
+          "text": "Highlight the topic sentence",
+          "tags": [
+            "nofeedback"
+          ]
+        },
+        {
+          "text": "I think a great feature would be a \"plagiarism\" detector to help users reviewing whether the content they write is similar to other sources available online. This can help users identify if they properly referenced sources they used--or if the content they generate with ChatGPT plagiarise existing sources.",
+          "tags": [
+            "'plagiarism' detection"
+          ]
+        },
+        {
+          "text": "I don't really know.",
+          "tags": [
+            "nofeedback"
+          ]
+        },
+        {
+          "text": "hyperlink of the source embedded in the text.",
+          "tags": [
+            "add references/links to support it's reasoning"
+          ]
+        },
+        {
+          "text": "",
+          "tags": [
+            "nofeedback"
+          ]
+        },
+        {
+          "text": "Provide users with two versions of the text paragraphs and let them choose by themselves",
+          "tags": [
+            "provided several options when doing the modification(make the modification more predictable)"
+          ]
+        },
+        {
+          "text": "the feature i want is like the chatting, nowadays the ai is like a robot just answer the question i ask. i hope there can have a al app the page and function like wechat, i can chat with ai on that way.",
+          "tags": [
+            "AI to be more extrovert"
+          ]
+        },
+        {
+          "text": "Being able to adjust multiple sentences at a time, rather than just one in the postive/negative feature",
+          "tags": [
+            "multiple updates in a batch"
+          ]
+        },
+        {
+          "text": "",
+          "tags": [
+            "nofeedback"
+          ]
+        }
+      ],
+      "general_info": "",
+      "current_progress": 59
+    },
+    {
+      "column_name": "feedback_of_app",
+      "cells": [
+        {
+          "text": "The questionnaire is too long and the \"describe how\" part is a little bit confusing. I didn't get the purpose of this question until the very end.",
+          "tags": [
+            "questionnaire too long"
+          ]
+        },
+        {
+          "text": "I like it",
+          "tags": [
+            "like it"
+          ]
+        },
+        {
+          "text": "The app was a little confusing as the box I could write a response in turned the page unresponsive. Other then that it was intuitive to use.",
+          "tags": [
+            "network glitch"
+          ]
+        },
+        {
+          "text": "I think sometimes the tone evaluation provided by the app doesn\u2019t align with my own judgment, and this inconsistency adds to my cognitive load and leaves me feeling confused. Personally, I usually use AI to generate content with a more neutral tone, focusing on factual accuracy rather than adding strong emotions. This makes it a bit challenging for me to adapt to this app. However, it was the first time I became aware of the potential emotional bias in sentences, and I also realized how difficult it can be to accurately convey subtleties of emotions through AI",
+          "tags": [
+            "inaccurate",
+            "but raised awareness"
+          ]
+        },
+        {
+          "text": "i like the design to visualize ",
+          "tags": [
+            "like it"
+          ]
+        },
+        {
+          "text": "",
+          "tags": [
+            "nofeedback"
+          ]
+        },
+        {
+          "text": "I liked this design. But i want to know how to determine the \"positive\"or \"negative\".",
+          "tags": [
+            "like it",
+            "curious on how it's cauculated"
+          ]
+        },
+        {
+          "text": "No, it is good enough to have the test.",
+          "tags": [
+            "nofeedback"
+          ]
+        },
+        {
+          "text": "For the double-click function to change the tone, I think it would be better to add some more options rather than having the AI respond immediately after entering the command. This is because there may be more modifications at a specific time.",
+          "tags": [
+            "hope there be 'multiple adjustment at the same time' rather than double click adjustment"
+          ]
+        },
+        {
+          "text": "It is a bit confusing in recognizing the tone. Sometimes I feel it not so precise in judging if the sentence is neutral, negative, or positive. But this is very subjective. And the colors can be a bit more lighter, it is a bit hear to read when ai recognize it as very green or very red.",
+          "tags": [
+            "inaccurate",
+            "use another color palette"
+          ]
+        },
+        {
+          "text": "The highlighting function I think is very helpful for me personally. And the feature of quickly adjusting by double-clicking is very practical and is a very efficient and convenient command. Although there are often some color displays that make me feel they don't match my judgment of the tone orientation.",
+          "tags": [
+            "inaccurate",
+            "helpful"
+          ]
+        },
+        {
+          "text": "no",
+          "tags": [
+            "nofeedback"
+          ]
+        },
+        {
+          "text": "1.sometimes neg/pos is not accurate.\n2.the tone and content is not easy to seperate",
+          "tags": [
+            "like it",
+            "tone and content hard to seperate"
+          ]
+        },
+        {
+          "text": "Please take a look at my other response.",
+          "tags": [
+            "nofeedback"
+          ]
+        },
+        {
+          "text": "",
+          "tags": [
+            "nofeedback"
+          ]
+        },
+        {
+          "text": "Well, I think some explanation in the questionnaire should be moved to the instruction at the beginning of the app. A picture of the whole panel and explanation of each figure and botton should be explained before the usage. Some point that may lead to confusions should also be pointed out more clearly at the very begining and during the usage like the inaccurate highlighting color of the tone of each sentence.",
+          "tags": [
+            "inaccurate",
+            "more instruction on how to use"
+          ]
+        },
+        {
+          "text": "",
+          "tags": [
+            "nofeedback"
+          ]
+        },
+        {
+          "text": "I like this design. It is very helpful for writing.",
+          "tags": [
+            "like it",
+            "helpful"
+          ]
+        },
+        {
+          "text": "No, it is good though.",
+          "tags": [
+            "like it"
+          ]
+        },
+        {
+          "text": "I think the design and thinking of this app is innovative.",
+          "tags": [
+            "innovative"
+          ]
+        },
+        {
+          "text": "i probably prefer not using visualisations. A liitle bit redundant.",
+          "tags": [
+            "prefer not to use because of redundant"
+          ]
+        },
+        {
+          "text": "I basically like the design, but I am not sure if it is possible to change the colour of the tones, as for now the green represented negative tones and the red represented positive tones, but sometimes I felt a bit confused as the red was like a sign of warning or mistake. I guess the blue or the yellow would be better for telling the difference of the tones.",
+          "tags": [
+            "like it",
+            "hope to have the ability of modify the color meter"
+          ]
+        },
+        {
+          "text": "Sometimes it confuses me. Maybe the topic I posted wasn't clear enough.",
+          "tags": [
+            "confusing"
+          ]
+        },
+        {
+          "text": "I like it combining attitude inside, it would be more useful",
+          "tags": [
+            "nofeedback"
+          ]
+        },
+        {
+          "text": "it is confusion to choose the neutural, slight off and so on. my choice may be affected by the content. and the level of word i hope could be lower.",
+          "tags": [
+            "the grading option confusing"
+          ]
+        },
+        {
+          "text": "I think the content and language expression are still not natural enough.",
+          "tags": [
+            "the langauge experession not natural"
+          ]
+        },
+        {
+          "text": "too many colour made me feel hard to read",
+          "tags": [
+            "too many color reduced readability"
+          ]
+        },
+        {
+          "text": "I like it, as it can help with change the tone easily.",
+          "tags": [
+            "like it",
+            "helpful"
+          ]
+        },
+        {
+          "text": "no",
+          "tags": [
+            "nofeedback"
+          ]
+        },
+        {
+          "text": "like this design , can make writing neutral ",
+          "tags": [
+            "like it",
+            "helpful"
+          ]
+        },
+        {
+          "text": "",
+          "tags": [
+            "nofeedback"
+          ]
+        },
+        {
+          "text": "",
+          "tags": [
+            "nofeedback"
+          ]
+        },
+        {
+          "text": "The app bugged out on the second question, recovered after page reload.",
+          "tags": [
+            "network glitch"
+          ]
+        },
+        {
+          "text": "I found the paragraphs written by the chatbot to lack a personal touch. The design of the app is clean and easy to follow. The only thing that could be improved is the visual structure of the consent form information, as I found it a bit confusing.",
+          "tags": [
+            "Do not like the writing style(lack of personal touch)",
+            "UI neat",
+            "consent form confusing"
+          ]
+        },
+        {
+          "text": "Sometimes I thought I could change the sentences after agreeing with the content, but this made me continue to the next step of the survey. I caught on quickly, so it wasn't a big issue.",
+          "tags": [
+            "nofeedback"
+          ]
+        },
+        {
+          "text": "",
+          "tags": [
+            "nofeedback"
+          ]
+        },
+        {
+          "text": "It was not clear to me at the beginning that double clicking sends an additional prompt that I could just send on my own and the note did not help it. The design was really great though, just as for a typical chatbot. I like that there are \"emotion\" confidence values.",
+          "tags": [
+            "like it",
+            "more instruction on the 'double clicking'."
+          ]
+        },
+        {
+          "text": "The design was pretty good overall. I would have liked to have the prompt remain at the top of the page or something to remind me of the goal of each paragraph (topic + positive or negative).",
+          "tags": [
+            "nice design",
+            "would like to have a reminder on certain part of the page to emphasize the goal(topic/positive/negative)"
+          ]
+        },
+        {
+          "text": "I did read about the double click feature at the start, however for me as someone who had not any of the extra visualizations, maybe some extra visual clue/small tutorial to use the double click feature could help. I don't think this is needed for the version with visualizations, because it is made more obvious with colourized text. The design of what I saw in the pictures looked very good/easy to use/clear",
+          "tags": [
+            "UI neat",
+            "more instruction on the 'double clicking'."
+          ]
+        },
+        {
+          "text": "I think the design of the first four questions can be clearer. At first I was not aware of the experience intended design ",
+          "tags": [
+            "more instruction on how to use"
+          ]
+        },
+        {
+          "text": "I think visualizations could be better utilized for data processing rather than just simple text.",
+          "tags": [
+            "could be utilized for data processing"
+          ]
+        },
+        {
+          "text": "",
+          "tags": [
+            "nofeedback"
+          ]
+        },
+        {
+          "text": "",
+          "tags": [
+            "nofeedback"
+          ]
+        },
+        {
+          "text": "",
+          "tags": [
+            "nofeedback"
+          ]
+        },
+        {
+          "text": "i think it's like a AI. do you understand. it can give you some clear concept. but sometimes AI can provide some emotions. such as if i mentioned negatived things i hope it can provides me some answers, like i really understand what you experienced.",
+          "tags": [
+            "want more emotional support"
+          ]
+        },
+        {
+          "text": "I didn't see any of the visualization features, but that might have been my bad",
+          "tags": [
+            "nofeedback"
+          ]
+        },
+        {
+          "text": "the app is kind of confusing.",
+          "tags": [
+            "confusing"
+          ]
+        },
+        {
+          "text": "",
+          "tags": [
+            "nofeedback"
+          ]
+        },
+        {
+          "text": "It was quite interactive and well-designed. ",
+          "tags": [
+            "UI neat",
+            "nice design"
+          ]
+        },
+        {
+          "text": "These features have already done a great job on the visualisation work.",
+          "tags": [
+            "great job"
+          ]
+        },
+        {
+          "text": "no",
+          "tags": [
+            "nofeedback"
+          ]
+        },
+        {
+          "text": "I did not see in the experiment some of the features showed in the questionnaire. Perhaps this is actually part of the experiment and done on purpose, but it made me curious about these features that I did not notice. Some of the screenshots/visualizations in the questionnaire are a bit too small, which makes it difficult to see/read. Other than that, I really appreciated your experiment (especially because we previously discussed about it during a meeting, and it was great to see the final product!)",
+          "tags": [
+            "confused because some of the feature's not available"
+          ]
+        },
+        {
+          "text": "It was slightly confusing at the beginning because, for the second visualization technique, namely the distribution plot, it didn't find legends indicating which color was before or after the change, but it was easy to figure out anyway as I moved the cursor to the sentences."
+        },
+        {
+          "text": "it's creative for me ",
+          "tags": [
+            "innovative"
+          ]
+        },
+        {
+          "text": "",
+          "tags": [
+            "nofeedback"
+          ]
+        },
+        {
+          "text": "The design is simple and I quite like it",
+          "tags": [
+            "UI neat",
+            "like it"
+          ]
+        },
+        {
+          "text": "no more",
+          "tags": [
+            "nofeedback"
+          ]
+        },
+        {
+          "text": "I was somewhat confused at first, because I had to mark if it aligned, but that confusion was quickly resolved. I think it's good to have such adaptive features, and especially to have an indicator of the tone. However, I do think that writing your own piece without AI would still be best.",
+          "tags": [
+            "more instruction on how to use"
+          ]
+        },
+        {
+          "text": "",
+          "tags": [
+            "nofeedback"
+          ]
+        }
+      ],
+      "general_info": "",
+      "current_progress": 59
+    }
+  ]
+}
