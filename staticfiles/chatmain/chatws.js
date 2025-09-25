@@ -44,7 +44,7 @@ function injectStandaloneRatingButtons(msgId) {
                 inputStatusElementUpdate("after_rated");
 
 
-                    setInputDisabled(false);
+           //         setInputDisabled(false);
                     document.querySelector('#chat-message-input').focus();
 
             });
@@ -200,7 +200,7 @@ function genScoreButtonContainer(message) {
                         });
                 } else {
                     // ✅ Re-enable input if not satisfied
-                    setInputDisabled(false);
+            //        setInputDisabled(false);
                     document.querySelector('#chat-message-input').focus();
                 }
             }).catch(err => {
@@ -246,8 +246,8 @@ function genComepareLabel(message) {
     //if (roomConfig.experiment_type != 'all')
 
     compareLabel.innerHTML = `
-        <input type="checkbox" class="compare-checkbox" style="display: none" data-msg-id="${message.msg_uuid}">
-        <span style="font-size: 14px;display: none">Visualize the tone</span>
+        <input type="checkbox" class="compare-checkbox" data-msg-id="${message.msg_uuid}">
+        <span style="font-size: 14px;>Visualize the tone</span>
     `;
 /*    const img_box = document.getElementById('imgbbox');
     img_box.style.display="none";*/
@@ -261,8 +261,8 @@ function genComepareLabel(message) {
                               "event_goal":e.target.checked?"Add to compare":"Remove from compare",
                               "goal_fulfilled":Object.keys(comparedMessages).length < 2})
         if (e.target.checked) {
-            if (Object.keys(comparedMessages).length >= 2) {
-                alert("You can compare up to 2 messages at a time.");
+            if (Object.keys(comparedMessages).length >= 5) {
+                alert("You can compare up to 5 messages at a time.");
                 e.target.checked = false;
                 return;
             }
@@ -428,12 +428,12 @@ function inputStatusElementUpdate(input_status){
 
     if(input_status==='after_rated'){
         section.style.display='none';
-        setInputDisabled(false);
+     //   setInputDisabled(false);
 
     }
 
     if(input_status==='after_respond'){
-        setInputDisabled(true);
+        //setInputDisabled(true);
 
         rating.classList.remove('slide-in');
         rating.classList.add('slide-out');
@@ -525,14 +525,14 @@ function handleIncomingMessage(message) {
 
 
         const scoreContainer = genScoreButtonContainer(message);
-/*        if (message.user_rated_score === '-1') {
-            /!*messageWrapper.appendChild(scoreContainer);*!/
+        if (message.user_rated_score === '-1') {
+            /*messageWrapper.appendChild(scoreContainer);*/
             inputStatusElementUpdate('after_respond');
-            setInputDisabled(true);
+    //        setInputDisabled(true);
         }else{
             inputStatusElementUpdate('after_rated');
 
-        }*/
+        }
         console.log(message)
 
     //    setupReactionButtons(message.msg_uuid);
