@@ -246,8 +246,8 @@ function genComepareLabel(message) {
     //if (roomConfig.experiment_type != 'all')
 
     compareLabel.innerHTML = `
-        <input type="checkbox" class="compare-checkbox" style="display: none" data-msg-id="${message.msg_uuid}">
-        <span style="font-size: 14px;display: none">Visualize the tone</span>
+        <input type="checkbox" class="compare-checkbox" data-msg-id="${message.msg_uuid}">
+        <span style="font-size: 14px;>Visualize the tone</span>
     `;
 /*    const img_box = document.getElementById('imgbbox');
     img_box.style.display="none";*/
@@ -261,8 +261,8 @@ function genComepareLabel(message) {
                               "event_goal":e.target.checked?"Add to compare":"Remove from compare",
                               "goal_fulfilled":Object.keys(comparedMessages).length < 2})
         if (e.target.checked) {
-            if (Object.keys(comparedMessages).length >= 2) {
-                alert("You can compare up to 2 messages at a time.");
+            if (Object.keys(comparedMessages).length >= 5) {
+                alert("You can compare up to 5 messages at a time.");
                 e.target.checked = false;
                 return;
             }
