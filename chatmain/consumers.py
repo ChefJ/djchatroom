@@ -16,7 +16,7 @@ from utils.utils_vis import ask_gpt, text_to_score, generate_sentiment_graph
 def get_or_create_room(room_name):
     tmp_chatroom = None
     if ChatRoom.objects.filter(room_name=room_name).count() < 1:
-        tmp_chatroom = ChatRoom.objects.create(room_name=room_name)
+        tmp_chatroom = ChatRoom.objects.create(room_name=room_name, is_experiment=False)
         tmp_chatroom.save()
     else:
         tmp_chatroom = ChatRoom.objects.filter(room_name=room_name).first()
