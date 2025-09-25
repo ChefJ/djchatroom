@@ -40,17 +40,10 @@ glbGridColor = getCSSVar('--border-color') || '#444';
 let selectedChoiceIndex = null;
 
 function ultRoomSettings(){
-/*    document.getElementById('toggle-colorize').addEventListener('change', function () {
-        enableColorize = this.checked;
-    });*/
     document.body.setAttribute('data-theme', 'modern');
     localStorage.setItem('chat-theme', 'modern');
 }
-/*function refreshImageById(messageId) {
-    const img = document.getElementById("visbias-image");
-    const timestamp = new Date().getTime();
-    img.src = `/static/chatmain/${messageId}.jpg?t=${timestamp}`;
-}*/
+
 function initUsrId(){
     if (!anon_id) {
         anon_id = generateCleanUUID();
@@ -103,33 +96,11 @@ function ultUX(){
             }));
 
             messageInput.value = '';
-            setInputDisabled(true);
+//            setInputDisabled(true);
 
 
         }
     };
-    document.getElementById('input-overlay').addEventListener('click', () => {
-/*        const allGPTMessages = document.querySelectorAll('.score-buttons-wrapper');
-        const lastBubble = Array.from(allGPTMessages).reverse().find(bubble => {
-            const wrapper = bubble.closest('.message-wrapper');
-            const sender = wrapper?.querySelector('.sender-name');
-            return sender && sender.textContent === 'GPT';
-        });
-
-        if (lastBubble) {
-            lastBubble.classList.add('blink-border');
-            setTimeout(() => lastBubble.classList.remove('blink-border'), 1200);
-        }*/
-        const section = document.getElementById('reaction-section');
-
-        section.classList.add('blink-border');
-            setTimeout(() => section.classList.remove('blink-border'), 1200);
-
-    });
-    if(roomConfig.is_experiment===false){
-        const reactionBlock = document.getElementById('reaction-section')
-        reactionBlock.style.display = 'none';
-    }
 }
 
 function promptForTopic() {

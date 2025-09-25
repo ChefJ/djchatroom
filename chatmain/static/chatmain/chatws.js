@@ -417,6 +417,7 @@ function addEventsForBubble(bubble) {
 
 
 function inputStatusElementUpdate(input_status){
+    if(roomConfig.is_experiment===false) return;
     const section = document.getElementById('reaction-section');
     const initial = section.querySelector('.reaction-initial');
     const rating = section.querySelector('.reaction-rating');
@@ -442,94 +443,10 @@ function inputStatusElementUpdate(input_status){
             rating.classList.remove('slide-out');
             initial.style.display = 'flex';
             initial.classList.add('slide-in');
-            // ❗ Optional: clear rating buttons
-            //   document.getElementById('tone-score-buttons').innerHTML = '';
+
         }, 300);
         section.style.display='block';
     }
-}
-function setupReactionButtons(msgId) {
-    const section = document.getElementById('reaction-section');
-    const initial = section.querySelector('.reaction-initial');
-    const rating = section.querySelector('.reaction-rating');
-
-    const offTopicBtn = document.getElementById('btn-off-topic');
-    const toneBtn = document.getElementById('btn-tone');
-    const backBtn = document.getElementById('tone-back-btn');
-
-    offTopicBtn.onclick = () => {
-        fetch('/message_scoring/', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-CSRFToken': getCSRFToken(),
-            },
-            body: JSON.stringify({msg_uuid: msgId, score: 0})
-        }).then(() => {
-            inputStatusElementUpdate("after_rated");
-
-            document.querySelector('#chat-message-input').focus();
-        }).catch(err => console.error('Failed to submit off-topic:', err));
-    };
-
-    const alignedBtn = document.getElementById('btn-aligned');
-
-    alignedBtn.onclick = () => {
-        alignedBtn.disabled = true;
-        toneBtn.disabled = true;
-        offTopicBtn.disabled = true;
-
-        fetch('/message_scoring/', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-CSRFToken': getCSRFToken(),
-            },
-            body: JSON.stringify({ msg_uuid: msgId, score: 5 })
-        }).then(() => {
-            const uuid = localStorage.getItem('anon_id') || '';
-            return fetch('/next_experiment/', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRFToken': getCSRFToken(),
-                },
-                body: JSON.stringify({ uuid: uuid })
-            });
-        }).then(res => res.text())
-            .then(url => window.location.href = url)
-            .catch(err => console.error('Aligned quick-submit failed:', err));
-    };
-
-    toneBtn.onclick = () => {
-        initial.classList.add('slide-out');
-
-        setTimeout(() => {
-            initial.style.display = 'none';
-            initial.classList.remove('slide-out');
-
-            rating.style.display = 'flex';
-            rating.classList.remove('slide-out'); // Just in case
-            rating.classList.add('slide-in');
-
-            // ✅ Always refresh rating buttons
-            document.getElementById('tone-score-buttons').innerHTML = '';
-            injectStandaloneRatingButtons(msgId);
-        }, 300);
-    };
-    backBtn.onclick = () => {
-        rating.classList.remove('slide-in');
-        rating.classList.add('slide-out');
-
-        setTimeout(() => {
-            rating.style.display = 'none';
-            rating.classList.remove('slide-out');
-            initial.style.display = 'flex';
-            initial.classList.add('slide-in');
-            // ❗ Optional: clear rating buttons
-         //   document.getElementById('tone-score-buttons').innerHTML = '';
-        }, 300);
-    };
 }
 
 // ==== Handle Incoming Messages ====
