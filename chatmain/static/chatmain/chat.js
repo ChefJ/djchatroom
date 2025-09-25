@@ -168,7 +168,7 @@ function promptForTopic() {
                 user_uuid: anon_id
             }));
 
-            setInputDisabled(true);
+          //  setInputDisabled(true);
 
             fetch(updateTopicUrl, {
                 method: 'POST',
@@ -259,7 +259,7 @@ function add_dbclick_refinement(){
             }));
 
             popup.style.display = 'none';
-            setInputDisabled(true);
+       //     setInputDisabled(true);
         });
     });
     document.addEventListener('click', (e) => {

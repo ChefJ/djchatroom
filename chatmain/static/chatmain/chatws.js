@@ -44,7 +44,7 @@ function injectStandaloneRatingButtons(msgId) {
                 inputStatusElementUpdate("after_rated");
 
 
-                    setInputDisabled(false);
+           //         setInputDisabled(false);
                     document.querySelector('#chat-message-input').focus();
 
             });
@@ -200,7 +200,7 @@ function genScoreButtonContainer(message) {
                         });
                 } else {
                     // ✅ Re-enable input if not satisfied
-                    setInputDisabled(false);
+            //        setInputDisabled(false);
                     document.querySelector('#chat-message-input').focus();
                 }
             }).catch(err => {
@@ -428,12 +428,12 @@ function inputStatusElementUpdate(input_status){
 
     if(input_status==='after_rated'){
         section.style.display='none';
-        setInputDisabled(false);
+     //   setInputDisabled(false);
 
     }
 
     if(input_status==='after_respond'){
-        setInputDisabled(true);
+        //setInputDisabled(true);
 
         rating.classList.remove('slide-in');
         rating.classList.add('slide-out');
@@ -528,7 +528,7 @@ function handleIncomingMessage(message) {
         if (message.user_rated_score === '-1') {
             /*messageWrapper.appendChild(scoreContainer);*/
             inputStatusElementUpdate('after_respond');
-            setInputDisabled(true);
+    //        setInputDisabled(true);
         }else{
             inputStatusElementUpdate('after_rated');
 
