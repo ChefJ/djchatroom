@@ -621,7 +621,7 @@ function handleIncomingMessage(message) {
         }
         console.log(message)
 
-        setupReactionButtons(message.msg_uuid);
+    //    setupReactionButtons(message.msg_uuid);
 
     }
 

@@ -243,14 +243,15 @@ function genComepareLabel(message) {
             <input type="checkbox" class="compare-checkbox" data-msg-id="${message.msg_uuid}">
             <span style="font-size: 14px;">Visualize the tone</span>
         `;
-    if (roomConfig.experiment_type != 'all') {
-        compareLabel.innerHTML = `
-            <input type="checkbox" class="compare-checkbox" style="display: none" data-msg-id="${message.msg_uuid}">
-            <span style="font-size: 14px;display: none">Visualize the tone</span>
-        `;
-        const img_box = document.getElementById('imgbbox');
-        img_box.style.display="none";
-    }
+    //if (roomConfig.experiment_type != 'all')
+
+    compareLabel.innerHTML = `
+        <input type="checkbox" class="compare-checkbox" style="display: none" data-msg-id="${message.msg_uuid}">
+        <span style="font-size: 14px;display: none">Visualize the tone</span>
+    `;
+    const img_box = document.getElementById('imgbbox');
+    img_box.style.display="none";
+
     compareLabel.querySelector('input').addEventListener('change', (e) => {
         const msgId = e.target.dataset.msgId;
         const bubble = document.querySelector(`[data-id="${msgId}"]`);
@@ -620,7 +621,7 @@ function handleIncomingMessage(message) {
         }
         console.log(message)
 
-        setupReactionButtons(message.msg_uuid);
+    //    setupReactionButtons(message.msg_uuid);
 
     }
 
@@ -633,7 +634,7 @@ function handleIncomingMessage(message) {
 
 // ==== Chart Comparison Handling ====
 function updateComparisonCharts() {
-    if (roomConfig.experiment_type != 'all') return;
+   // if (roomConfig.experiment_type != 'all') return;
     Object.values(chartRefs).forEach(chart => chart.destroy?.());
 
     const sortedMsgIds = Array.from(document.querySelectorAll('.chat-message'))
@@ -812,7 +813,7 @@ function updateComparisonCharts() {
 }
 
 function autoCheckLatestTwoGPT() {
-    if (roomConfig.experiment_type != 'all') return;
+   // if (roomConfig.experiment_type != 'all') return;
 
     // 1. Uncheck all compare checkboxes first
     const allCompareBoxes = Array.from(document.querySelectorAll('.compare-checkbox'));
