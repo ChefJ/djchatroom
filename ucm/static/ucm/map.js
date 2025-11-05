@@ -14,7 +14,9 @@ const DATA_URL = (window.UCM && window.UCM.POINTS_URL) || 'points.json';
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { attribution: '&copy; OpenStreetMap contributors' }).addTo(map);
 
     const clusterToggle = document.getElementById('clusterToggle');
+/*
     const labelsToggle = document.getElementById('labelsToggle');
+*/
     const hoverCard = document.getElementById('hoverCard');
 
     let clusterLayer = null;
@@ -62,7 +64,9 @@ const DATA_URL = (window.UCM && window.UCM.POINTS_URL) || 'points.json';
     const m = L.marker([+p.lat, +p.lon], { riseOnHover: true });
     // Tooltip label toggle
     const labelText = p.label || p.title || p.location || '';
+/*
     if (labelText && labelsToggle.checked) m.bindTooltip(labelText);
+*/
 
     // Hover card content
     const titleLink = p.href ? `<a href="${escapeAttr(p.href)}" target="_blank" rel="noopener">${escapeHtml(p.title || 'Untitled')}</a>` : escapeHtml(p.title || 'Untitled');
@@ -130,7 +134,9 @@ const DATA_URL = (window.UCM && window.UCM.POINTS_URL) || 'points.json';
 
     // UI events
     clusterToggle.addEventListener('change', () => refreshLayers(dataCache));
+/*
     labelsToggle.addEventListener('change', () => refreshLayers(dataCache));
+*/
 
     // Modal helpers
     const backdrop = document.getElementById('backdrop');
