@@ -33,6 +33,7 @@ ALLOWED_HOSTS = ['2003.io','127.0.0.1','0.0.0.0']
 INSTALLED_APPS = [
     "daphne",
     "chatmain",
+    'ucm',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',

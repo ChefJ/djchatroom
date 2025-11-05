@@ -34,6 +34,8 @@ urlpatterns = [
     path("join_experiment/", consent_form_view, name="next_experiment"),
 
     path("thankyou/", info_overall, name="next_experiment"),
+    path('ucm/', include('ucm.urls')),
+
 
 ]
 handler404 = 'chatmain.views.handler404'
